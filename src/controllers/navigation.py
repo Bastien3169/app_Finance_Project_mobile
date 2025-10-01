@@ -1,7 +1,11 @@
 from src.views import home, indices #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
-def route_change(page: "ft.Page"):
+from src.views import home, indices #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
+import flet as ft
+
+def route_change(page: ft.Page):  # Pas besoin de guillemets
+    """Gère les changements de route de l'application"""
     page.clean()  # Nettoie la page avant d'afficher le nouveau contenu
     route = page.route
 
@@ -9,28 +13,22 @@ def route_change(page: "ft.Page"):
         home.main_page(page)
     elif route == "/indices":
         indices.main_page(page)
+    elif route == "/stocks":
+        # stocks.main_page(page)
+        page.add(ft.Text("Page Stocks - En construction"))
+    elif route == "/etfs":
+        # etfs.main_page(page)
+        page.add(ft.Text("Page ETFs - En construction"))
+    elif route == "/cryptos":
+        # cryptos.main_page(page)
+        page.add(ft.Text("Page Cryptos - En construction"))
+    elif route == "/dca_vs_lp":
+        # dca_vs_lp.main_page(page)
+        page.add(ft.Text("Page DCA vs LP - En construction"))
+    elif route == "/maj_bd":  
+        # maj_bd.main_page(page)
+        page.add(ft.Text("Page MAJ BD - En construction"))
     else:
-        page.add(ft.Text("Page not found"))    
-        # Vous pouvez ajouter d'autres routes ici
-        # elif route == "/stocks":
-        #     stocks.main_page(page)
-        # elif route == "/etfs":
-        #     etfs.main_page(page)
-        # elif route == "/cryptos":
-        #     cryptos.main_page(page)
-        # elif route == "/dca_vs_lp":
-        #     dca_vs_lp.main_page(page)
-        # elif route == "/maj_bd":  
-        #     maj_bd.main_page(page)
-        # else:
-        #     page.add(ft.Text("Page not found"))
-    page.update()  # Met à jour la page pour refléter les changements
-
-# Page principale (accueil)
-def main(page: ft.Page):
-    page.route = "/"
-    page.on_route_change = lambda e: route_change(page)  # garde juste cette petite lambda ici
-    route_change(page)  # affichage initial
-    page.update()
-
+        page.add(ft.Text("❌ Page introuvable", size=20))
     
+    page.update()  # Met à jour la page pour refléter les changements

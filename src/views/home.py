@@ -1,34 +1,41 @@
 import flet as ft
 
-def navigate_to(page: ft.Page, route: str):
-    def handler(e):
-        page.go(route)
-    return handler
 
 def main_page(page: ft.Page):
-    page.clean()  # Nettoie la page avant d'afficher le contenu
+    page.clean()
 
-    page.add(ft.Text("Bienvenue sur Finance facile !", size=24))
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.vertical_alignment = ft.MainAxisAlignment.START
 
-    # Liste des tuiles (nom, couleur, route)
-    tiles = [
-        ("Indices", ft.Colors.BLUE, "/indices"),
-        ("Stocks", ft.Colors.GREEN, "/stocks"),
-        ("ETFs", ft.Colors.ORANGE, "/etfs"),
-        ("Cryptos", ft.Colors.PURPLE, "/cryptos"),
-        ("DCA vs LP", ft.Colors.RED, "/dca_vs_lp"),
-        ("MAJ BD", ft.Colors.CYAN, "/maj_bd"),
+    texte_bienvenu = ft.Text("Bienvenue sur Finance facile !", size=20)
+
+    # Liste des tuiles
+    tiles_button = [
+        ("Indices", ft.Colors.AMBER_200, "/indices"),      # Jaune pastel
+        ("Stocks", ft.Colors.GREEN_200, "/stocks"),       # Vert clair
+        ("ETFs", ft.Colors.ORANGE_200, "/etfs"),         # Orange doux
+        ("Cryptos", ft.Colors.PURPLE_200, "/cryptos"),   # Violet pastel
+        ("DCAvsLP", ft.Colors.RED_200, "/dca_vs_lp"),  # Rouge doux
+        ("MAJ BD", ft.Colors.CYAN_200, "/maj_bd"),       # Bleu clair
     ]
 
-    rows = []
+    # Créer la liste de boutons avec une boucle normale
+    buttons = []
+    for name, color, route in tiles_button:
+        btn = ft.ElevatedButton(
+            content=ft.Text(name, size=12),# "content" accepte les widjets, pas juste du texte
+            bgcolor=color,
+            color=ft.Colors.BLACK,
+            on_click=lambda e, r=route: page.go(r), # Utilisation de r=route pour capturer la route correcte au momment de l'itération
+            width=100,
+            height=50,
+            )   
+        buttons.append(btn)
 
-    for i in range(0, len(tiles), 3):
-        row_tiles = tiles[i:i+3]
-        row_buttons = []
-        for name, color, route in row_tiles:
-            btn = ft.ElevatedButton(text=name,bgcolor=color,on_click=navigate_to(page, route))  # fonction normale au lieu de lambda
-            row_buttons.append(btn)
-        rows.append(ft.Row(row_buttons, alignment=ft.MainAxisAlignment.CENTER))
+    # Disposer les boutons en grille 2x3
+    row1 = ft.Row(controls=[buttons[0], buttons[1], buttons[2]], alignment=ft.MainAxisAlignment.CENTER)
+    row2 = ft.Row(controls=[buttons[3], buttons[4], buttons[5]], alignment=ft.MainAxisAlignment.CENTER)
 
-    # Ajouter toutes les lignes à la page
-    page.add(*rows)
+    page.add(texte_bienvenu, row1, row2)
+
+
