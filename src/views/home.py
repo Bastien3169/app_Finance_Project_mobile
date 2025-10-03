@@ -4,9 +4,6 @@ import flet as ft
 def main_page(page: ft.Page):
     page.clean()
 
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.vertical_alignment = ft.MainAxisAlignment.START
-
     texte_bienvenu = ft.Text("Bienvenue sur Finance facile !", size=20)
 
     # Liste des tuiles
@@ -17,7 +14,9 @@ def main_page(page: ft.Page):
         ("Cryptos", ft.Colors.PURPLE_200, "/cryptos"),   # Violet pastel
         ("DCAvsLP", ft.Colors.RED_200, "/dca_vs_lp"),  # Rouge doux
         ("MAJ BD", ft.Colors.CYAN_200, "/maj_bd"),       # Bleu clair
+        ("TEST", ft.Colors.CYAN_500, "/test"),       # Bleu clair
     ]
+
 
     # Créer la liste de boutons avec une boucle normale
     buttons = []
@@ -32,10 +31,34 @@ def main_page(page: ft.Page):
             )   
         buttons.append(btn)
 
+
+    # Créer un Row centré qui contient tous les boutons
+    centered_grid = ft.Row(
+        controls=buttons,
+        wrap=True,  # existe aussi "no_wrap" et "wrap_reverse"
+        alignment=ft.MainAxisAlignment.CENTER,
+        #vertical_alignment=ft.CrossAxisAlignment.CENTER,
+        spacing=10,
+        run_spacing=10,
+        expand=True
+    )
+
+    # Ajouter le padding en passant par un Container
+    grid_avec_espace = ft.Container(
+        content=centered_grid,
+        padding=ft.padding.only(top=100)
+    )
+    
+    page.add(texte_bienvenu, grid_avec_espace)
+
+    page.update()
+
+
+'''
     # Disposer les boutons en grille 2x3
     row1 = ft.Row(controls=[buttons[0], buttons[1], buttons[2]], alignment=ft.MainAxisAlignment.CENTER)
     row2 = ft.Row(controls=[buttons[3], buttons[4], buttons[5]], alignment=ft.MainAxisAlignment.CENTER)
 
     page.add(texte_bienvenu, row1, row2)
 
-
+'''

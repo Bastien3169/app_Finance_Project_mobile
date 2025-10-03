@@ -1,7 +1,7 @@
 from src.views import home, indices #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
-from src.views import home, indices #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
+from src.views import home, indices, test #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
 def route_change(page: ft.Page):  # Pas besoin de guillemets
@@ -12,7 +12,7 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
     if route == "/":
         home.main_page(page)
     elif route == "/indices":
-        indices.main_page(page)
+        indices.indices_page(page)
     elif route == "/stocks":
         # stocks.main_page(page)
         page.add(ft.Text("Page Stocks - En construction"))
@@ -28,6 +28,9 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
     elif route == "/maj_bd":  
         # maj_bd.main_page(page)
         page.add(ft.Text("Page MAJ BD - En construction"))
+    elif route == "/test": 
+        # maj_bd.main_page(page)
+        test.indices_page(page) 
     else:
         page.add(ft.Text("❌ Page introuvable", size=20))
     
