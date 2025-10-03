@@ -18,12 +18,26 @@ def indices_page(page: ft.Page):
     page.clean()
     page.scroll = "auto"
     
-    # Dropdown
-    dropdown_indice = ft.Dropdown(label="Choisissez un indice pour le graphique", value=indice_default, options=[ft.dropdown.Option(indice) for indice in liste_indices], width=300)
+    # Widget : titre
+    text_graphique = ft.Text("📈 Graphiques des indices", color=ft.Colors.AMBER_200, weight=ft.FontWeight.BOLD, size=21)
+
+    # Widget : ligne de séparation dans un container pour avoir padding que en dessous 
+    separation = ft.Container(
+        content=ft.Divider(thickness=2, color=ft.Colors.AMBER_200),
+        padding=ft.padding.only(bottom=10)  # espace seulement en dessous
+    )
+
+    # # Widget : Dropdown (menu déroulant)
+    dropdown_indice = ft.Dropdown(
+        label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+        value=indice_default,
+        options=[ft.dropdown.Option(indice) for indice in liste_indices],
+        width=300
+)    
+    # Widget : graphique PlotlyChart (vide au départ)
+    graphique = PlotlyChart(figure=go.Figure())
     
-    # PlotlyChart (vide au départ)
-    chart = PlotlyChart(figure=go.Figure())
-    
+
     def update_graph(e): # Met à jour le graphique quand on change l'indice
         
         selected_indice = dropdown_indice.value
@@ -39,41 +53,73 @@ def indices_page(page: ft.Page):
         fig.update_layout(title=f"Évolution de {selected_indice}", xaxis_title="Date", yaxis_title="Prix de clôture", width=340, height=300, hovermode='x unified', dragmode='zoom')
         
         # Mettre à jour le chart
-        chart.figure = fig
+        graphique.figure = fig
         page.update()
 
     # Lier l'événement de changement
     dropdown_indice.on_change = update_graph
     
     # Ajouter à la page
-    page.add(ft.Text("📈 Graphiques des indices", color=ft.Colors.CYAN_500, size=24), dropdown_indice, chart)
+    page.add(
+        text_graphique, 
+        separation,
+        dropdown_indice, 
+        graphique, 
+    )
     
     # Charger le graphique initial
     update_graph(None)
 
 
-################################## TABLEAU RENDEMENT ########################################
+################################## TABLEAU COMPARATIF RENDEMENTS ######################
 
-################################## TABLEAU COMPARATIF RENDEMENTS #################################################
+    # Widget : titre
+    text_rendement = ft.Container(
+        content=ft.Text(
+            "💯 Rendements des indices (%)",
+            color=ft.Colors.AMBER_200,
+            weight=ft.FontWeight.BOLD,
+            size=21),
+        padding=ft.padding.only(top=20)  # espace de 10 px au-dessus
+        )
 
-    ft.Divider(height=20, thickness=2)
-    ft.Text("💯 Rendements des indices (%)", color=ft.Colors.CYAN_500, size=24)
-    
-    # Dropdown multi-sélection (plus propre qu'une liste de checkboxes)
-    indices_selectionnes = [indice_default]
-    
+
+    # Widget : ligne de séparation dans un container pour avoir padding que en dessous 
+    separation = ft.Container(
+        content=ft.Divider(thickness=2, color=ft.Colors.AMBER_200),
+        padding=ft.padding.only(bottom=10)  # espace seulement en dessous
+    )
+
+    # Widget : Dropdown (menu déroulant) mis dans un container pour le style notteement le borderradius 
     dropdown_multi = ft.Dropdown(
         label="Sélectionnez les indices à comparer",
         hint_text="Choisissez un ou plusieurs indices",
+        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
+        hint_style=ft.TextStyle(color=ft.Colors.GREY),
         width=300,
-        options=[ft.dropdown.Option(indice) for indice in liste_indices],
-        on_change=lambda e: ajouter_indice(e.control.value)
+        options=[ft.dropdown.Option(i) for i in liste_indices], # éléments de la liste
+        on_change=lambda e: ajouter_indice(e.control.value),
+        #multiple=True,  # Permet la sélection multiple
+        value=indice_default  # Valeur par défaut (liste des indices sélectionnés)
+        )
+
+    
+    # Widget : texte "Indices sélectionnés"
+    text_liste_indice_selectionnes = ft.Text("Indices sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
+
+    # Widget : liste des indices sélectionnés en ligne
+    liste_selection = ft.Row()
+
+    # Container englobant texte + liste des indices sélectionnés pour le style (notamment le border)
+    cadre_text_liste_indice_selectionnes = ft.Container(
+    content=ft.Column([text_liste_indice_selectionnes, liste_selection]),
+    padding=5,  # espace autour du texte
+    border=ft.border.all(1, ft.Colors.GREY),  # bordure 1px grise
+    border_radius=10,  # coins arrondis
+    alignment=ft.alignment.center_left  # contenu aligné à gauche
     )
-    
-    # Liste des indices sélectionnés
-    liste_selection = ft.Column()
-    
-    # DataTable
+
+    # Widget : tableau
     table = ft.DataTable(
         column_spacing=8, # Espace entre les colonnes
         columns=[
@@ -87,7 +133,13 @@ def indices_page(page: ft.Page):
         ],
         rows=[]
     )
-    
+
+    # Widget : cadre autour du tableau en metant le tableau dans un container
+    cadre_tableau = ft.Container(content=table, border=ft.border.all(1, ft.Colors.AMBER_200), border_radius=10, padding=5)
+
+    # Liste des indices sélectionnés par défaut "SP500"
+    indices_selectionnes = [indice_default] 
+
     def ajouter_indice(indice):
         """Ajoute un indice à la sélection"""
         if indice and indice not in indices_selectionnes:
@@ -105,19 +157,20 @@ def indices_page(page: ft.Page):
     def update_selection_list():
         """Met à jour la liste des indices sélectionnés"""
         liste_selection.controls.clear()
-        for indice in indices_selectionnes:
+        for i in indices_selectionnes:
             liste_selection.controls.append(
                 ft.Row([
-                    ft.Text(indice, size=12),
+                    ft.Text(i, size=12),
                     ft.IconButton(
                         icon=ft.Icons.CLOSE,  # ← I majuscule
                         icon_size=16,
-                        on_click=lambda e, i=indice: retirer_indice(i)
+                        on_click=lambda e, i=i : retirer_indice(i) # Utilisation de i=i pour capturer la valeur correcte au moment de l'itération
                     )
                 ])
             )
         page.update()
-        
+
+
     def update_table():
         """Met à jour le tableau"""
         table.rows.clear()
@@ -138,14 +191,19 @@ def indices_page(page: ft.Page):
                         valeur_float = float(valeur)
                         texte = f"{valeur_float:.1f}%"
                         # Couleur du TEXTE au lieu du fond
-                        couleur_texte = ft.Colors.GREEN if valeur_float > 0 else ft.Colors.RED if valeur_float < 0 else ft.Colors.BLACK
+                        if valeur_float > 0:
+                            couleur_texte = ft.Colors.GREEN
+                        elif valeur_float < 0:
+                            couleur_texte = ft.Colors.RED
+                        else:
+                            couleur_texte = ft.Colors.BLACK
                     except (ValueError, TypeError):
                         texte = str(valeur)
                         couleur_texte = ft.Colors.BLACK
                     
                     cells.append(
                         ft.DataCell(
-                            ft.Text(texte, size=10, color=couleur_texte)  # ← color au lieu de bgcolor
+                            ft.Text(texte, size=10, color=couleur_texte)  # color au lieu de bgcolor
                         )
                     )
                 
@@ -153,18 +211,16 @@ def indices_page(page: ft.Page):
         
         page.update()
     
+    # Ajout des widgets à la page
     page.add(
+        text_rendement,
+        separation,
         dropdown_multi,
-        ft.Text("Indices sélectionnés:", size=12, weight=ft.FontWeight.BOLD),
-        liste_selection,
-        ft.Container(
-            content=table,
-            border=ft.border.all(1, ft.Colors.GREY_300),
-            border_radius=10,
-            padding=5
+        cadre_text_liste_indice_selectionnes,
+        cadre_tableau
         )
-    )
     
+    page.update()
     # Initialiser
     update_selection_list()
     update_table()
