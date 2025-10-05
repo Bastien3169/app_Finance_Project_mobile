@@ -27,15 +27,16 @@ def indices_page(page: ft.Page):
         padding=ft.padding.only(bottom=10)  # espace seulement en dessous
     )
 
-    # # Widget : Dropdown (menu déroulant)
+    # Widget : Dropdown (menu déroulant)
     dropdown_indice = ft.Dropdown(
         label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
         value=indice_default,
         options=[ft.dropdown.Option(indice) for indice in liste_indices],
         width=300
 )    
-    # Widget : graphique PlotlyChart (vide au départ)
-    graphique = PlotlyChart(figure=go.Figure())
+
+    # Widget : graphique PlotlyChart vide
+    graphique = PlotlyChart(figure=go.Figure(), visible=False)
     
 
     def update_graph(e): # Met à jour le graphique quand on change l'indice
@@ -50,20 +51,42 @@ def indices_page(page: ft.Page):
         
         # Créer le graphique
         fig = go.Figure(go.Scatter(x=df["Date"], y=df["Close"], mode='lines', name=selected_indice, line=dict(color='#6DBE8C', width=2)))
-        fig.update_layout(title=f"Évolution de {selected_indice}", xaxis_title="Date", yaxis_title="Prix de clôture", width=340, height=300, hovermode='x unified', dragmode='zoom')
-        
-        # Mettre à jour le chart
+        fig.update_layout(
+            title=f"Évolution de {selected_indice}",
+            title_font=dict(size=22, color='white', family='Arial Black'),
+            plot_bgcolor='black',          # fond du graphique noir
+            paper_bgcolor='black',         # fond global noir
+            font=dict(color='white'),      # texte blanc
+            xaxis_title="Date",
+            yaxis_title="Prix de clôture",
+            hovermode='x unified',         # affichage des infos sur toute la verticale
+            dragmode='zoom',               # zoom avec la souris
+            margin=dict(l=50, r=50, t=80, b=50),
+            xaxis=dict(showgrid=False, zeroline=False, showline=False, linecolor='white',tickangle=-45),
+            yaxis=dict(gridcolor='rgba(255,255,255,0.25)', zeroline=False, showline=False, linecolor='white')
+            )             # pas de lignes de grille / pas de ligne à y=0 / afficher l'axe y / couleur de l'axe y
+
+        # Mise à jour du graphique
+        #graphique.figure = fig 
+        #page.update()
+
+        # Mise à jour du graphique
         graphique.figure = fig
+
+        # Rendre le graphique visible après la première mise à jour pour pas avoir chart blanc au départ
+        graphique.visible = True
+        
+        # Met à jour la page pour refléter les changements
         page.update()
 
-    # Lier l'événement de changement
+    # Lier "dropdown_indice" à la fonction "update_graph" grace à l'événement "on_change"  qui est un callback
     dropdown_indice.on_change = update_graph
     
     # Ajouter à la page
     page.add(
         text_graphique, 
         separation,
-        dropdown_indice, 
+        dropdown_indice,
         graphique, 
     )
     
@@ -73,24 +96,24 @@ def indices_page(page: ft.Page):
 
 ################################## TABLEAU COMPARATIF RENDEMENTS ######################
 
-    # Widget : titre
+    # Widget : titre dans container pour le padding
     text_rendement = ft.Container(
         content=ft.Text(
             "💯 Rendements des indices (%)",
             color=ft.Colors.AMBER_200,
             weight=ft.FontWeight.BOLD,
             size=21),
-        padding=ft.padding.only(top=20)  # espace de 10 px au-dessus
+        padding=ft.padding.only(top=30)  # espace de 10 px au-dessus
         )
 
 
-    # Widget : ligne de séparation dans un container pour avoir padding que en dessous 
+    # Widget : ligne de séparation dans un container pour avoir padding
     separation = ft.Container(
         content=ft.Divider(thickness=2, color=ft.Colors.AMBER_200),
         padding=ft.padding.only(bottom=10)  # espace seulement en dessous
     )
 
-    # Widget : Dropdown (menu déroulant) mis dans un container pour le style notteement le borderradius 
+    # Widget : Dropdown (menu déroulant)
     dropdown_multi = ft.Dropdown(
         label="Sélectionnez les indices à comparer",
         hint_text="Choisissez un ou plusieurs indices",
@@ -110,32 +133,43 @@ def indices_page(page: ft.Page):
     # Widget : liste des indices sélectionnés en ligne
     liste_selection = ft.Row()
 
-    # Container englobant texte + liste des indices sélectionnés pour le style (notamment le border)
+    # Widget : cadre qui prend texte + liste des indices dansun contenair
     cadre_text_liste_indice_selectionnes = ft.Container(
     content=ft.Column([text_liste_indice_selectionnes, liste_selection]),
     padding=5,  # espace autour du texte
-    border=ft.border.all(1, ft.Colors.GREY),  # bordure 1px grise
+    border=ft.border.all(1, ft.Colors.WHITE30),  # bordure 1px grise
     border_radius=10,  # coins arrondis
     alignment=ft.alignment.center_left  # contenu aligné à gauche
     )
 
-    # Widget : tableau
+    # Widget : tableau avec personnalisation
     table = ft.DataTable(
-        column_spacing=8, # Espace entre les colonnes
+        column_spacing=10, # Espace entre les colonnes
+        #vertical_lines=ft.BorderSide(1, ft.Colors.GREY_400),
+        heading_row_height=25,  # Hauteur de la ligne d'en-tête
+        data_row_min_height=35,  # Hauteur minimale des lignes de données
+        data_row_max_height=35,  # Hauteur maximale des lignes de données
+        divider_thickness=0.5, # Epaisseur séparateur lignes
         columns=[
-            ft.DataColumn(ft.Text("Indice", weight=ft.FontWeight.BOLD)),
-            ft.DataColumn(ft.Text("6m", weight=ft.FontWeight.BOLD)),
-            ft.DataColumn(ft.Text("12m", weight=ft.FontWeight.BOLD)),
-            ft.DataColumn(ft.Text("24m", weight=ft.FontWeight.BOLD)),
-            ft.DataColumn(ft.Text("60m", weight=ft.FontWeight.BOLD)),
-            ft.DataColumn(ft.Text("120m", weight=ft.FontWeight.BOLD)),
-            ft.DataColumn(ft.Text("180m", weight=ft.FontWeight.BOLD))
+            ft.DataColumn(ft.Text("Indice", weight=ft.FontWeight.BOLD, size=12)),
+            ft.DataColumn(ft.Text("6m", weight=ft.FontWeight.BOLD, size=12)),
+            ft.DataColumn(ft.Text("12m", weight=ft.FontWeight.BOLD, size=12)),
+            ft.DataColumn(ft.Text("24m", weight=ft.FontWeight.BOLD, size=12)),
+            ft.DataColumn(ft.Text("60m", weight=ft.FontWeight.BOLD, size=12)),
+            ft.DataColumn(ft.Text("120m", weight=ft.FontWeight.BOLD, size=12)),
+            ft.DataColumn(ft.Text("180m", weight=ft.FontWeight.BOLD, size=12))
         ],
         rows=[]
-    )
+        )
 
-    # Widget : cadre autour du tableau en metant le tableau dans un container
-    cadre_tableau = ft.Container(content=table, border=ft.border.all(1, ft.Colors.AMBER_200), border_radius=10, padding=5)
+    # Widget : cadres tableau (dans un contenaur)
+    cadre_tableau = cadre_tableau = ft.Container(
+        content=ft.Row([table], scroll=ft.ScrollMode.AUTO),
+        border=ft.border.all(1, ft.Colors.AMBER_200),
+        border_radius=10,
+        padding=5,
+        width=350
+        )
 
     # Liste des indices sélectionnés par défaut "SP500"
     indices_selectionnes = [indice_default] 
@@ -224,3 +258,101 @@ def indices_page(page: ft.Page):
     # Initialiser
     update_selection_list()
     update_table()
+
+
+################################## COMPOSITION INDICES ############################
+
+    # Widget : titre dans container pour le padding
+    text_composition = ft.Container(
+        content=ft.Text(
+            "🗂 Composition des indices",
+            color=ft.Colors.AMBER_200,
+            weight=ft.FontWeight.BOLD,
+            size=21),
+        padding=ft.padding.only(top=30)
+    )
+
+    # Widget : ligne de séparation
+    separation = ft.Container(
+        content=ft.Divider(thickness=2, color=ft.Colors.AMBER_200),
+        padding=ft.padding.only(bottom=10)
+    )
+
+    # Widget : Dropdown
+    dropdown_composition = ft.Dropdown(  # ← Nom différent pour éviter confusion
+        label="Sélectionnez la composition de l'indice",
+        hint_text="Choisissez un indice",
+        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
+        hint_style=ft.TextStyle(color=ft.Colors.GREY),
+        width=300,
+        options=[ft.dropdown.Option(i) for i in liste_indices],
+        on_change=lambda e: update_table_composition(e.control.value),  # ← Appelle update_table_composition
+        value=indice_default
+    )
+
+    # Tableau vide pour la composition
+    table_composition = ft.DataTable(
+        column_spacing=10,
+        heading_row_height=30,
+        data_row_min_height=25,
+        divider_thickness=0.5,
+        columns=[ft.DataColumn(ft.Text("Chargement...", size=11))],  # ← Au moins 1 colonne
+        rows=[]
+    )
+
+    # Conteneur avec scroll
+    cadre_table_composition = ft.Container(
+        content=ft.Column(
+            [ft.Row([table_composition], scroll=ft.ScrollMode.AUTO)],  # Row pour scroll horizontal
+            scroll=ft.ScrollMode.AUTO  # Column pour scroll vertical
+        ),
+        border=ft.border.all(1, ft.Colors.AMBER_200),
+        border_radius=10,
+        padding=5,
+        height=300,  # Hauteur fixe nécessaire pour activer le scroll vertical
+        width=350
+    )
+
+    # Texte d'état
+    texte_resultat = ft.Text("", size=13, color=ft.Colors.WHITE)
+
+    # Fonction de mise à jour
+    def update_table_composition(indice):
+        df = datas_indices.get_composition_indice(indice)
+        
+        table_composition.columns.clear()
+        table_composition.rows.clear()
+        
+        if df is None or df.empty:
+            texte_resultat.value = f"⚠️ Pas de données disponibles pour l'indice {indice}."
+            # Remettre une colonne vide pour éviter l'erreur
+            table_composition.columns.append(
+                ft.DataColumn(ft.Text("Aucune donnée", size=11))
+            )
+        else:
+            texte_resultat.value = f"📊 Composition de l'indice {indice} :"
+            
+            # Colonnes
+            for col in df.columns:
+                table_composition.columns.append(
+                    ft.DataColumn(ft.Text(str(col), weight=ft.FontWeight.BOLD, size=11))
+                )
+            
+            # Lignes
+            for _, row in df.iterrows():
+                cells = [ft.DataCell(ft.Text(str(val), size=10)) for val in row]
+                table_composition.rows.append(ft.DataRow(cells=cells))
+        
+        page.update()
+
+    # Ajouter à la page
+    page.add(
+        text_composition,
+        separation,
+        dropdown_composition,  # ← Utilise le bon nom
+        texte_resultat,
+        cadre_table_composition
+    )
+
+    # Initialiser
+    update_table_composition(indice_default)

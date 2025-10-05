@@ -33,7 +33,7 @@ def indices_page(page: ft.Page):
     # Dropdown
     dropdown_indice = ft.Dropdown(label="Choisissez un indice pour le graphique", value=indice_default, options=[ft.dropdown.Option(indice) for indice in liste_indices], width=300)
     
-    # PlotlyChart (vide au départ)
+    # Widget : PlotlyChart (vide au départ)
     chart = PlotlyChart(figure=go.Figure())
     
     def update_graph(e): # Met à jour le graphique quand on change l'indice
