@@ -53,12 +53,3 @@ def main_page(page: ft.Page):
 
     page.update()
 
-
-'''
-    # Disposer les boutons en grille 2x3
-    row1 = ft.Row(controls=[buttons[0], buttons[1], buttons[2]], alignment=ft.MainAxisAlignment.CENTER)
-    row2 = ft.Row(controls=[buttons[3], buttons[4], buttons[5]], alignment=ft.MainAxisAlignment.CENTER)
-
-    page.add(texte_bienvenu, row1, row2)
-
-'''

@@ -27,7 +27,7 @@ def main(page: ft.Page): # “page: ft.Page“ est une annotation de type. Sert 
  
     route_change(page) # Affichage initial
 
-    # page.on_route_change = lambda e: route_change(page) # Alternative avec lambda pour passer la page à route_change
+    # page.on_route_change = lambda e: route_change(page)
     
 ft.app(target=main) 
 
