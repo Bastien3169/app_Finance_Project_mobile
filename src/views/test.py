@@ -100,154 +100,239 @@ def create_graph_section(page):
 
 def create_rendement_section(page):
 
-    # Widget : titre dans container pour le padding
-    text_rendement = ft.Container(content=ft.Text("💯 Rendements des indices (%)", color=ft.Colors.AMBER_200, weight=ft.FontWeight.BOLD, size=21),
-                                  padding=ft.padding.only(top=35),
-                                  )
+    periods_selectionnees = [6, 12, 24, 60, 120, 180]  # affichées au début
 
-    # Widget : ligne de séparation dans un container pour avoir padding que en dessous 
-    separation = ft.Container(content=ft.Divider(thickness=2, color=ft.Colors.AMBER_200), padding=ft.padding.only(bottom=15))
+    # --- Titre ---
+    text_rendement = ft.Container(
+        content=ft.Text("💯 Rendements des indices (%)",
+                        color=ft.Colors.AMBER_200,
+                        weight=ft.FontWeight.BOLD,
+                        size=21),
+        padding=ft.padding.only(top=35),
+    )
 
-    # Widget : Dropdown (menu déroulant)
+    # --- Séparateur ---
+    separation = ft.Container(
+        content=ft.Divider(thickness=2, color=ft.Colors.AMBER_200),
+        padding=ft.padding.only(bottom=15)
+    )
+
+    # --- Sélection des indices ---
     dropdown_multi = ft.Dropdown(
         label="Sélectionnez les indices à comparer",
         hint_text="Choisissez un ou plusieurs indices",
         label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
         hint_style=ft.TextStyle(color=ft.Colors.GREY),
         width=300,
-        options=[ft.dropdown.Option(i) for i in liste_indices], # éléments de la liste
+        options=[ft.dropdown.Option(i) for i in liste_indices],
         on_change=lambda e: ajouter_indice(e.control.value),
-        value=indice_default  # Valeur par défaut (liste des indices sélectionnés)
-        )
+        value=indice_default
+    )
 
-    # Liste des indices sélectionnés (initialisé avec un indice par défaut)
     indices_selectionnes = [indice_default]
-    
-    # Widget : liste des indices sélectionnés
     liste_selection = ft.Row(scroll=ft.ScrollMode.AUTO)
 
-    # Cadre autour de la liste des indices sélectionnés
     cadre_text = ft.Container(
-    content=ft.Column([ft.Text("Indices sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),liste_selection], 
-                      horizontal_alignment=ft.CrossAxisAlignment.START),
-                      padding=5,
-                      border=ft.border.all(0.5, ft.Colors.WHITE30),
-                      border_radius=10,
-                      expand=True, # permet au container de prendre toute la largeur
-                      alignment=ft.alignment.top_left # centre horizontalement le contenu
-                      )
-                    
-    # Widget : tableau des rendements
+        content=ft.Column([
+            ft.Text("Indices sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+            liste_selection
+        ],
+            horizontal_alignment=ft.CrossAxisAlignment.START),
+        padding=5,
+        border=ft.border.all(0.5, ft.Colors.WHITE30),
+        border_radius=10,
+        expand=True,
+        alignment=ft.alignment.top_left
+    )
+
+    # Input pour ajouter des périodes personnalisées
+    input_periode = ft.Column(
+    controls=[
+        ft.Text(
+            "Ajouter une période (en mois)", 
+            size=11,
+            style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
+        ),
+        ft.TextField(
+            width=200,
+            keyboard_type=ft.KeyboardType.NUMBER,
+            on_submit=lambda e: ajouter_periode(e.control.value),
+            hint_text="Ex: 3, 150, ...",
+            hint_style=ft.TextStyle(color=ft.Colors.GREY_600, size=11),
+            text_style=ft.TextStyle(size=11)
+        )
+    ],
+    spacing=2
+)
+
+    bouton_ajouter_periode = ft.IconButton(
+        icon=ft.Icons.ADD,
+        icon_color=ft.Colors.AMBER_200,
+        tooltip="Ajouter la période",
+        on_click=lambda e: ajouter_periode(input_periode.value)
+    )
+
+    # Ligne pour l'input et le bouton
+    ligne_ajout_periode = ft.Row(
+        [input_periode, bouton_ajouter_periode],
+        alignment=ft.MainAxisAlignment.START,
+        spacing=10
+    )
+
+    # Conteneur pour les périodes sélectionnées
+    liste_periodes = ft.Row(scroll=ft.ScrollMode.AUTO)
+
+    # 🔲 Cadre complet regroupant tout
+    cadre_periodes = ft.Container(
+        content=ft.Column(
+            [
+                ligne_ajout_periode,
+                ft.Text(
+                    "Périodes sélectionnées (en mois) :",
+                    size=11,
+                    style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)
+                ),
+                liste_periodes,  # <= ici on l’ajoute DANS le cadre
+            ],
+            spacing=10,
+            alignment=ft.MainAxisAlignment.START
+        ),
+        padding=10,
+        border=ft.border.all(0.5, ft.Colors.WHITE30),
+        border_radius=10,
+        expand=True,
+        alignment=ft.alignment.top_left
+    )
+
+    # Tableau des rendements
     table = ft.DataTable(
         expand=True,
-        column_spacing=10, # Espace entre les colonnes pour que tout rentre
-        #vertical_lines=ft.BorderSide(1, ft.Colors.GREY_400), # Lignes verticales entre les colonnes
-        heading_row_height=25,  # Hauteur de la ligne d'en-tête
-        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),  # Couleur de l'entête
-        data_row_min_height=35,  # Hauteur minimale des lignes de données
-        data_row_max_height=35,  # Hauteur maximale des lignes de données
-        divider_thickness=0.5, # Epaisseur séparateur lignes
-        columns=[
-            ft.DataColumn(ft.Text("Indice", weight=ft.FontWeight.BOLD, size=12)),
-            ft.DataColumn(ft.Text("6m", weight=ft.FontWeight.BOLD, size=12),),
-            ft.DataColumn(ft.Text("12m", weight=ft.FontWeight.BOLD, size=12)),
-            ft.DataColumn(ft.Text("24m", weight=ft.FontWeight.BOLD, size=12)),
-            ft.DataColumn(ft.Text("60m", weight=ft.FontWeight.BOLD, size=12)),
-            ft.DataColumn(ft.Text("120m", weight=ft.FontWeight.BOLD, size=12)),
-            ft.DataColumn(ft.Text("180m", weight=ft.FontWeight.BOLD, size=12))
-        ],
+        column_spacing=10,
+        heading_row_height=25,
+        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
+        data_row_min_height=35,
+        data_row_max_height=35,
+        divider_thickness=0.5,
+        columns=[],
         rows=[],
-        )
-    
-    # Conteneur qui prend le tebleau  et qui l'encadre
+    )
+
     cadre_tableau = ft.Container(
-        content=ft.Row([table], scroll=ft.ScrollMode.AUTO, alignment=ft.MainAxisAlignment.CENTER), 
+        content=ft.Row([table],
+                       scroll=ft.ScrollMode.AUTO,
+                       alignment=ft.MainAxisAlignment.CENTER),
         border=ft.border.all(0.5, ft.Colors.AMBER_200),
-        border_radius=10, 
+        border_radius=10,
         padding=5,
         alignment=ft.alignment.center,
     )
 
-    # Fonction pour calculer les rendements
+    # --- Fonctions ---
     def update_selection_list():
         liste_selection.controls.clear()
         for i in indices_selectionnes:
             liste_selection.controls.append(
                 ft.Row([
                     ft.Text(i, size=12),
-                    ft.IconButton(icon=ft.Icons.CLOSE, icon_size=16,
+                    ft.IconButton(icon=ft.Icons.CLOSE,
+                                  icon_size=16,
                                   on_click=lambda e, i=i: retirer_indice(i))
                 ])
             )
         page.update()
 
-    # Fonction pour ajouter ou retirer un indice de la sélection
     def ajouter_indice(indice):
         if indice and indice not in indices_selectionnes:
             indices_selectionnes.append(indice)
             update_selection_list()
             update_table()
 
-    # Fonction pour retirer un indice de la sélection
     def retirer_indice(indice):
         if indice in indices_selectionnes:
             indices_selectionnes.remove(indice)
             update_selection_list()
             update_table()
 
-    # Fonction pour mettre à jour le tableau des rendements
+    # 🆕 Fonction : ajouter une période personnalisée
+    def ajouter_periode(p):
+        try:
+            p = int(p)
+            if p <= 0:
+                return
+        except (ValueError, TypeError):
+            return
+        if p not in periods_selectionnees:
+            periods_selectionnees.append(p)
+            update_periodes_list()
+            update_table()
+        input_periode.value = ""  # on vide le champ
+        page.update()
+
+    def retirer_periode(p):
+        if p in periods_selectionnees:
+            periods_selectionnees.remove(p)
+            update_periodes_list()
+            update_table()
+
+    # 🆕 Affichage dynamique des périodes sélectionnées
+    def update_periodes_list():
+        liste_periodes.controls.clear()
+        for p in sorted(periods_selectionnees):
+            liste_periodes.controls.append(
+                ft.Row([
+                    ft.Text(f"{p}m", size=12),
+                    ft.IconButton(
+                        icon=ft.Icons.CLOSE,
+                        icon_size=16,
+                        on_click=lambda e, p=p: retirer_periode(p)
+                    )
+                ])
+            )
+        page.update()
+
     def update_table():
-        # Met à jour le tableau
+        table.columns.clear()
         table.rows.clear()
-        periods = [6, 12, 24, 60, 120, 180]
-        
+
+        # Colonnes dynamiques selon les périodes sélectionnées
+        columns = [ft.DataColumn(ft.Text("Indice", weight=ft.FontWeight.BOLD, size=12))]
+        for period in sorted(periods_selectionnees):
+            columns.append(ft.DataColumn(ft.Text(f"{period}m", weight=ft.FontWeight.BOLD, size=12)))
+        table.columns = columns
+
         for indice in indices_selectionnes:
             df = datas_indices.get_prix_date(indice)
-            
             if not df.empty:
-                rendements = calculate_rendement(df, periods)
-                
-                # Convertir en float si c'est une string
+                rendements = calculate_rendement(df, periods_selectionnees)
                 cells = [ft.DataCell(ft.Text(indice, size=11))]
-                
-                for period in periods:
+                for period in sorted(periods_selectionnees):
                     valeur = rendements.get(f'{period} mois', 0)
                     try:
                         valeur_float = float(valeur)
                         texte = f"{valeur_float:.1f}%"
-                        # Couleur du TEXTE au lieu du fond
-                        if valeur_float > 0:
-                            couleur_texte = ft.Colors.GREEN
-                        elif valeur_float < 0:
-                            couleur_texte = ft.Colors.RED
-                        else:
-                            couleur_texte = ft.Colors.BLACK
+                        couleur_texte = (
+                            ft.Colors.GREEN if valeur_float > 0
+                            else ft.Colors.RED if valeur_float < 0
+                            else ft.Colors.BLACK
+                        )
                     except (ValueError, TypeError):
                         texte = str(valeur)
                         couleur_texte = ft.Colors.BLACK
-                    
-                    cells.append(
-                        ft.DataCell(
-                            ft.Text(texte, size=10, color=couleur_texte) # color au lieu de bgcolor
-                        )
-                    )
-                
+                    cells.append(ft.DataCell(ft.Text(texte, size=10, color=couleur_texte)))
                 table.rows.append(ft.DataRow(cells=cells))
-
         page.update()
 
-    # Lier "dropdown_multi" à la fonction "ajouter_indice" grace à l'événement "on_change"  qui est un callback
-    dropdown_multi.on_change = lambda e: ajouter_indice(e.control.value)
-    
-    # Initialisation des fonctions
+    # Initialisation
     update_selection_list()
+    update_periodes_list()
     update_table()
 
     return [
-        text_rendement, 
-        separation, 
-        dropdown_multi, 
-        cadre_text, 
+        text_rendement,
+        separation,
+        dropdown_multi,
+        cadre_text,
+        cadre_periodes,
         cadre_tableau
     ]
 
@@ -328,6 +413,21 @@ def indices_page(page: ft.Page):
     rendement_elements = create_rendement_section(page)
     composition_elements = create_composition_section(page)
 
+    # Bouton retour en haut à droite
+    bouton_retour_haut = ft.IconButton(
+        icon=ft.Icons.ARROW_BACK,  # flèche gauche
+        icon_color=ft.Colors.AMBER_700,  # même couleur que le bouton accueil
+        tooltip="Retour accueil",
+        on_click=lambda e: page.go("/")
+    )
+
+    # Container pour aligner à gauche
+    container_retour_haut = ft.Container(
+        content=ft.Row([bouton_retour_haut], alignment=ft.MainAxisAlignment.START),
+        padding=ft.padding.all(0),        # plus aucun padding
+        height=30, 
+    )
+
     # Bouton Retour accueil
     bouton_retour = ft.ElevatedButton(
         "Retour accueil",
@@ -349,6 +449,7 @@ def indices_page(page: ft.Page):
 
     # Un seul page.add() avec tous les éléments avec décompression des listes grace à l'étoile *
     page.add(
+        container_retour_haut,  # Bouton en haut à droite
         *graph_elements,
         *rendement_elements, 
         *composition_elements,
