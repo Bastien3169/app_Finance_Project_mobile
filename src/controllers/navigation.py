@@ -30,7 +30,7 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
         page.add(ft.Text("Page MAJ BD - En construction"))
     elif route == "/test": 
         # maj_bd.main_page(page)
-        test.indices_page(page) 
+        test.simulation_dca_vs_ls(page) 
     else:
         page.add(ft.Text("❌ Page introuvable", size=20))
     

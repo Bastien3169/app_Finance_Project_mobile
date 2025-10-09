@@ -5,8 +5,6 @@ import bcrypt
 import re
 import uuid
 from datetime import datetime, timedelta
-from streamlit_cookies_manager import EncryptedCookieManager
-import streamlit as st
 
 
 ############################################# CLASS BDD USERS #############################################
