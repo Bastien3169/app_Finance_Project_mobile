@@ -16,7 +16,7 @@ def simulation_dca_vs_ls(page: ft.Page):
     page.scroll = "adaptive"
 
     # Données de base
-    liste_indices = ["S&P 500", "NASDAQ 100", "CAC 40"]
+    liste_indices = datas_indices.get_list_indices()
     indice_default = "S&P 500"
 
     # Widgets utilisateur

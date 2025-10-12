@@ -22,9 +22,15 @@ class FinanceDatabaseStocks:
         return df["Short_Name_Stocks"].tolist()
     
   
-    def get_infos_stocks(self):
+    def get_infos_stocks(self, short_name=None):
         with sqlite3.connect(self.db_path) as conn:
-            df = pd.read_sql("SELECT * FROM stocks_infos_par_indice", conn)
+            query = "SELECT * FROM stocks_infos_par_indice"
+            if short_name:
+                query += " WHERE Short_Name_Stocks = ?"
+                df = pd.read_sql(query, conn, params=(short_name,))
+            else:
+                df = pd.read_sql(query, conn)
+
         # Supprimer les doublons sur la colonne d'identification de l'entreprise
         df = df.drop_duplicates(subset=["Short_Name_Stocks"])
         return df

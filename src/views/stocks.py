@@ -13,13 +13,13 @@ from src.models.control_datas.connexion_db_datas import *
 
 
 # Connexion DB et récupération des données
-datas_indices = FinanceDatabaseIndice(db_path="data.db")
-liste_indices = datas_indices.get_list_indices()
-infos_indices = datas_indices.get_infos_indices()
-indice_default = "S&P 500"
+datas_stocks = FinanceDatabaseStocks(db_path="data.db")
+liste_actifs = datas_stocks.get_list_stocks()
+infos_actifs = datas_stocks.get_infos_stocks()
+actif_default = "Apple Inc."
 
-couleur_titre_separateur = ft.Colors.AMBER_200
-couleur_bouton_fleche = ft.Colors.AMBER_700
+couleur_titre_separateur = ft.Colors.GREEN_200
+couleur_bouton_fleche = ft.Colors.GREEN_700
 
 ################################## GRAPHIQUE #################################################
 def create_graph_section(page):
@@ -34,8 +34,8 @@ def create_graph_section(page):
     # Widget : Dropdown (menu déroulant)
     dropdown_indice = ft.Dropdown(
         label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-        value=indice_default,
-        options=[ft.dropdown.Option(indice) for indice in liste_indices],
+        value=actif_default,
+        options=[ft.dropdown.Option(indice) for indice in liste_actifs],
         width=300
     )
 
@@ -54,7 +54,7 @@ def create_graph_section(page):
         selected_indice = dropdown_indice.value
 
         # Récupérer les données de l'indice sélectionné
-        df = datas_indices.get_prix_date(selected_indice)
+        df = datas_stocks.get_prix_date(selected_indice)
 
         # Convertir les dates en string
         df['Date'] = df['Date'].astype(str)
@@ -131,12 +131,12 @@ def create_rendement_section(page):
         label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
         hint_style=ft.TextStyle(color=ft.Colors.GREY),
         width=300,
-        options=[ft.dropdown.Option(i) for i in liste_indices],
+        options=[ft.dropdown.Option(i) for i in liste_actifs],
         on_change=lambda e: ajouter_indice(e.control.value),
-        value=indice_default
+        value=actif_default
     )
 
-    indices_selectionnes = [indice_default]
+    indices_selectionnes = [actif_default]
     liste_selection = ft.Row(scroll=ft.ScrollMode.AUTO)
 
     cadre_text = ft.Container(
@@ -308,7 +308,7 @@ def create_rendement_section(page):
         table.columns = columns
 
         for indice in indices_selectionnes:
-            df = datas_indices.get_prix_date(indice)
+            df = datas_stocks.get_prix_date(indice)
             if not df.empty:
                 rendements = calculate_rendement(df, periods_selectionnees)
                 cells = [ft.DataCell(ft.Text(indice, size=11))]
@@ -344,12 +344,12 @@ def create_rendement_section(page):
     ]
 
 
-################################## COMPOSITION INDICES  ################################
+################################## INFO ENTREPRISE  ################################
 
 def create_composition_section(page):
     
      # Widget : titre dans container pour le padding
-    text_composition = ft.Container(content=ft.Text("🗂 Composition des indices",
+    text_composition = ft.Container(content=ft.Text("🗂 Informations entreprise",
                                                     color=couleur_titre_separateur,
                                                     weight=ft.FontWeight.BOLD,
                                                     size=21),
@@ -359,15 +359,6 @@ def create_composition_section(page):
     separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur),
                               padding=ft.padding.only(bottom=15))
 
-    # Widget : Dropdown (menu déroulant)        
-    dropdown_composition = ft.Dropdown(
-        label="Sélectionnez la composition de l'indice",
-        hint_text="Choisissez un indice",
-        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
-        width=300,
-        options=[ft.dropdown.Option(i) for i in liste_indices],
-        value=indice_default
-    )
 
     # Widget : tableau de la composition
     table_composition = ft.DataTable(
@@ -391,7 +382,7 @@ def create_composition_section(page):
 
     # Fonction pour mettre à jour le tableau de composition
     def update_table_composition(indice):
-        df = datas_indices.get_composition_indice(indice)
+        df = datas_stocks.get_infos_stocks(indice)
         table_composition.columns.clear()
         table_composition.rows.clear()
         for col in df.columns:
@@ -399,26 +390,22 @@ def create_composition_section(page):
         for _, row in df.iterrows():
             table_composition.rows.append(ft.DataRow(cells=[ft.DataCell(ft.Text(str(v), size=10)) for v in row]))
         page.update()
-
-    # Lier "dropdown_composition" à la fonction "update_table_composition" grace à l'événement "on_change"  qui est un callback
-    dropdown_composition.on_change = lambda e: update_table_composition(e.control.value)
     
     # Appel initial pour afficher la composition par défaut
-    update_table_composition(indice_default)
+    update_table_composition(actif_default)
 
-    return [text_composition, separation, dropdown_composition, cadre_table_composition]
-
+    return [text_composition, separation, cadre_table_composition]
 
 ################################### FONCTION PRINCIPALE ################################
 
-def indices_page(page: ft.Page):
+def stocks_page(page: ft.Page):
     page.clean()
     page.scroll = "auto"
 
     # Récupère tous les éléments
     graph_elements = create_graph_section(page)
     rendement_elements = create_rendement_section(page)
-    composition_elements = create_composition_section(page)
+    infos_elements = create_composition_section(page)
 
     # Bouton retour en haut à droite
     bouton_retour_haut = ft.IconButton(
@@ -459,6 +446,6 @@ def indices_page(page: ft.Page):
         container_retour_haut,  # Bouton en haut à droite
         *graph_elements,
         *rendement_elements, 
-        *composition_elements,
+        *infos_elements,
         container_bouton  # Bouton en dernier
     )
