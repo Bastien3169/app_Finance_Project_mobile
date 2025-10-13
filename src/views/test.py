@@ -8,49 +8,73 @@ from src.controllers.LP_VS_DCA import *
 
 # -------------------- Connexion DB --------------------
 datas_indices = FinanceDatabaseIndice(db_path="data.db")
-liste_indices = datas_indices.get_list_indices()
+liste_actifs = datas_indices.get_list_indices()
+actif_default = "S&P 500"
 
-# -------------------- Fonction Flet --------------------
+couleur_titre_separateur = ft.Colors.RED_200
+couleur_bouton_fleche = ft.Colors.RED_700
+
+################################## INPUT #################################################
 def simulation_dca_vs_ls(page: ft.Page):
     page.title = "🏛️ Simulation DCA vs Lump Sum"
     page.scroll = "adaptive"
 
-    # Données de base
-    liste_indices = datas_indices.get_list_indices()
-    indice_default = "S&P 500"
+    # Widget : titre
+    text_graphique = ft.Text("📈 Graphiques des indices", color=couleur_titre_separateur, weight=ft.FontWeight.BOLD, size=21)
 
-    # Widgets utilisateur
-    select_indice = ft.Dropdown(
-        label="Choisissez un indice pour le graphique",
-        options=[ft.dropdown.Option(i) for i in liste_indices],
-        value=indice_default
+    # Widget : ligne de séparation dans un container pour avoir padding que en dessous
+    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur),padding=ft.padding.only(bottom=15))
+
+     # Widget : Dropdown (menu déroulant)
+    dropdown_indice = ft.Dropdown(
+        label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+        value=actif_default,
+        options=[ft.dropdown.Option(indice) for indice in liste_actifs],
+        border_radius=8,
+        border_color=ft.Colors.WHITE30,
+        expand=True
     )
 
     input_montant = ft.TextField(
         label="💰 Montant à investir (€)",
         value="100000",
-        keyboard_type=ft.KeyboardType.NUMBER
+        keyboard_type=ft.KeyboardType.NUMBER,
+        border=ft.InputBorder.OUTLINE,  # ✅ Bordure native
+        border_radius=8,  # ✅ Coins arrondis
+        border_color=ft.Colors.WHITE30,  # ✅ Bordure blanche
+        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
     )
 
     input_durees = ft.TextField(
         label="⏳ Durées d'investissement (en années)",
         value="5,10,15,20,25",
-        hint_text="Ex: 5,10,15,20,25"
+        hint_text="Ex: 5,10,15,20,25",
+        border=ft.InputBorder.OUTLINE,
+        border_radius=8,
+        border_color=ft.Colors.WHITE30,
+        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
+        
     )
 
     input_mois_dca = ft.TextField(
         label="📆 Mois de DCA",
         value="6,12,24",
-        hint_text="Ex: 6,12,24"
+        hint_text="Ex: 6,12,24",
+        border=ft.InputBorder.OUTLINE,
+        border_radius=8,
+        border_color=ft.Colors.WHITE30,
+        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
     )
+
 
     output_zone = ft.Column(spacing=20)
 
     # Action : lancer la simulation
     def lancer_simulation(e):
         output_zone.controls.clear()
+        output_zone.spacing = 20  # ✅ Réappliquer le spacing après clear
 
-        ticker = select_indice.value
+        ticker = dropdown_indice.value
         somme_investie = float(input_montant.value)
         durees = [int(x.strip()) for x in input_durees.value.split(",") if x.strip().isdigit()]
         mois_dca_list = [int(x.strip()) for x in input_mois_dca.value.split(",") if x.strip().isdigit()]
@@ -102,24 +126,76 @@ def simulation_dca_vs_ls(page: ft.Page):
 
         page.update()
 
+    # Personnalisation boutton
     bouton_simulation = ft.ElevatedButton(
-        text="🚀 Lancer la simulation",
-        on_click=lancer_simulation
+        content=ft.Text("🚀 Lancer la simulation", weight=ft.FontWeight.BOLD),
+        on_click=lancer_simulation,
+        expand=True,  # prend toute la largeur
+        width=600,  # largeur fixe en pixels
+        style=ft.ButtonStyle(
+            bgcolor=ft.Colors.RED_200,  # fond rouge
+            color=ft.Colors.RED_700,      # texte blanc
+            padding=ft.padding.symmetric(vertical=20),  # hauteur du bouton
+            )
+        )
+    
+
+    # Margin dans chque widget input. On met en column pour ca 
+    inputs_column = ft.Column(controls=[dropdown_indice, input_montant, input_durees, input_mois_dca, bouton_simulation],
+                              spacing=25,  # ici l'espacement vertical entre chaque widget
+                              )
+    
+    return [text_graphique, separation, inputs_column, output_zone]
+
+
+################################### FONCTION PRINCIPALE ################################
+
+def dca_lp_page(page: ft.Page):
+    page.clean()
+    page.scroll = "auto"
+
+    simulation = simulation_dca_vs_ls(page)
+
+    # Bouton retour en haut à droite
+    bouton_retour_haut = ft.IconButton(
+        icon=ft.Icons.ARROW_BACK,  # flèche gauche
+        icon_color=couleur_bouton_fleche,  # même couleur que le bouton accueil
+        tooltip="Retour accueil",
+        on_click=lambda e: page.go("/")
     )
 
+    # Container pour aligner à gauche la flèche retour
+    container_retour_haut = ft.Container(
+        content=ft.Row([bouton_retour_haut], alignment=ft.MainAxisAlignment.START),
+        padding=ft.padding.all(0),        # plus aucun padding
+        height=30, 
+    )
+
+    # Bouton Retour accueil
+    bouton_retour = ft.ElevatedButton(
+        "Retour accueil",
+        icon=ft.Icons.HOME, # ajoute icône à gauche du texte
+        style=ft.ButtonStyle(
+            color=ft.Colors.WHITE,
+            bgcolor=couleur_bouton_fleche,
+            padding=ft.padding.symmetric(horizontal=20, vertical=15)
+        ),
+        on_click=lambda e: page.go("/")  # Redirection vers la page d'accueil
+    )
+
+    # Container pour centrer le bouton retour
+    container_bouton = ft.Container(
+        content=bouton_retour,
+        alignment=ft.alignment.center,
+        padding=ft.padding.only(top=30, bottom=20)  # Espacement avant et après
+    )
+
+    
     # Layout principal
     page.add(
-        ft.Column([
-            ft.Text("🏛️ Simulation DCA vs Lump Sum", size=22, weight="bold"),
-            select_indice,
-            input_montant,
-            input_durees,
-            input_mois_dca,
-            bouton_simulation,
-            output_zone
-        ], scroll=ft.ScrollMode.AUTO, spacing=20)
-    )
+            container_retour_haut,
+            *simulation,
+            container_bouton
+            )
 
-# -------------------- Lancer Flet --------------------
-if __name__ == "__main__":
-    ft.app(target=simulation_dca_vs_ls, view=ft.WEB_BROWSER)
+

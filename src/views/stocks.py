@@ -24,7 +24,7 @@ couleur_bouton_fleche = ft.Colors.GREEN_700
 ################################## GRAPHIQUE #################################################
 def create_graph_section(page):
     page.scroll = "auto"
-
+    
     # Widget : titre
     text_graphique = ft.Text("📈 Graphiques des indices", color=couleur_titre_separateur, weight=ft.FontWeight.BOLD, size=21)
 
@@ -360,6 +360,14 @@ def create_composition_section(page):
                               padding=ft.padding.only(bottom=15))
 
 
+
+    # Widget : Dropdown (menu déroulant)
+    dropdown_indice = ft.Dropdown(
+        label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+        value=actif_default,
+        options=[ft.dropdown.Option(indice) for indice in liste_actifs],
+        width=300
+    )
     # Widget : tableau de la composition
     table_composition = ft.DataTable(
         column_spacing=10,
@@ -377,12 +385,13 @@ def create_composition_section(page):
         border=ft.border.all(0.5, couleur_titre_separateur),
         border_radius=10,
         padding=5,
-        height=300,
     )
 
+
     # Fonction pour mettre à jour le tableau de composition
-    def update_table_composition(indice):
-        df = datas_stocks.get_infos_stocks(indice)
+    def update_table_composition(e):
+        selected_indice = dropdown_indice.value # Récupérer l'indice sélectionné
+        df = datas_stocks.get_infos_stocks(selected_indice)
         table_composition.columns.clear()
         table_composition.rows.clear()
         for col in df.columns:
@@ -391,10 +400,16 @@ def create_composition_section(page):
             table_composition.rows.append(ft.DataRow(cells=[ft.DataCell(ft.Text(str(v), size=10)) for v in row]))
         page.update()
     
+
+    # Lier le dropdown à la fonction de mise à jour
+    dropdown_indice.on_change = update_table_composition
+
     # Appel initial pour afficher la composition par défaut
     update_table_composition(actif_default)
+    page.update()
 
-    return [text_composition, separation, cadre_table_composition]
+    return [text_composition, separation, dropdown_indice, cadre_table_composition]
+
 
 ################################### FONCTION PRINCIPALE ################################
 
