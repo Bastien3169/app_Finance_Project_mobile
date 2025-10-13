@@ -66,8 +66,11 @@ def simulation_dca_vs_ls(page: ft.Page):
         label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
     )
 
-
+    # On crér un zone dynamique (un contenair ft.Columns) dans la page pour conreoler que cette zone et pas refresh la page à chaque fois
     output_zone = ft.Column(spacing=20)
+
+
+################################## SIMULATION #################################################
 
     # Action : lancer la simulation
     def lancer_simulation(e):
@@ -79,50 +82,104 @@ def simulation_dca_vs_ls(page: ft.Page):
         durees = [int(x.strip()) for x in input_durees.value.split(",") if x.strip().isdigit()]
         mois_dca_list = [int(x.strip()) for x in input_mois_dca.value.split(",") if x.strip().isdigit()]
 
-        output_zone.controls.append(ft.Text("Calcul en cours...", italic=True))
+        # Mise en place di loader
+        output_zone.controls.append(ft.ProgressRing(color=couleur_titre_separateur, visible=True, width=50, height=50))
+        
         page.update()
 
-        # 🔹 Données financières
-        data_financiere = datas_indices.get_prix_date(ticker)
-
-        # 🔹 Calculs
+        # Calculs
         df_resultats = calcul_rendements_durations(durees, mois_dca_list, somme_investie, ticker)
         df = calcul_multiple_rendements(durees, mois_dca_list, somme_investie, ticker)
 
-        # 🔹 Graphique 1 : montants finaux
-        output_zone.controls.append(ft.Text(
+
+         # suppression le loader avant d'ajouter les résultats
+        output_zone.controls.clear()
+        output_zone.spacing = 20
+
+        # Graphique 1 : texte
+        graphe1_text = (ft.Text(
             "📈 Les montants finaux obtenus en fonction de la durée du placement",
             size=18, weight="bold"
         ))
+
+        graphe1_text = ft.Container(
+            content=ft.Text("📈 Les montants finaux par durée",
+                            color=couleur_titre_separateur,
+                            weight=ft.FontWeight.BOLD,
+                            size=21),
+            padding=ft.padding.only(top=35),
+            expand=True,
+            )
+
+        # --- Séparateur ---
+        separation = ft.Container(
+            content=ft.Divider(thickness=2, color=couleur_titre_separateur),
+            padding=ft.padding.only(bottom=15)
+        )
+        # Graphique 1 : graphique barre
         fig1 = graphe_barre(df_resultats)
-        output_zone.controls.append(PlotlyChart(fig1, expand=True))
+        graphe1_graphe = (PlotlyChart(fig1, expand=True))
 
-        # 🔹 Graphique 2 : évolution dans le temps
-        output_zone.controls.append(ft.Text(
-            "📈 Évolution des placements en fonction du temps",
-            size=18, weight="bold"
-        ))
+        # Graphique 2 : texte
+        graphe2_text = ft.Container(
+            content=ft.Text("📈 Évolution des placements en fonction du temps",
+                            color=couleur_titre_separateur,
+                            weight=ft.FontWeight.BOLD,
+                            size=21),
+            padding=ft.padding.only(top=35),
+            expand=True,
+            )
+        
+        # Graphique 2 : évolution dans le temps
         fig2 = graphe_line(df, somme_investie)
-        output_zone.controls.append(PlotlyChart(fig2, expand=True))
+        graphe2_graphe = (PlotlyChart(fig2, expand=True))
 
-        # 🔹 Tableaux
-        output_zone.controls.append(ft.Text("📋 Tableaux comparatifs DCA vs Lump Sum", size=18, weight="bold"))
-
+        # Texte des tableaux récap
+        tableau_text = ft.Container(
+            content=ft.Text("📋 Tableaux comparatifs DCA vs Lump Sum",
+                            color=couleur_titre_separateur,
+                            weight=ft.FontWeight.BOLD,
+                            size=21),
+            padding=ft.padding.only(top=35),
+            expand=True,
+            )
+        
         # Montants finaux
-        output_zone.controls.append(ft.Text("Tableau des montants finaux"))
-        output_zone.controls.append(ft.DataTable(
+        tableau1_titre = (ft.Text("Tableau des montants finaux"))
+        tableau1 = (ft.DataTable(
             columns=[ft.DataColumn(ft.Text(c)) for c in df_resultats.columns],
             rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(str(v))) for v in row])
                   for row in df_resultats.tail(10).values.tolist()]
         ))
 
         # Évolution temporelle
-        output_zone.controls.append(ft.Text("Tableau des évolutions temporelles"))
-        output_zone.controls.append(ft.DataTable(
+        tableau2_titre = (ft.Text("Tableau des évolutions temporelles"))
+        tableau2 = (ft.DataTable(
             columns=[ft.DataColumn(ft.Text(c)) for c in df.columns],
             rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(str(v))) for v in row])
                   for row in df.tail(10).values.tolist()]
         ))
+
+        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
+        graph1_separateur = ft.Column(controls=[graphe1_text, separation],
+                                      spacing=0,  # pas d'espace entre les deux
+                                      tight=True,  # réduit les marges
+                                      )
+        
+        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
+        graph2_separateur = ft.Column(controls=[graphe2_text, separation],
+                                      spacing=0,  # pas d'espace entre les deux
+                                      tight=True,  # réduit les marges
+                                      )
+        
+        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
+        tableau_separateur = ft.Column(controls=[tableau_text, separation],
+                                      spacing=0,  # pas d'espace entre les deux
+                                      tight=True,  # réduit les marges
+                                      )
+        
+        # J'ajoute avec .extend car plusieurs ajout. Sinon c'est .append
+        output_zone.controls.extend([graph1_separateur, graphe1_graphe, graph2_separateur, graphe2_graphe, tableau_separateur, tableau1_titre, tableau1, tableau2_titre, tableau2])
 
         page.update()
 
