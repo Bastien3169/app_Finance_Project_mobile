@@ -1,5 +1,5 @@
 # Créer un venv : python3 -m venv .venv
-# L’activer : source .venv/bin/activate
+# L’activer : "source .venv/bin/activate" ou "source venv/bin/activate"
 # Désactiver : deactivate
 # Installer les dépendances : pip install -r requirements.txt
 # Lancer l’application : python main.py

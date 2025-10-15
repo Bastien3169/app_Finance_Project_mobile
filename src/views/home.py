@@ -14,7 +14,8 @@ def main_page(page: ft.Page):
         ("Cryptos", ft.Colors.PURPLE_200, "/cryptos"),   # Violet pastel
         ("DCAvsLP", ft.Colors.RED_200, "/dca_vs_lp"),  # Rouge doux
         ("MAJ BD", ft.Colors.CYAN_200, "/maj_bd"),       # Bleu clair
-        ("TEST", ft.Colors.CYAN_500, "/test"),       # Bleu clair
+        ("Test", ft.Colors.CYAN_500, "/test"),       # Bleu clair
+        ("Test2", ft.Colors.BLUE_500, "/test2"),       # Bleu 
     ]
 
 

@@ -97,13 +97,7 @@ def simulation_dca_vs_ls(page: ft.Page):
 
 
 #======================================================== GRAPHIQUE 1 ========================================================#
-
         # Graphique 1 : texte
-        graphe1_text = (ft.Text(
-            "📈 Les montants finaux obtenus en fonction de la durée du placement",
-            size=18, weight="bold"
-        ))
-
         graphe1_text = ft.Container(
             content=ft.Text("📈 Gains par durée",
                             color=couleur_titre_separateur,
@@ -113,29 +107,48 @@ def simulation_dca_vs_ls(page: ft.Page):
             expand=True,
             )
 
-        # --- Séparateur ---
+        # Séparateur
         separation = ft.Container(
             content=ft.Divider(thickness=2, color=couleur_titre_separateur),
             padding=ft.padding.only(bottom=15)
         )
+
+        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
+        graph1_separateur = ft.Column(controls=[graphe1_text, separation],
+                                      spacing=0,  # pas d'espace entre les deux
+                                      horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                      tight=True,  # réduit les marges
+                                      )
+
         # Graphique 1 : graphique barre
         fig1 = graphe_barre(df_resultats)
         graphe1_graphe = (PlotlyChart(fig1, expand=True))
 
-
-
+        
 
 #======================================================== GRAPHIQUE 2 ========================================================#
-
         # Graphique 2 : texte
         graphe2_text = ft.Container(
-            content=ft.Text("📈 Évolution de l'actif",
+            content=ft.Text("📈 Évolution des gains",
                             color=couleur_titre_separateur,
                             weight=ft.FontWeight.BOLD,
                             size=titre_size),
             padding=ft.padding.only(top=35),
             expand=True,
             )
+
+         # Séparateur
+        separation = ft.Container(
+            content=ft.Divider(thickness=2, color=couleur_titre_separateur),
+            padding=ft.padding.only(bottom=15)
+        )
+
+        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
+        graph2_separateur = ft.Column(controls=[graphe2_text, separation],
+                                      spacing=0,  # pas d'espace entre les deux
+                                      horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                      tight=True,  # réduit les marges
+                                      )
         
         # Graphique 2 : évolution dans le temps
         fig2 = graphe_line(df, somme_investie)
@@ -143,8 +156,7 @@ def simulation_dca_vs_ls(page: ft.Page):
 
 
 
-
-#======================================================== TABLEAU 1 ========================================================#
+#======================================================== TITRE TABLEAU ========================================================#
         # Titre partie tableau
         tableau_text = ft.Container(
             content=ft.Text("📈 Résultat sur tableau",
@@ -155,8 +167,22 @@ def simulation_dca_vs_ls(page: ft.Page):
             expand=True,
             )
         
+        # Séparateur
+        separation = ft.Container(
+            content=ft.Divider(thickness=2, color=couleur_titre_separateur),
+            padding=ft.padding.only(bottom=15)
+        )
 
-       # Titre du tableau 1 : montants finaux
+        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
+        tableau_separateur = ft.Column(controls=[tableau_text, separation],
+                                      spacing=0,  # pas d'espace entre les deux
+                                      horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                      tight=True,  # réduit les marges
+                                      )
+
+
+#======================================================== TABLEAU 1 ========================================================#
+       # Légende tableau 1
         titre_tableau1 = ft.Text(
             "Montants finaux par durée",
             weight=ft.FontWeight.BOLD,
@@ -165,12 +191,12 @@ def simulation_dca_vs_ls(page: ft.Page):
             style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
         )
 
-        # Conteneur du titre tableau 1 pour mettre du padding
+        # Conteneur légende tableau 1 pour padding
         titre_tableau1_contenair = ft.Container(content=titre_tableau1,
                                                 alignment=ft.alignment.center,
                                                 )
 
-        # Tableau 1 stylé (même style que tableau2)
+        # Tableau 1
         tableau1 = ft.DataTable(
             column_spacing=10,
             heading_row_height=30,
@@ -186,7 +212,7 @@ def simulation_dca_vs_ls(page: ft.Page):
             ],
         )
 
-        # Cadre du tableau 1 avec scroll automatique (même rendu que le 2)
+        # Cadre tableau 1 avec scroll automatique
         cadre_tableau1 = ft.Container(
             content=ft.Column(
                 [ft.Row([tableau1], scroll=ft.ScrollMode.AUTO)],
@@ -199,16 +225,15 @@ def simulation_dca_vs_ls(page: ft.Page):
         )
 
 
-
 #======================================================== TABLEAU 2 ========================================================#        
-        # Titre tableau 2 : évolutions temporelles
+        # Légende tableau 2
         titre_tableau2 = ft.Text("Évolutions des montants par durée",
                     weight=ft.FontWeight.BOLD,
                     size=18,
                     text_align=ft.TextAlign.CENTER,
                     style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
         
-        # Contenair du titre tableau 2 pour mettre du padding
+        # Contenair légende tableau 2 pour padding
         titre_tableau2_contenair= ft.Container(content=titre_tableau2,
                                                alignment=ft.alignment.center,
                                                padding=ft.padding.only(top=35))
@@ -223,7 +248,7 @@ def simulation_dca_vs_ls(page: ft.Page):
                 columns=[ft.DataColumn(ft.Text(c, size=11)) for c in df.columns],
                 rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(str(v), size=11)) for v in row])for row in df.values.tolist()]
                                             )
-
+        
         # Cadre tableau 2 avec scroll automatique
         cadre_tableau2 = ft.Container(
             content=ft.Column([ft.Row([tableau2], scroll=ft.ScrollMode.AUTO)], scroll=ft.ScrollMode.AUTO),
@@ -232,38 +257,16 @@ def simulation_dca_vs_ls(page: ft.Page):
             padding=5,
             height=300,  # hauteur fixe pour activer le scroll
                                     )
-
-
-
-
-        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
-        graph1_separateur = ft.Column(controls=[graphe1_text, separation],
-                                      spacing=0,  # pas d'espace entre les deux
-                                      horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                      tight=True,  # réduit les marges
-                                      )
-        
-        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
-        graph2_separateur = ft.Column(controls=[graphe2_text, separation],
-                                      spacing=0,  # pas d'espace entre les deux
-                                      horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                      tight=True,  # réduit les marges
-                                      )
-        
-        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
-        tableau_separateur = ft.Column(controls=[tableau_text, separation],
-                                      spacing=0,  # pas d'espace entre les deux
-                                      horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                      tight=True,  # réduit les marges
-                                      )
         
 
-        # J'ajoute avec .extend car plusieurs ajout. Sinon c'est .append
+        # Ajout dans "output_zone.controls" avec .extend car plusieurs ajout. Sinon c'est .append
         output_zone.controls.extend([graph1_separateur, graphe1_graphe, graph2_separateur, graphe2_graphe, tableau_separateur, titre_tableau1_contenair, cadre_tableau1, titre_tableau2_contenair, cadre_tableau2])
 
         page.update()
 
-    # Personnalisation boutton
+
+#======================================================== BOUTTON SIMULATION ========================================================#        
+    # Boutton simulation
     bouton_simulation = ft.ElevatedButton(
         content=ft.Text("🚀 Lancer la simulation", weight=ft.FontWeight.BOLD),
         on_click=lancer_simulation,
@@ -293,7 +296,7 @@ def dca_lp_page(page: ft.Page):
 
     simulation = simulation_dca_vs_ls(page)
 
-    # Bouton retour en haut à droite
+    # Flèche retour en haut à droite
     bouton_retour_haut = ft.IconButton(
         icon=ft.Icons.ARROW_BACK,  # flèche gauche
         icon_color=couleur_bouton_fleche,  # même couleur que le bouton accueil

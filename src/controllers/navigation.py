@@ -1,8 +1,9 @@
 from src.views import home, indices #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
-from src.views import home, indices, test, stocks #, etfs, cryptos, dca_vs_lp, maj_bd
+from src.views import home, indices, stocks, test, test2 #, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
+
 
 def route_change(page: ft.Page):  # Pas besoin de guillemets
     """Gère les changements de route de l'application"""
@@ -30,7 +31,9 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
         page.add(ft.Text("Page MAJ BD - En construction"))
     elif route == "/test": 
         # maj_bd.main_page(page)
-        test.dca_lp_page(page) 
+        test.dca_lp_page(page)
+    elif route == "/test2":
+        test2.dca_lp_page(page)
     else:
         page.add(ft.Text("❌ Page introuvable", size=20))
     
