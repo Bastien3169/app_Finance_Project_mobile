@@ -203,14 +203,9 @@ def simulation_dca_vs_ls(page: ft.Page):
             heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
             data_row_min_height=25,
             divider_thickness=0.5,
-            columns=[ft.DataColumn(ft.Text(c, size=11)) for c in df_resultats.columns],
-            rows=[
-                ft.DataRow(
-                    cells=[ft.DataCell(ft.Text(str(v), size=11)) for v in row]
-                )
-                for row in df_resultats.tail(10).values.tolist()
-            ],
-        )
+            columns=[ft.DataColumn(ft.Text(c, size=11, text_align=ft.TextAlign.CENTER)) for c in df_resultats.columns],
+            rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(str(v), size=11, text_align=ft.TextAlign.CENTER)) for v in row])for row in df_resultats.tail(10).values.tolist()],
+                        )
 
         # Cadre tableau 1 avec scroll automatique
         cadre_tableau1 = ft.Container(
@@ -238,16 +233,25 @@ def simulation_dca_vs_ls(page: ft.Page):
                                                alignment=ft.alignment.center,
                                                padding=ft.padding.only(top=35))
         
+        # Je refais un df sans la colonne "Date" car elle prend trop de place (mais obligé de garder pour les calcul)
+        df1 = df.drop(columns=['Date'])
         # Tableau 2
         tableau2 = ft.DataTable(
-                column_spacing=10,
-                heading_row_height=30,
-                heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),  
-                data_row_min_height=25,
-                divider_thickness=0.5,
-                columns=[ft.DataColumn(ft.Text(c, size=11)) for c in df.columns],
-                rows=[ft.DataRow(cells=[ft.DataCell(ft.Text(str(v), size=11)) for v in row])for row in df.values.tolist()]
-                                            )
+            column_spacing=10,
+            heading_row_height=30,
+            heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
+            data_row_min_height=25,
+            divider_thickness=0.5,
+            # En-têtes centrés
+            columns=[ft.DataColumn(ft.Container(
+                content=ft.Text(c, size=11, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
+                width=60, # Met une taille fixe pour que le header soit aligné
+                )) for c in df1.columns],
+            # Cellules centrées
+            rows=[ft.DataRow(cells=[ft.DataCell(ft.Container(
+                content=ft.Text(str(v), size=11, text_align=ft.TextAlign.CENTER),
+                alignment=ft.alignment.center)) for v in row]) for row in df1.values.tolist()])
+                                                    
         
         # Cadre tableau 2 avec scroll automatique
         cadre_tableau2 = ft.Container(
