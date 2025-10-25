@@ -36,7 +36,7 @@ def calcul_rendement(duree_invest=1, somme_investie=100000, mois_dca=6, ticker="
     # Ds une nouvelle colonne, je réécris les dates pour meilleure lisibilité
     data_financiere['Date_fr'] = data_financiere['Date'].dt.strftime('%d/%m/%Y')
     # Réorganisation des colonnes
-    data_financiere = data_financiere[['Date', 'Date_test', 'Close', 'Rdt mois']]
+    data_financiere = data_financiere[['Date', 'Date_fr', 'Close', 'Rdt mois']]
 
 
     #=============================== DCA ===============================
