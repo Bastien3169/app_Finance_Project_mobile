@@ -414,6 +414,8 @@ def create_composition_section(page):
 def indices_page(page: ft.Page):
     page.clean()
     page.scroll = "auto"
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.theme_mode = ft.ThemeMode.DARK
 
     # Récupère tous les éléments
     graph_elements = create_graph_section(page)

@@ -237,6 +237,8 @@ def dca_lp_page(page: ft.Page):
     page.clean()
     page.title = "🏛️ Simulation DCA vs Lump Sum"
     page.scroll = "auto"
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.theme_mode = ft.ThemeMode.DARK
 
 
     # Flèche retour en haut à droite

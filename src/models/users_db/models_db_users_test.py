@@ -45,10 +45,6 @@ class AuthManager(BaseDBManager):
         super().__init__(db_path)  # appelle init_db via la classe parente
         self.cookie_name = cookie_name
         # on créé une instance de EncryptedCookieManager et on ne met pas de préfix
-        self.cookies = EncryptedCookieManager(prefix="", password=cookie_secret) 
-        
-        if not self.cookies.ready(): # Si cookie pas dispo (.ready lit via du JS)
-            st.stop()
         self.init_db()
         self.clean_expired_sessions() # Nettoie la bdd des session expirées à chaque arrivée sur la page
 

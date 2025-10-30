@@ -1,7 +1,7 @@
 from src.views import home, indices #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
-from src.views import home, indices, stocks, dca_vs_lp, test #, etfs, cryptos, dca_vs_lp, maj_bd
+from src.views import home, indices, stocks, dca_vs_lp, test, test2 #, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
 
@@ -34,7 +34,7 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
         # maj_bd.main_page(page)
         test.admin_flet(page)
     elif route == "/test2":
-        test.dca_lp_page(page)
+        test2.admin_flet(page)
     else:
         page.add(ft.Text("❌ Page introuvable", size=20))
     

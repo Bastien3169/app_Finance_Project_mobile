@@ -19,6 +19,8 @@ def main(page: ft.Page): # “page: ft.Page“ est une annotation de type. Sert 
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = "auto"  # Permet le défilement si le contenu dépasse la hauteur de la fenêtre
     page.route = "/" # Définir la route initiale
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.theme_mode = ft.ThemeMode.DARK
 
     # Fonction de callback pour le changement de route
     def on_route_change(e):
