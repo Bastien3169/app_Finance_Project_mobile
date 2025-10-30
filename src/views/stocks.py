@@ -152,64 +152,42 @@ def create_rendement_section(page):
         alignment=ft.alignment.top_left
     )
 
-    # Input pour ajouter des périodes personnalisées
-    input_periode = ft.Column(
-    controls=[
-        ft.Text(
-            "Ajouter une période (en mois)", 
-            size=11,
-            style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-        ),
-        ft.TextField(
-            width=200,
-            keyboard_type=ft.KeyboardType.NUMBER,
-            on_submit=lambda e: ajouter_periode(e.control.value),
-            hint_text="Ex: 3, 150, ...",
-            hint_style=ft.TextStyle(color=ft.Colors.GREY_600, size=11),
-            text_style=ft.TextStyle(size=11)
-        )
-    ],
-    spacing=2
-)
+    # Text pour période à ajouter
+    text_periode = ft.Text("Ajouter une période (en mois)", size=11,style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),)
 
-    bouton_ajouter_periode = ft.IconButton(
-        icon=ft.Icons.ADD,
-        icon_color=couleur_titre_separateur,
-        tooltip="Ajouter la période",
-        on_click=lambda e: ajouter_periode(input_periode.value)
-    )
+    # Input période à ajouter
+    input_periode = ft.TextField(width=200,
+                                keyboard_type=ft.KeyboardType.NUMBER, 
+                                label="Ex: 3, 9, 18...", 
+                                label_style=ft.TextStyle(size=12, italic=True),
+                                on_submit=lambda e: ajouter_periode(e.control.value), 
+                                text_style=ft.TextStyle(size=11))
+    
+    # Bouton "+" pour ajouter la période
+    bouton_ajouter_periode = ft.IconButton(icon=ft.Icons.ADD, 
+                                           tooltip="Ajouter la période", 
+                                           on_click=lambda e: ajouter_periode(input_periode.value))
 
-    # Ligne pour l'input et le bouton
-    ligne_ajout_periode = ft.Row(
-        [input_periode, bouton_ajouter_periode],
-        alignment=ft.MainAxisAlignment.START,
-        spacing=10
-    )
+    # Ligne pour l'input et le bouton "+"
+    ligne_ajout_periode = ft.Row([input_periode, bouton_ajouter_periode], 
+                                 alignment=ft.MainAxisAlignment.START, 
+                                 spacing=10)
 
     # Conteneur pour les périodes sélectionnées
     liste_periodes = ft.Row(scroll=ft.ScrollMode.AUTO)
 
-    # 🔲 Cadre complet regroupant tout
-    cadre_periodes = ft.Container(
-        content=ft.Column(
-            [
-                ligne_ajout_periode,
-                ft.Text(
-                    "Périodes sélectionnées (en mois) :",
-                    size=11,
-                    style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)
-                ),
-                liste_periodes,  # <= ici on l’ajoute DANS le cadre
-            ],
-            spacing=10,
-            alignment=ft.MainAxisAlignment.START
-        ),
-        padding=10,
-        border=ft.border.all(0.5, ft.Colors.WHITE30),
-        border_radius=10,
-        expand=True,
-        alignment=ft.alignment.top_left
-    )
+    # Cadre complet regroupant tout
+    cadre_periodes = ft.Container(content=ft.Column([text_periode,
+                                                     ligne_ajout_periode,
+                                                     ft.Text("Périodes sélectionnées (en mois) :", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+                                                    liste_periodes,],  # <= ici on l’ajoute DANS le cadre
+                                                    spacing=10,
+                                                    alignment=ft.MainAxisAlignment.START),
+                                padding=10,
+                                border=ft.border.all(0.5, ft.Colors.WHITE30),
+                                border_radius=10,
+                                expand=True,
+                                alignment=ft.alignment.top_left)
 
     # Tableau des rendements
     table = ft.DataTable(
@@ -238,14 +216,10 @@ def create_rendement_section(page):
     def update_selection_list():
         liste_selection.controls.clear()
         for i in indices_selectionnes:
-            liste_selection.controls.append(
-                ft.Row([
-                    ft.Text(i, size=12),
-                    ft.IconButton(icon=ft.Icons.CLOSE,
-                                  icon_size=16,
-                                  on_click=lambda e, i=i: retirer_indice(i))
-                ])
-            )
+            liste_selection.controls.append(ft.Row([ft.Text(i, size=12),
+                                                    ft.IconButton(icon=ft.Icons.CLOSE, icon_size=16,on_click=lambda e, i=i: retirer_indice(i))], 
+                                                    spacing=0,)
+                                )
         page.update()
 
     def ajouter_indice(indice):
@@ -260,7 +234,7 @@ def create_rendement_section(page):
             update_selection_list()
             update_table()
 
-    # 🆕 Fonction : ajouter une période personnalisée
+    # Fonction : ajouter une période personnalisée
     def ajouter_periode(p):
         try:
             p = int(p)
@@ -281,20 +255,15 @@ def create_rendement_section(page):
             update_periodes_list()
             update_table()
 
-    # 🆕 Affichage dynamique des périodes sélectionnées
+    # Affichage dynamique des périodes sélectionnées
     def update_periodes_list():
         liste_periodes.controls.clear()
         for p in sorted(periods_selectionnees):
             liste_periodes.controls.append(
-                ft.Row([
-                    ft.Text(f"{p}m", size=12),
-                    ft.IconButton(
-                        icon=ft.Icons.CLOSE,
-                        icon_size=16,
-                        on_click=lambda e, p=p: retirer_periode(p)
-                    )
-                ])
-            )
+                ft.Row([ft.Text(f"{p}m", size=12),
+                        ft.IconButton(icon=ft.Icons.CLOSE, icon_size=16, on_click=lambda e, p=p: retirer_periode(p))]
+                        , spacing=0))
+            
         page.update()
 
     def update_table():
@@ -415,9 +384,16 @@ def create_composition_section(page):
 
 def stocks_page(page: ft.Page):
     page.clean()
+    page.title = "Les stocks"
     page.scroll = "auto"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.DARK
+
+     # Création Loader général
+    loader_global = ft.Container(content=ft.ProgressRing(color=ft.Colors.GREEN_200, width=60, height=60),
+                                 alignment=ft.alignment.center,
+                                 visible=True)
+    page.add(loader_global)
 
     # Récupère tous les éléments
     graph_elements = create_graph_section(page)
@@ -429,15 +405,13 @@ def stocks_page(page: ft.Page):
         icon=ft.Icons.ARROW_BACK,  # flèche gauche
         icon_color=couleur_bouton_fleche,  # même couleur que le bouton accueil
         tooltip="Retour accueil",
-        on_click=lambda e: page.go("/")
-    )
+        on_click=lambda e: page.go("/"))
 
-    # Container pour aligner à gauche
     container_retour_haut = ft.Container(
         content=ft.Row([bouton_retour_haut], alignment=ft.MainAxisAlignment.START),
         padding=ft.padding.all(0),        # plus aucun padding
-        height=30, 
-    )
+        height=30,)
+
 
     # Bouton Retour accueil
     bouton_retour = ft.ElevatedButton(
@@ -448,15 +422,18 @@ def stocks_page(page: ft.Page):
             bgcolor=couleur_bouton_fleche,
             padding=ft.padding.symmetric(horizontal=20, vertical=15)
         ),
-        on_click=lambda e: page.go("/")  # Redirection vers la page d'accueil
-    )
+        on_click=lambda e: page.go("/"))  # Redirection vers la page d'accueil
 
-    # Container pour centrer le bouton
+
     container_bouton = ft.Container(
         content=bouton_retour,
         alignment=ft.alignment.center,
-        padding=ft.padding.only(top=30, bottom=20)  # Espacement avant et après
-    )
+        padding=ft.padding.only(top=30, bottom=20))  # Espacement avant et après
+
+
+    # Suppresion du loader
+    loader_global.visible = False
+
 
     # Un seul page.add() avec tous les éléments avec décompression des listes grace à l'étoile *
     page.add(

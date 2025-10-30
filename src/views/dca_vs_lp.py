@@ -20,7 +20,7 @@ def create_input_section():
 
        # Titre
     text_graphique = ft.Text(
-        "📈 Simulation DCA vs Lump Sum",
+        " 📊 Simulation DCA vs Lump Sum",
         color=couleur_titre_separateur,
         weight="bold",
         size=titre_size
@@ -100,7 +100,7 @@ def create_simulation_handler(page: ft.Page, dropdown_indice, input_montant, inp
 
         # ======================================================== GRAPHIQUE 1 ======================================================== #
         graph1_text = ft.Container(
-            content=ft.Text("📈 Gains par durée", 
+            content=ft.Text("📊 Gains par durée", 
                             color=couleur_titre_separateur, 
                             weight=ft.FontWeight.BOLD, 
                             size=titre_size),
@@ -124,7 +124,7 @@ def create_simulation_handler(page: ft.Page, dropdown_indice, input_montant, inp
 
         # ======================================================== GRAPHIQUE 2 ======================================================== #
         graph2_text = ft.Container(
-            content=ft.Text("📊 Évolution de l’actif",
+            content=ft.Text("📈 Évolution de l’actif",
                             color=couleur_titre_separateur,
                             weight=ft.FontWeight.BOLD,
                             size=titre_size),

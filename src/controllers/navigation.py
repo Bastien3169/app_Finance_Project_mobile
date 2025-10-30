@@ -25,8 +25,7 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
         # cryptos.main_page(page)
         page.add(ft.Text("Page Cryptos - En construction"))
     elif route == "/dca_vs_lp":
-        dca_vs_lp.test.dca_lp_page(page)
-        page.add(ft.Text("Page DCA vs LP - En construction"))
+        dca_vs_lp.dca_lp_page(page)
     elif route == "/maj_bd":  
         # maj_bd.main_page(page)
         page.add(ft.Text("Page MAJ BD - En construction"))
