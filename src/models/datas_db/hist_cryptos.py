@@ -45,7 +45,9 @@ def hist_cryptos(csv_bdd):
     # Concaténation de tous les historiques
     df_hist = pd.concat(historique.values(), ignore_index=True)
     # Convertir la colonne "Date" en format datetime et reformater en "JJ-MM-AAAA"
-    df_hist["Date"] = df_hist["Date"].dt.strftime("%Y-%m-%d")
+    #df_hist["Date"] = df_hist["Date"].dt.strftime("%d-%m-%Y")
+    df_hist["Date"] = pd.to_datetime(df_hist["Date"], errors="coerce").dt.strftime("%d-%m-%Y")
+    
     # Arrondir la colonne "Close"
     df_hist["Close"] = df_hist["Close"].round(3)
 

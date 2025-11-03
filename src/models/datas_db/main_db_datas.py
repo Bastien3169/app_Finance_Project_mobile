@@ -21,10 +21,10 @@ from . import hist_stocks  # Pour récupérer l'historique des prix des entrepri
 from . import sql_datas # Pour créer la base de donnée sql
 '''
 
-def main_db_datas(dossier_csv = "csv", csv_bdd = "csv/csv_bdd", db_path = "datas.bd"):
+def main_db_datas(dossier_csv = "csv", csv_bdd = "csv/csv_bdd", db_path = "data.db"):
 
     #scraping_tickers.all_tickers_yf()
-
+    '''
     # Étape 1: Scraper les tickers de chaque indice et Récupérer les informations des entreprises pour chaque indice
     composition_indices.csv_indices(dossier_csv)
     print("[✅] Les tickers des indices et les informations des entreprises ont été récupérés et sauvegardés.")
@@ -48,11 +48,11 @@ def main_db_datas(dossier_csv = "csv", csv_bdd = "csv/csv_bdd", db_path = "datas
     # Étape 6: Récupérer et sauvegarder l'historique des prix des entreprises
     hist_stocks.recuperer_et_clean_stocks(csv_bdd)
     print("[✅] L'historique des entreprises a été récupéré et sauvegardé.")
-
+    '''
     # Étape 7: Récupérer et sauvegarder l'historique des prix des cryptomonnaies
     hist_cryptos.hist_cryptos(csv_bdd)
     print("[✅] L'historique des cryptomonnaies a été récupéré et sauvegardé.")
-
+    
     # Étape 8 : Création de la base de donnée
     sql_datas.main_creation_db(csv_bdd, db_path)
     print("[✅] La base de données a été créée et les données ont été importées.")
@@ -60,5 +60,5 @@ def main_db_datas(dossier_csv = "csv", csv_bdd = "csv/csv_bdd", db_path = "datas
     print("[✅]✅] Toutes les étapes ont été exécutées avec succès.")
 
 if __name__ == "__main__":
-    main_db_datas("csv", "csv/csv_bdd", "datas.bd")
+    main_db_datas("csv", "csv/csv_bdd", "data.db")
 
