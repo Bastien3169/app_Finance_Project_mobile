@@ -83,19 +83,20 @@ def add_update_database(page: ft.Page, dossier_csv: str, csv_bdd: str, db_path: 
     # Création du bouton de mise à jour
     bouton = ft.ElevatedButton("Cliquez pour la maj de la BDD datas",
                                on_click=on_click,
-                               style=ft.ButtonStyle(bgcolor=couleur_bouton, color=ft.Colors.WHITE, padding=ft.padding.symmetric(20, 15)))
+                               style=ft.ButtonStyle(bgcolor=couleur_bouton, color=ft.Colors.WHITE, padding=ft.padding.symmetric(20, 15)),
+                               width=400,)
     
     # Création du texte info
     info = ft.Text("La maj peut prendre entre 20 et 30 min", size=10)
 
     # Création de la barre de progression stylée
-    progress_bar = ft.Container(content=ft.ProgressBar(width=400, height=15, value=0, bgcolor=ft.Colors.GREY_800),
-                                width=400,
+    progress_bar = ft.Container(content=ft.ProgressBar(value=0, bgcolor=ft.Colors.GREY_800),
+                                width=380, # on fait width et height du container pour styliser la barre pas le ProgressBar directement car lui il prend tout l'espace dispo
                                 height=15,
                                 bgcolor=ft.Colors.with_opacity(0.1, ft.Colors.CYAN_700),
                                 border_radius=20,  # arrondi
                                 padding=ft.padding.all(2),  # petit espace intérieur
-                                border=ft.border.all(1, ft.Colors.CYAN_400),  # bord coloré
+                                border=ft.border.all(1, ft.Colors.WHITE30,),  # bord coloré
                                 margin=ft.margin.only(top = 10, bottom=40),)
 
     # Création du conteneur loader
@@ -114,12 +115,16 @@ def users_admin_flet(page: ft.Page):
     search_field = ft.TextField(label="🔍 Rechercher par email ou username", 
                                 label_style=ft.TextStyle(size=12, italic=True),
                                 width=400, 
-                                border_color=ft.Colors.CYAN_400,)
+                                #border_color=ft.Colors.CYAN_400,
+                                border_radius=8,
+                                border_color=ft.Colors.WHITE30,)
     
     results_column = ft.Column(spacing=15)
 
+    # Dictionnaire pour suivre l'état d'édition
     edit_state = {}
 
+    # Création de la fonction de validation de recherche
     def validate_search(e):
         results_column.controls.clear()
         search = search_field.value.strip()
@@ -128,118 +133,145 @@ def users_admin_flet(page: ft.Page):
             page.update()
             return
 
+        # Recherche utilisateur
         user = admin_manager.get_user_by_email_username(search)
         if not user:
-            results_column.controls.append(ft.Text("⚠️ Aucun utilisateur trouvé."))
+            results_column.controls.append(ft.Text("⚠️ Aucun utilisateur trouvé.", color=ft.Colors.RED))
             page.update()
             return
 
         id, username, email, role, registration_date = user
 
-        headers = ["🆔 ID", "👤 Username", "📧 Email", "🔐 Rôle", "🗓️ Date", "🗑️ Supprimer", "✏️ Modifier"]
-        header_row = ft.Column(
-            [ft.Text(h, color=ft.Colors.CYAN_300, weight=ft.FontWeight.BOLD) for h in headers],
-            alignment=ft.MainAxisAlignment.SPACE_BETWEEN
-        )
-        results_column.controls.append(header_row)
+        # Fiche utilisateur sous forme de colonne
+        fiche = ft.Column([ft.Row([ft.Text("🆔 ID : ", weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE),
+                                   ft.Text(f"{id}")]),
+                            ft.Row([ft.Text("👤 Username : ", weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE),
+                                    ft.Text(f"{username}")]),
+                            ft.Row([ft.Text("📧 Email : ", weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE),
+                                    ft.Text(f"{email}")]),
+                            ft.Row([ft.Text("🔐 Rôle : ", weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE),
+                                    ft.Text(f"{role}")]),
+                            ft.Row([ft.Text("🗓️ Date inscription : ", weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE),
+                                    ft.Text(f"{registration_date}")]),
+                            ft.Divider(height=1, color=ft.Colors.GREY_300),
+                            ft.Row([ft.ElevatedButton("Modifier",
+                                                      width=100,
+                                                      bgcolor=ft.Colors.CYAN_600,
+                                                      color=ft.Colors.WHITE,
+                                                      on_click=lambda ev, em=email: toggle_edit(ev, em)),
+                                    ft.ElevatedButton("Supprimer",
+                                                      width=100,
+                                                      bgcolor=ft.Colors.RED_400,
+                                                      color=ft.Colors.WHITE,
+                                                      on_click=lambda ev, em=email, un=username: delete_user(ev, em, un)),], 
+                            spacing=10,
+                            alignment=ft.MainAxisAlignment.CENTER)], 
+                        spacing=8, 
+                        alignment=ft.MainAxisAlignment.START)
 
-        row = ft.Column(
-            [
-                ft.Text(str(id)),
-                ft.Text(username),
-                ft.Text(email),
-                ft.Text(role),
-                ft.Text(str(registration_date)),
-                ft.ElevatedButton("Supprimer", bgcolor=ft.Colors.RED_400, color=ft.Colors.WHITE,
-                                  on_click=lambda ev, em=email, un=username: delete_user(ev, em, un)),
-                ft.ElevatedButton("Modifier", bgcolor=ft.Colors.CYAN_600, color=ft.Colors.WHITE,
-                                  on_click=lambda ev, em=email: toggle_edit(ev, em)),
-            ],
-            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-        )
-        results_column.controls.append(row)
 
+        # Encadré visuel de la fiche
+        fiche_container = ft.Container(content=fiche,
+                                        bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.CYAN_100),
+                                        border_radius=10,
+                                        padding=15,
+                                        margin=ft.margin.symmetric(vertical=10))
+
+        # Affichage de la fiche user
+        results_column.controls.append(fiche_container)
+
+        # Si édition active : formulaire
         if edit_state.get(email, False):
             results_column.controls.append(edit_form(user))
 
         page.update()
 
+
+    # Création de la fonction de suppression
     def delete_user(e, email, username):
         admin_manager.delete_user(email)
         results_column.controls.append(ft.Text(f"✅ Utilisateur {username} supprimé."))
         page.update()
 
+    # Création de la fonction de bascule édition
     def toggle_edit(e, email):
         edit_state[email] = not edit_state.get(email, False)
         validate_search(None)
 
+    # Création du formulaire d'édition
     def edit_form(user):
         id, username, email, role, registration_date = user
-        new_username = ft.TextField(label="Nouveau nom d'utilisateur", value=username, width=300)
-        new_role = ft.Dropdown(
-            label="Nouveau rôle",
-            options=[ft.dropdown.Option("admin"), ft.dropdown.Option("user")],
-            value=role,
-            width=200,
-        )
-        new_password = ft.TextField(label="Nouveau mot de passe", password=True, can_reveal_password=True)
 
-        def reset_password(e):
-            if not new_password.value:
-                results_column.controls.append(ft.Text("⚠️ Entrez un mot de passe."))
-            else:
-                admin_manager.update_user(email=email, password=new_password.value)
-                results_column.controls.append(ft.Text(f"🔑 Mot de passe de {username} réinitialisé."))
-            page.update()
+        new_username = ft.TextField(label="Nouveau nom d'utilisateur", 
+                                    value=username, 
+                                    width=300,
+                                    border_radius=8,
+                                    border_color=ft.Colors.WHITE30,)
+        new_role = ft.Dropdown(label="Nouveau rôle",
+                               options=[ft.dropdown.Option("admin"), ft.dropdown.Option("user")],
+                               value=role,
+                               width=300,
+                               border_radius=8,
+                               border_color=ft.Colors.WHITE30,)
+        new_password = ft.TextField(label="Nouveau mot de passe", 
+                                    hint_text="Ex : 1234",
+                                    width=300,
+                                    password=True,
+                                    can_reveal_password=True,
+                                    border_radius=8,
+                                    border_color=ft.Colors.WHITE30,) # Affiche une icône pour révéler le mdp)
 
+        # Création de la fonction de soumission des modifications
         def submit_changes(e):
-            admin_manager.update_user(email=email, username=new_username.value, role=new_role.value)
+            admin_manager.update_user(email=email, 
+                                      username=new_username.value, 
+                                      role=new_role.value, 
+                                      password=new_password.value if new_password.value else None) # Met à jour seulement si un mot de passe est fourni pour éviter de le réinitialiser par une chaine "" vide 
             results_column.controls.append(ft.Text(f"✅ Utilisateur {new_username.value} modifié avec succès."))
             edit_state[email] = False
             page.update()
 
-        return ft.Container(
-            bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.CYAN_100),
-            padding=20,
-            content=ft.Column(
-                [
-                    ft.Text("✏️ Modification de l'utilisateur", weight=ft.FontWeight.BOLD),
-                    new_username,
-                    new_role,
-                    ft.Row(
-                        [
-                            ft.ElevatedButton("Réinitialiser le mot de passe", on_click=reset_password),
-                            new_password,
-                        ],
-                        alignment=ft.MainAxisAlignment.START,
-                    ),
-                    ft.ElevatedButton(
-                        "Valider les modifications",
-                        bgcolor=ft.Colors.CYAN_600,
-                        color=ft.Colors.WHITE,
-                        on_click=submit_changes,
-                    ),
-                ],
-                spacing=10,
-            ),
-        )
+        # Texte de la card de modification 
+        text_edition = text_edition = ft.Column([ft.Container(
+                                                    ft.Text("✏️ Modification de l'utilisateur", 
+                                                            weight=ft.FontWeight.BOLD, 
+                                                            text_align=ft.TextAlign.CENTER, 
+                                                            color=couleur_titre,
+                                                            size=15)),
+                                                
+                                                ft.Container(
+                                                    content=ft.Divider(height=2, color=couleur_titre),)],
+                                                spacing=2)
+    
+        
+        # Bouton valider les modifications
+        bouton_valid_modif = ft.ElevatedButton("Valider les modifications", bgcolor=ft.Colors.CYAN_600, color=ft.Colors.WHITE, on_click=submit_changes,)
+
+        # Création de la card de modification
+        card_modif_iser = ft.Container(bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.CYAN_100),
+                            padding=20,
+                            alignment=ft.alignment.center,  # Centre le contenu dans le container
+                            content=ft.Column([text_edition, new_username, new_role, new_password, bouton_valid_modif],
+                                              spacing=10,
+                                              horizontal_alignment=ft.CrossAxisAlignment.CENTER,  # Centre horizontalement les éléments
+                                              alignment=ft.MainAxisAlignment.CENTER))  # Centre verticalement si le container est plus grand
+        return card_modif_iser
 
     # Création du bouton valider
-    validate_button = ft.ElevatedButton("Valider la recherche",
+    validate_button = ft.ElevatedButton("Valider",
+                                        height=40,
+                                        width=400,
                                         icon=ft.Icons.SEARCH,
-                                        bgcolor=ft.Colors.CYAN_700,
+                                        bgcolor=couleur_bouton,
                                         color=ft.Colors.WHITE,
                                         on_click=validate_search,)
 
 
-    return ft.Column(
-    [
-        ft.Column([search_field, validate_button], spacing=10, horizontal_alignment=ft.CrossAxisAlignment.CENTER),
-        results_column,
-    ],
-    spacing=20,
-    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-)
+    return ft.Column([ft.Column([search_field, validate_button], 
+                                spacing=10, horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+                      results_column,],
+                      spacing=20,
+                      horizontal_alignment=ft.CrossAxisAlignment.CENTER,)
 
 
 #################################### PAGE ADMIN PRINCIPALE ####################################

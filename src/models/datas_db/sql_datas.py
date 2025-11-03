@@ -11,7 +11,9 @@ def creation_db(db_path):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Création des tables infos
+    # ----------- Création des tables infos ----------- #
+
+    # Infos stocks
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS stocks_infos_par_indice (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,6 +30,7 @@ def creation_db(db_path):
     )
     ''')
 
+    # Infos indices
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS indices_infos (
         Short_Name_Indice TEXT,
@@ -39,6 +42,24 @@ def creation_db(db_path):
     )
     ''')
 
+    # Infos cryptos
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS cryptos_infos (
+        Short_Name_Cryptos TEXT,
+        Ticker_Cryptos_Yf TEXT PRIMARY KEY,  -- (clé primaire),
+        Ticker_Cryptos TEXT,
+        Prix_actuel REAL,
+        Capitalisation_Boursiere REAL,
+        Offre_En_Circulation REAL,
+        ATH REAL,
+        MAJ TEXT
+    )
+    ''')
+
+
+    # ----------- Création des tables historiques ----------- #
+
+    # Historique indices
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS historique_indices (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,22 +70,37 @@ def creation_db(db_path):
     )
     ''')
 
+    # Historique stocks
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS historique_stocks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         Date TEXT,
         Close REAL,
         Ticker_Stocks_Yf TEXT,
-        Short_Name_Stocks
+        Short_Name_Stocks TEXT
     )
     ''')
     
+    # Historique cryptos
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS historique_cryptos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Date TEXT,
+        Close REAL,
+        Ticker_Cryptos_Yf TEXT,
+        Short_Name_Cryptos TEXT
+    )
+    ''')
+
+
     # Création des index pour optimiser les performances
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_hist_indices_date_ticker ON historique_indices(Date, Ticker_Indice_Yf)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_hist_stocks_date_ticker ON historique_stocks(Date, Ticker_Stocks_Yf)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_hist_indices_close ON historique_indices(Close)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_hist_stocks_close ON historique_stocks(Close)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_stocks_infos_ticker ON stocks_infos_par_indice(Ticker_Stocks_Yf)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_hist_cryptos_date_ticker ON historique_cryptos(Date, Ticker_Cryptos_Yf)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_hist_cryptos_close ON historique_cryptos(Close)")
 
     # Valider les changements
     conn.commit()

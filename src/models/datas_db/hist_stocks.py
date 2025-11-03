@@ -4,7 +4,7 @@ import os
 
 def recuperer_et_clean_stocks(csv_bdd):
     # Charger le fichier de tickers et infos
-    df_tickers = pd.read_csv(os.path.join(csv_bdd, "stocks_infos_par_indice.csv"), encoding="utf-8")
+    df_tickers = pd.read_csv(os.path.join(csv_bdd, "stocks_infos.csv"), encoding="utf-8")
     tickers_yahoo = df_tickers["Ticker_Stocks_Yf"].dropna().unique().tolist()
     
     dfs = []

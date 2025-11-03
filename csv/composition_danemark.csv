@@ -1,0 +1,26 @@
+Short_Name_Stocks,Ticker_Stocks_Yf,Ticker_Stocks,Secteur_Activite,Pays_Stocks,Place_Boursiere,Capitalisation_Boursiere,Nom_Indice,Ticker_Indice_Yf,Nombres_Entreprises,Ponderation
+Novo Nordisk B A/S,NOVO-B.CO,NOVO-B,Healthcare,Denmark,CPH,1418787160064,OMX Copenhagen 25,^OMXC25,25,34.53
+Nordea Bank Abp,NDA-DK.CO,NDA-DK,Financial Services,Finland,CPH,382600642560,OMX Copenhagen 25,^OMXC25,25,9.31
+DSV A/S,DSV.CO,DSV,Industrials,Denmark,CPH,327842234368,OMX Copenhagen 25,^OMXC25,25,7.98
+Danske Bank A/S,DANSKE.CO,DANSKE,Financial Services,Denmark,CPH,237165985792,OMX Copenhagen 25,^OMXC25,25,5.77
+A.P. Møller - Mærsk A A/S,MAERSK-A.CO,MAERSK-A,Industrials,Denmark,CPH,201820766208,OMX Copenhagen 25,^OMXC25,25,4.91
+A.P. Møller - Mærsk B A/S,MAERSK-B.CO,MAERSK-B,Industrials,Denmark,CPH,202417061888,OMX Copenhagen 25,^OMXC25,25,4.93
+Novonesis (Novozymes A/S) B,NSIS-B.CO,NSIS-B,Basic Materials,Denmark,CPH,181349302272,OMX Copenhagen 25,^OMXC25,25,4.41
+ORSTED A/S,ORSTED.CO,ORSTED,Utilities,Denmark,CPH,151986962432,OMX Copenhagen 25,^OMXC25,25,3.7
+Vestas Wind Systems A/S,VWS.CO,VWS,Industrials,Denmark,CPH,132114653184,OMX Copenhagen 25,^OMXC25,25,3.22
+Coloplast B A/S,COLO-B.CO,COLO-B,Healthcare,Denmark,CPH,132786118656,OMX Copenhagen 25,^OMXC25,25,3.23
+Genmab A/S,GMAB.CO,GMAB,Healthcare,Denmark,CPH,113537507328,OMX Copenhagen 25,^OMXC25,25,2.76
+Carlsberg B A/S,CARL-B.CO,CARL-B,Consumer Defensive,Denmark,CPH,107469004800,OMX Copenhagen 25,^OMXC25,25,2.62
+Tryg A/S,TRYG.CO,TRYG,Financial Services,Denmark,CPH,96853966848,OMX Copenhagen 25,^OMXC25,25,2.36
+Pandora A/S,PNDORA.CO,PNDORA,Consumer Cyclical,Denmark,CPH,64378040320,OMX Copenhagen 25,^OMXC25,25,1.57
+Rockwool A/S ser. B,ROCK-B.CO,ROCK-B,Industrials,Denmark,CPH,46084562944,OMX Copenhagen 25,^OMXC25,25,1.12
+Jyske Bank A/S,JYSK.CO,JYSK,Financial Services,Denmark,CPH,45069393920,OMX Copenhagen 25,^OMXC25,25,1.1
+Demant A/S,DEMANT.CO,DEMANT,Healthcare,Denmark,CPH,46224105472,OMX Copenhagen 25,^OMXC25,25,1.12
+NKT A/S,NKT.CO,NKT,Industrials,Denmark,CPH,38323974144,OMX Copenhagen 25,^OMXC25,25,0.93
+Zealand Pharma A/S,ZEAL.CO,ZEAL,Healthcare,Denmark,CPH,35595612160,OMX Copenhagen 25,^OMXC25,25,0.87
+ISS A/S,ISS.CO,ISS,Industrials,Denmark,CPH,33487235072,OMX Copenhagen 25,^OMXC25,25,0.81
+Sydbank A/S,SYDB.CO,SYDB,Financial Services,Denmark,CPH,27089465344,OMX Copenhagen 25,^OMXC25,25,0.66
+Ambu A/S,AMBU-B.CO,AMBU-B,Healthcare,Denmark,CPH,26718896128,OMX Copenhagen 25,^OMXC25,25,0.65
+Royal UNIBREW A/S,RBREW.CO,RBREW,Consumer Defensive,Denmark,CPH,24364562432,OMX Copenhagen 25,^OMXC25,25,0.59
+Bavarian Nordic A/S,BAVA.CO,BAVA,Healthcare,Denmark,CPH,18566324224,OMX Copenhagen 25,^OMXC25,25,0.45
+GN Store Nord A/S,GN.CO,GN,Healthcare,Denmark,CPH,16359569408,OMX Copenhagen 25,^OMXC25,25,0.4

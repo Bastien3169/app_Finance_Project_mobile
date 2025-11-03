@@ -12,14 +12,12 @@ def main(page: ft.Page): # “page: ft.Page“ est une annotation de type. Sert 
     page.title = "Finance facile"
     page.window.width = 360   # iPhone standard de référence
     page.window.height = 640  # iPhone standard de référence
-    page.window_resizable = False
-    page.padding = 10
-    page.spacing = 5
     page.vertical_alignment = ft.MainAxisAlignment.START
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.padding = 10
+    page.spacing = 5
     page.scroll = "auto"  # Permet le défilement si le contenu dépasse la hauteur de la fenêtre
     page.route = "/" # Définir la route initiale
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.DARK
 
     # Fonction de callback pour le changement de route
@@ -28,8 +26,6 @@ def main(page: ft.Page): # “page: ft.Page“ est une annotation de type. Sert 
     page.on_route_change = on_route_change # On attache le handler
  
     route_change(page) # Affichage initial
-
-    # page.on_route_change = lambda e: route_change(page)
     
 ft.app(target=main) 
 

@@ -1,0 +1,29 @@
+Short_Name_Stocks,Ticker_Stocks_Yf,Ticker_Stocks,Secteur_Activite,Pays_Stocks,Place_Boursiere,Capitalisation_Boursiere,Nom_Indice,Ticker_Indice_Yf,Nombres_Entreprises,Ponderation
+ASML HOLDING,ASML.AS,ASML,Technology,Netherlands,AMS,366147633152,AEX-Index,^AEX,28,26.07
+SHELL PLC,SHELL.AS,SHELL,Energy,United Kingdom,AMS,189125705728,AEX-Index,^AEX,28,13.46
+PROSUS,PRX.AS,PRX,Communication Services,Netherlands,AMS,137360523264,AEX-Index,^AEX,28,9.78
+UNILEVER PLC,UNA.AS,UNA,Consumer Defensive,United Kingdom,AMS,129067237376,AEX-Index,^AEX,28,9.19
+RELX,REN.AS,REN,Industrials,United Kingdom,AMS,70429835264,AEX-Index,^AEX,28,5.01
+ING GROEP N.V.,INGA.AS,INGA,Financial Services,Netherlands,AMS,65558409216,AEX-Index,^AEX,28,4.67
+ADYEN,ADYEN.AS,ADYEN,Technology,Netherlands,AMS,47275802624,AEX-Index,^AEX,28,3.37
+UNIVERSAL MUSIC GROUP,UMG.AS,UMG,Communication Services,Netherlands,AMS,42142695424,AEX-Index,^AEX,28,3.0
+HEINEKEN,HEIA.AS,HEIA,Consumer Defensive,Netherlands,AMS,37575061504,AEX-Index,^AEX,28,2.68
+KONINKLIJKE AHOLD DELHAIZE N.V.,AD.AS,AD,Consumer Defensive,Netherlands,AMS,32082616320,AEX-Index,^AEX,28,2.28
+ASM International N.V.,ASM.AS,ASM,Technology,Netherlands,AMS,27830573056,AEX-Index,^AEX,28,1.98
+ARCELORMITTAL SA,MT.AS,MT,Basic Materials,Luxembourg,AMS,25392629760,AEX-Index,^AEX,28,1.81
+WOLTERS KLUWER,WKL.AS,WKL,Industrials,Netherlands,AMS,24306477056,AEX-Index,^AEX,28,1.73
+EXOR,EXO.AS,EXO,Industrials,Netherlands,AMS,24710905856,AEX-Index,^AEX,28,1.76
+KON.PHILIPS N.V.,PHIA.AS,PHIA,Healthcare,Netherlands,AMS,22528616448,AEX-Index,^AEX,28,1.6
+ABN AMRO BANK N.V.,ABN.AS,ABN,Financial Services,Netherlands,AMS,21707819008,AEX-Index,^AEX,28,1.55
+DSM FIRMENICH AG,DSFIR.AS,DSFIR,Basic Materials,Switzerland,AMS,18197782528,AEX-Index,^AEX,28,1.3
+KPN KON,KPN.AS,KPN,Communication Services,Netherlands,AMS,15413096448,AEX-Index,^AEX,28,1.1
+JDE PEET'S,JDEP.AS,JDEP,Consumer Defensive,Netherlands,AMS,15363004416,AEX-Index,^AEX,28,1.09
+CVC CAPITAL,CVC.AS,CVC,Financial Services,Jersey,AMS,15723183104,AEX-Index,^AEX,28,1.12
+NN GROUP,NN.AS,NN,Financial Services,Netherlands,AMS,15934068736,AEX-Index,^AEX,28,1.13
+ASR NEDERLAND,ASRNL.AS,ASRNL,Financial Services,Netherlands,AMS,12171213824,AEX-Index,^AEX,28,0.87
+BE Semiconductor Industries N.V,BESI.AS,BESI,Technology,Netherlands,AMS,11509157888,AEX-Index,^AEX,28,0.82
+AEGON,AGN.AS,AGN,Financial Services,Netherlands,AMS,10480914432,AEX-Index,^AEX,28,0.75
+AKZO NOBEL,AKZA.AS,AKZA,Basic Materials,Netherlands,AMS,9954250752,AEX-Index,^AEX,28,0.71
+Randstad N.V.,RAND.AS,RAND,Industrials,Netherlands,AMS,5928040448,AEX-Index,^AEX,28,0.42
+INPOST S.A.,INPST.AS,INPST,Industrials,Luxembourg,AMS,5409486336,AEX-Index,^AEX,28,0.39
+IMCD,IMCD.AS,IMCD,Basic Materials,Netherlands,AMS,5272670720,AEX-Index,^AEX,28,0.38

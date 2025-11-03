@@ -4,7 +4,7 @@ import flet as ft
 def main_page(page: ft.Page):
     page.clean()
 
-    texte_bienvenu = ft.Text("Bienvenue sur Finance facile !", size=20)
+    texte_bienvenu = ft.Text("Bienvenue sur Finance facile !", color=ft.Colors.GREEN_700, weight=ft.FontWeight.BOLD, size=20)
 
     # Liste des tuiles
     tiles_button = [
@@ -13,7 +13,7 @@ def main_page(page: ft.Page):
         ("ETFs", ft.Colors.ORANGE_200, "/etfs"),         # Orange doux
         ("Cryptos", ft.Colors.PURPLE_200, "/cryptos"),   # Violet pastel
         ("DCAvsLP", ft.Colors.RED_200, "/dca_vs_lp"),  # Rouge doux
-        ("MAJ BD", ft.Colors.CYAN_200, "/maj_bd"),       # Bleu clair
+        ("Admin", ft.Colors.CYAN_200, "/admin"),       # Bleu clair
         ("Test", ft.Colors.CYAN_500, "/test"),       # Bleu clair
         ("Test2", ft.Colors.BLUE_500, "/test2"),       # Bleu 
     ]

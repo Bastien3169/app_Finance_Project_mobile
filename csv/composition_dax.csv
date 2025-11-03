@@ -1,0 +1,41 @@
+Short_Name_Stocks,Ticker_Stocks_Yf,Ticker_Stocks,Secteur_Activite,Pays_Stocks,Place_Boursiere,Capitalisation_Boursiere,Nom_Indice,Ticker_Indice_Yf,Nombres_Entreprises,Ponderation
+SAP SE                        I,SAP.DE,SAP,Technology,Germany,GER,267334909952,DAX,^GDAXI,40,12.82
+SIEMENS AG                    N,SIE.DE,SIE,Industrials,Germany,GER,193493876736,DAX,^GDAXI,40,9.28
+Airbus SE                     A,AIR.DE,AIR,Industrials,Netherlands,GER,168055521280,DAX,^GDAXI,40,8.06
+Allianz SE                    v,ALV.DE,ALV,Financial Services,Germany,GER,136446615552,DAX,^GDAXI,40,6.54
+DEUTSCHE TELEKOM AG           N,DTE.DE,DTE,Communication Services,Germany,GER,132801634304,DAX,^GDAXI,40,6.37
+Siemens Energy AG             N,ENR.DE,ENR,Industrials,Germany,GER,89696657408,DAX,^GDAXI,40,4.3
+RHEINMETALL AG                I,RHM.DE,RHM,Industrials,Germany,GER,78023843840,DAX,^GDAXI,40,3.74
+MUENCHENER RUECKVERS.-GES. AG N,MUV2.DE,MUV2,Financial Services,Germany,GER,69650128896,DAX,^GDAXI,40,3.34
+DEUTSCHE BANK AG              N,DBK.DE,DBK,Financial Services,Germany,GER,60789383168,DAX,^GDAXI,40,2.91
+Siemens Healthineers AG       N,SHL.DE,SHL,Healthcare,Germany,GER,54867197952,DAX,^GDAXI,40,2.63
+Mercedes-Benz Group AG        N,MBG.DE,MBG,Consumer Cyclical,Germany,GER,56108396544,DAX,^GDAXI,40,2.69
+MERCK KGAA                    I,MRK.DE,MRK,Healthcare,Germany,GER,49629896704,DAX,^GDAXI,40,2.38
+BAYERISCHE MOTOREN WERKE AG   S,BMW.DE,BMW,Consumer Cyclical,Germany,GER,50053672960,DAX,^GDAXI,40,2.4
+DEUTSCHE POST AG              N,DHL.DE,DHL,Industrials,Germany,GER,45114253312,DAX,^GDAXI,40,2.16
+VOLKSWAGEN AG                 V,VOW3.DE,VOW3,Consumer Cyclical,Germany,GER,46964367360,DAX,^GDAXI,40,2.25
+INFINEON TECHNOLOGIES AG      N,IFX.DE,IFX,Technology,Germany,GER,44952440832,DAX,^GDAXI,40,2.15
+E.ON SE                       N,EOAN.DE,EOAN,Utilities,Germany,GER,41979101184,DAX,^GDAXI,40,2.01
+DEUTSCHE BOERSE AG            N,DB1.DE,DB1,Financial Services,Germany,GER,40283488256,DAX,^GDAXI,40,1.93
+BASF SE                       N,BAS.DE,BAS,Basic Materials,Germany,GER,38860414976,DAX,^GDAXI,40,1.86
+Heidelberg Materials AG       I,HEI.DE,HEI,Basic Materials,Germany,GER,36114382848,DAX,^GDAXI,40,1.73
+Commerzbank AG                I,CBK.DE,CBK,Financial Services,Germany,GER,36215177216,DAX,^GDAXI,40,1.74
+RWE AG                        I,RWE.DE,RWE,Utilities,Germany,GER,31098073088,DAX,^GDAXI,40,1.49
+HANNOVER RUECK SE NA O.N.,HNR1.DE,HNR1,Financial Services,Germany,GER,29763373056,DAX,^GDAXI,40,1.43
+adidas AG                     N,ADS.DE,ADS,Consumer Cyclical,Germany,GER,29139210240,DAX,^GDAXI,40,1.4
+Henkel AG & Co. KGaA          I,HEN3.DE,HEN3,Consumer Defensive,Germany,GER,28250640384,DAX,^GDAXI,40,1.35
+Fresenius SE & Co. KGaA       I,FRE.DE,FRE,Healthcare,Germany,GER,27925303296,DAX,^GDAXI,40,1.34
+Daimler Truck Holding AG      N,DTG.DE,DTG,Industrials,Germany,GER,26462068736,DAX,^GDAXI,40,1.27
+Bayer AG                      N,BAYN.DE,BAYN,Healthcare,Germany,GER,26363348992,DAX,^GDAXI,40,1.26
+Vonovia SE                    N,VNA.DE,VNA,Real Estate,Germany,GER,21854431232,DAX,^GDAXI,40,1.05
+MTU Aero Engines AG           N,MTX.DE,MTX,Industrials,Germany,GER,20287795200,DAX,^GDAXI,40,0.97
+BEIERSDORF AG                 I,BEI.DE,BEI,Consumer Defensive,Germany,GER,20366884864,DAX,^GDAXI,40,0.98
+Fresenius Medical Care AG     I,FME.DE,FME,Healthcare,Germany,GER,13602647040,DAX,^GDAXI,40,0.65
+CONTINENTAL AG                I,CON.DE,CON,Consumer Cyclical,Germany,GER,13300398080,DAX,^GDAXI,40,0.64
+Porsche Automobil Holding SE  I,PAH3.DE,PAH3,Consumer Cyclical,Germany,GER,10737124352,DAX,^GDAXI,40,0.51
+Symrise AG                    I,SY1.DE,SY1,Basic Materials,Germany,GER,9990906880,DAX,^GDAXI,40,0.48
+GEA Group AG                  I,G1A.DE,G1A,Industrials,Germany,GER,10085563392,DAX,^GDAXI,40,0.48
+Qiagen N.V.                   A,QIA.DE,QIA,Healthcare,Netherlands,GER,8754683904,DAX,^GDAXI,40,0.42
+Scout24 SE                    N,G24.DE,G24,Communication Services,Germany,GER,7337330688,DAX,^GDAXI,40,0.35
+Brenntag SE                   N,BNR.DE,BNR,Basic Materials,Germany,GER,6953599488,DAX,^GDAXI,40,0.33
+Zalando SE                    I,ZAL.DE,ZAL,Consumer Cyclical,Germany,GER,6373551104,DAX,^GDAXI,40,0.31

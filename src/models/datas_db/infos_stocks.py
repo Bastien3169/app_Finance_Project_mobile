@@ -26,7 +26,7 @@ def infos_stocks(dossier_csv, csv_bdd) :
     df_final = df_concat.drop(columns=["Nom_Indice", "Nombres_Entreprises"])
     
     # Sauvegarde du fichier fusionné sans doublons
-    df.to_csv(os.path.join(csv_bdd, "stocks_infos.csv"), index=False, encoding="utf-8")
+    df_final.to_csv(os.path.join(csv_bdd, "stocks_infos.csv"), index=False, encoding="utf-8")
     
     # Affichage du DataFrame final
     return df_final
