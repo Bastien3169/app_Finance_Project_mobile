@@ -18,24 +18,24 @@ liste_actifs = datas_stocks.get_list_cryptos()
 infos_actifs = datas_stocks.get_infos_cryptos()
 actif_default = "Bitcoin"
 
-couleur_titre_separateur = ft.Colors.GREEN_200
-couleur_bouton_fleche = ft.Colors.GREEN_700
+couleur_titre_separateur = ft.Colors.PURPLE_200
+couleur_bouton_fleche = ft.Colors.PURPLE_700
 
 ################################## GRAPHIQUE #################################################
 def create_graph_section(page):
     page.scroll = "auto"
     
     # Widget : titre
-    text_graphique = ft.Text("📈 Graphiques des indices", color=couleur_titre_separateur, weight=ft.FontWeight.BOLD, size=21)
+    text_graphique = ft.Text("📈 Graphiques des cryptos", color=couleur_titre_separateur, weight=ft.FontWeight.BOLD, size=21)
 
     # Widget : ligne de séparation dans un container pour avoir padding que en dessous
     separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur),padding=ft.padding.only(bottom=15))
 
     # Widget : Dropdown (menu déroulant)
     dropdown_indice = ft.Dropdown(
-        label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+        label=ft.Text("Sélectionnez une crypto", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
         value=actif_default,
-        options=[ft.dropdown.Option(indice) for indice in liste_actifs],
+        options=[ft.dropdown.Option(i) for i in liste_actifs],
         width=300
     )
 
@@ -111,7 +111,7 @@ def create_rendement_section(page):
 
     # --- Titre ---
     text_rendement = ft.Container(
-        content=ft.Text("💯 Rendements des indices (%)",
+        content=ft.Text("💯 Rendements des cryptos (%)",
                         color=couleur_titre_separateur,
                         weight=ft.FontWeight.BOLD,
                         size=21),
@@ -126,8 +126,8 @@ def create_rendement_section(page):
 
     # --- Sélection des indices ---
     dropdown_multi = ft.Dropdown(
-        label="Sélectionnez les indices à comparer",
-        hint_text="Choisissez un ou plusieurs indices",
+        label="Sélectionnez les cryptos à comparer",
+        hint_text="Choisissez une ou plusieurs cryptos",
         label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
         hint_style=ft.TextStyle(color=ft.Colors.GREY),
         width=300,
@@ -141,7 +141,7 @@ def create_rendement_section(page):
 
     cadre_text = ft.Container(
         content=ft.Column([
-            ft.Text("Indices sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+            ft.Text("Cryptos sélectionnées:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
             liste_selection
         ],
             horizontal_alignment=ft.CrossAxisAlignment.START),
@@ -313,12 +313,12 @@ def create_rendement_section(page):
     ]
 
 
-################################## INFO ENTREPRISE  ################################
+################################## INFO CRYPTOS  ################################
 
 def create_composition_section(page):
     
      # Widget : titre dans container pour le padding
-    text_composition = ft.Container(content=ft.Text("🗂 Informations entreprise",
+    text_composition = ft.Container(content=ft.Text("🗂 Informations crypto",
                                                     color=couleur_titre_separateur,
                                                     weight=ft.FontWeight.BOLD,
                                                     size=21),
@@ -332,7 +332,7 @@ def create_composition_section(page):
 
     # Widget : Dropdown (menu déroulant)
     dropdown_indice = ft.Dropdown(
-        label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+        label=ft.Text("Sélectionnez une crypto", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
         value=actif_default,
         options=[ft.dropdown.Option(indice) for indice in liste_actifs],
         width=300
@@ -384,13 +384,13 @@ def create_composition_section(page):
 
 def cryptos_page(page: ft.Page):
     page.clean()
-    page.title = "Les stocks"
+    page.title = "Les cryptomonais"
     page.scroll = "auto"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.DARK
 
      # Création Loader général
-    loader_global = ft.Container(content=ft.ProgressRing(color=ft.Colors.GREEN_200, width=60, height=60),
+    loader_global = ft.Container(content=ft.ProgressRing(color=couleur_titre_separateur, width=60, height=60),
                                  alignment=ft.alignment.center,
                                  visible=True)
     page.add(loader_global)

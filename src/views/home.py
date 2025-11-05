@@ -4,18 +4,23 @@ import flet as ft
 def main_page(page: ft.Page):
     page.clean()
 
-    texte_bienvenu = ft.Text("Bienvenue sur Finance facile !", color=ft.Colors.GREEN_700, weight=ft.FontWeight.BOLD, size=20)
+    texte_bienvenu = ft.Container(content=ft.Text("Bienvenue sur Finance Facile !", color=ft.Colors.TEAL_700, weight=ft.FontWeight.BOLD, size=22, text_align=ft.TextAlign.CENTER,),
+                                  padding=ft.padding.symmetric(vertical=12, horizontal=20),
+                                  border=ft.border.all(2, ft.Colors.TEAL_300),  # bordure fine et élégante
+                                  border_radius=ft.border_radius.all(12),
+                                  alignment=ft.alignment.center,)
 
     # Liste des tuiles
     tiles_button = [
-        ("Indices", ft.Colors.AMBER_200, "/indices"),      # Jaune pastel
-        ("Stocks", ft.Colors.GREEN_200, "/stocks"),       # Vert clair
-        ("ETFs", ft.Colors.ORANGE_200, "/etfs"),         # Orange doux
-        ("Cryptos", ft.Colors.PURPLE_200, "/cryptos"),   # Violet pastel
-        ("DCAvsLP", ft.Colors.RED_200, "/dca_vs_lp"),  # Rouge doux
-        ("Admin", ft.Colors.CYAN_200, "/admin"),       # Bleu clair
+        ("Indices",  "#7FB77E", "/indices"),      # Jaune pastel
+        ("Stocks", ft.Colors.AMBER_200, "/stocks"),       # Vert clair
+        ("ETFs", ft.Colors.CYAN_200, "/etfs"),         # Orange doux
+        ("Cryptos", "#F7931A", "/cryptos"),     # Couleur Bitcoin
+        ("Tous Actifs", "#6C8EBF", "/tous_actifs"),
+        ("DCAvsLP", "#D67C7C", "/dca_vs_lp"),  # Rouge doux
+        ("Admin", ft.Colors.BLUE_500, "/admin"),       # Bleu clair
         ("Test", ft.Colors.CYAN_500, "/test"),       # Bleu clair
-        ("Test2", ft.Colors.BLUE_500, "/test2"),       # Bleu 
+        ("Test2", "#4E6E81", "/test2"),       # Bleu 
     ]
 
 

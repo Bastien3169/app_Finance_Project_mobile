@@ -18,13 +18,13 @@ class FinanceDatabaseStocks:
     def get_list_stocks(self):
         #Récupérer la liste des entreprises
         with sqlite3.connect(self.db_path) as conn:
-            df = pd.read_sql("SELECT DISTINCT Short_Name_Stocks FROM stocks_infos_par_indice", conn)
+            df = pd.read_sql("SELECT DISTINCT Short_Name_Stocks FROM stocks_infos", conn)
         return df["Short_Name_Stocks"].tolist()
     
   
     def get_infos_stocks(self, short_name=None):
         with sqlite3.connect(self.db_path) as conn:
-            query = "SELECT * FROM stocks_infos_par_indice"
+            query = "SELECT * FROM stocks_infos"
             if short_name:
                 query += " WHERE Short_Name_Stocks = ?"
                 df = pd.read_sql(query, conn, params=(short_name,))
@@ -88,7 +88,7 @@ class FinanceDatabaseIndice:
                 query = """
                SELECT 
                 	s.*
-                FROM stocks_infos_par_indice s
+                FROM stocks_infos s
                 JOIN indices_infos i ON s.Ticker_Indice_Yf = i.Ticker_Indice_Yf
                 WHERE i.Short_Name_Indice =  ?
                 ORDER BY s.Short_Name_Stocks
@@ -113,13 +113,13 @@ class FinanceDatabaseCryptos:
     def get_list_cryptos(self):
         #Récupérer la liste des entreprises
         with sqlite3.connect(self.db_path) as conn:
-            df = pd.read_sql("SELECT DISTINCT Short_Name_Cryptos FROM cryptos_infos", conn)
+            df = pd.read_sql("SELECT DISTINCT Short_Name_Cryptos FROM crypto_infos", conn)
         return df["Short_Name_Cryptos"].tolist()
     
   
     def get_infos_cryptos(self, short_name=None):
         with sqlite3.connect(self.db_path) as conn:
-            query = "SELECT * FROM cryptos_infos"
+            query = "SELECT * FROM crypto_infos"
             if short_name:
                 query += " WHERE Short_Name_Cryptos = ?"
                 df = pd.read_sql(query, conn, params=(short_name,))

@@ -33,7 +33,7 @@ def create_graph_section(page):
 
     # Widget : Dropdown (menu déroulant)
     dropdown_indice = ft.Dropdown(
-        label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+        label=ft.Text("Sélectionnez un indice", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
         value=indice_default,
         options=[ft.dropdown.Option(indice) for indice in liste_indices],
         width=300

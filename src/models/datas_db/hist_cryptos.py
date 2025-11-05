@@ -18,7 +18,7 @@ def hist_cryptos(csv_bdd):
     cryptos_tickers = df_crypto_infos["Ticker_cryptos_Yf"].tolist()
     cryptos_nom = df_crypto_infos["Short_Name_Cryptos"].tolist()
 
-    historique = {} # dictionnaire pour stocker les futurs df de chaque crypto. clé = ticker, valeur = liste de df (ici une seule valeur par clé)
+    historique = [] # dictionnaire pour stocker les futurs df de chaque crypto. clé = ticker, valeur = liste de df (ici une seule valeur par clé)
 
     for ticker, nom in zip(cryptos_tickers, cryptos_nom):
         try:
@@ -29,7 +29,7 @@ def hist_cryptos(csv_bdd):
                 df = df.reset_index()  # pour avoir la colonne Date
                 df["Ticker_cryptos_Yf"] = ticker
                 df["Short_Name_Cryptos"] = nom
-                historique[ticker] = df # historique[ticker] représente la clé pour la valeur de chaque df.
+                historique.append(df)
 
                 print(f"✅ {nom} : {len(df)} points récupérés (du {df['Date'].min().date()} au {df['Date'].max().date()})")
             else:
@@ -43,7 +43,7 @@ def hist_cryptos(csv_bdd):
     # Concaténer tous les historiques en un seul DataFrame
 
     # Concaténation de tous les historiques
-    df_hist = pd.concat(historique.values(), ignore_index=True)
+    df_hist = pd.concat(historique, ignore_index=True)
     # Convertir la colonne "Date" en format datetime et reformater en "JJ-MM-AAAA"
     #df_hist["Date"] = df_hist["Date"].dt.strftime("%d-%m-%Y")
     df_hist["Date"] = pd.to_datetime(df_hist["Date"], errors="coerce").dt.strftime("%d-%m-%Y")

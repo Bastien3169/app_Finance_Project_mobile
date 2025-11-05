@@ -26,14 +26,14 @@ def create_graph_section(page):
     page.scroll = "auto"
     
     # Widget : titre
-    text_graphique = ft.Text("📈 Graphiques des indices", color=couleur_titre_separateur, weight=ft.FontWeight.BOLD, size=21)
+    text_graphique = ft.Text("📈 Graphiques entreprise", color=couleur_titre_separateur, weight=ft.FontWeight.BOLD, size=21)
 
     # Widget : ligne de séparation dans un container pour avoir padding que en dessous
     separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur),padding=ft.padding.only(bottom=15))
 
     # Widget : Dropdown (menu déroulant)
     dropdown_indice = ft.Dropdown(
-        label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+        label=ft.Text("Sélectionnez une entreprise", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
         value=actif_default,
         options=[ft.dropdown.Option(indice) for indice in liste_actifs],
         width=300
@@ -111,7 +111,7 @@ def create_rendement_section(page):
 
     # --- Titre ---
     text_rendement = ft.Container(
-        content=ft.Text("💯 Rendements des indices (%)",
+        content=ft.Text("💯 Rendements entreprises (%)",
                         color=couleur_titre_separateur,
                         weight=ft.FontWeight.BOLD,
                         size=21),
@@ -126,8 +126,8 @@ def create_rendement_section(page):
 
     # --- Sélection des indices ---
     dropdown_multi = ft.Dropdown(
-        label="Sélectionnez les indices à comparer",
-        hint_text="Choisissez un ou plusieurs indices",
+        label="Sélectionnez les entreprises à comparer",
+        hint_text="Choisissez une ou plusieurs entreprises",
         label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
         hint_style=ft.TextStyle(color=ft.Colors.GREY),
         width=300,
@@ -141,7 +141,7 @@ def create_rendement_section(page):
 
     cadre_text = ft.Container(
         content=ft.Column([
-            ft.Text("Indices sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+            ft.Text("Entreprises sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
             liste_selection
         ],
             horizontal_alignment=ft.CrossAxisAlignment.START),
@@ -271,7 +271,7 @@ def create_rendement_section(page):
         table.rows.clear()
 
         # Colonnes dynamiques selon les périodes sélectionnées
-        columns = [ft.DataColumn(ft.Text("Indice", weight=ft.FontWeight.BOLD, size=12))]
+        columns = [ft.DataColumn(ft.Text("Entreprises", weight=ft.FontWeight.BOLD, size=12))]
         for period in sorted(periods_selectionnees):
             columns.append(ft.DataColumn(ft.Text(f"{period}m", weight=ft.FontWeight.BOLD, size=12)))
         table.columns = columns
@@ -332,7 +332,7 @@ def create_composition_section(page):
 
     # Widget : Dropdown (menu déroulant)
     dropdown_indice = ft.Dropdown(
-        label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+        label=ft.Text("Sélectionnez une entreprise", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
         value=actif_default,
         options=[ft.dropdown.Option(indice) for indice in liste_actifs],
         width=300
@@ -384,7 +384,7 @@ def create_composition_section(page):
 
 def stocks_page(page: ft.Page):
     page.clean()
-    page.title = "Les stocks"
+    page.title = "Les entreprises"
     page.scroll = "auto"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.DARK

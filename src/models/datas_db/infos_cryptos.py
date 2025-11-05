@@ -26,11 +26,12 @@ def infos_cryptos(dossier_csv="csv", csv_bdd="csv/csv_bdd"):
     response = requests.get(url, params=params)
     data = response.json()
 
-
+    '''
+    # Pas besoin ?
     for i in data:
         info_crypto = (i["name"], i["symbol"], i["current_price"],i["market_cap"], i["total_volume"], i["circulating_supply"],i["ath"],i["last_updated"])
         #print(info_crypto)
-
+    '''
 
     df = pd.DataFrame()
     df["Short_Name_Cryptos"] = [i["name"] for i in data]
@@ -39,8 +40,12 @@ def infos_cryptos(dossier_csv="csv", csv_bdd="csv/csv_bdd"):
     df["Prix_actuel"] = [i["current_price"] for i in data]
     df["Capitalisation_Boursiere"] = [i["market_cap"] for i in data]
     df["Offre_En_Circulation"] = [i["circulating_supply"] for i in data]
+    df["Offre_En_Circulation"] = df["circulating_supply"].round(1)
     df["ATH"] = [i["ath"] for i in data]
     df["MAJ"] = [i["last_updated"].split("T")[0] for i in data]
+
+    # Suppression de la ligne "Wrapped SOL" car probleme yfinance (en fait garde toute la ligne où le Short_Name_Cryptos est différents "Wrapped SOL")
+    #df = df[df["Short_Name_Cryptos"] != "Wrapped SOL"]
 
     # Sauvegarde du fichier
     df.to_csv(("csv/csv_bdd/crypto_infos.csv"))
