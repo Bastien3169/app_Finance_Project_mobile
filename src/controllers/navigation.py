@@ -1,7 +1,7 @@
 from src.views import home, indices #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
-from src.views import home, indices, stocks, dca_vs_lp, cryptos, tous_actifs, admin, test, test2 #, etfs, cryptos, dca_vs_lp, maj_bd
+from src.views import home, indices, stocks, dca_vs_lp, cryptos, tous_actifs, admin, auth_manag, test, test2 #, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
 
@@ -28,6 +28,8 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
         dca_vs_lp.dca_lp_page(page)
     elif route == "/admin":  
         admin.admin_flet(page)
+    elif route == "/auth_manag":  
+        auth_manag.auth_manage_page(page)
     elif route == "/test": 
         # maj_bd.main_page(page)
         test.admin_flet(page)
