@@ -10,6 +10,7 @@ import flet as ft
 from flet.plotly_chart import PlotlyChart
 import plotly.graph_objects as go
 from src.models.control_datas.connexion_db_datas import *
+from src.components.components_views import *
 
 
 # Connexion DB indices
@@ -41,50 +42,18 @@ def create_rendement_section(page):
 
     periods_selectionnees = [6, 12, 24, 60, 120, 180]  # affichées au début
 
-    # --- Titre ---
-    text_rendement = ft.Container(
-        content=ft.Text("💯 Rendements actifs (%)",
-                        color=couleur_titre_separateur,
-                        weight=ft.FontWeight.BOLD,
-                        size=21),
-    )
+    titre = titre_separateur(text = "💯 Rendements actifs (%)", 
+                            padding_text_top = 0, 
+                            couleur_titre_separateur = couleur_titre_separateur)
 
-    # --- Séparateur ---
-    separation = ft.Container(
-        content=ft.Divider(thickness=2, color=couleur_titre_separateur),
-        padding=ft.padding.only(bottom=15)
-    )
-
-    # ------- Sélection des indices -------
+    # ------- Sélection des actifs -------
 
     # Dropdown indice : (menu déroulant)
-    dropdown_indice = ft.Dropdown(
-        label=ft.Text("Sélectionnez un indice", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-        value=indice_default,
-        options=[ft.dropdown.Option(i) for i in liste_indices],
-        width=300,
-        on_change=lambda e: ajouter_indice(e.control.value),
-        )
-    
+    dropdown_indices = dropdown ("Sélectionnez un indice", indice_default, liste_indices, handler= lambda e: ajouter_indice(e.control.value))
     # Dropdown stocks :  (menu déroulant)
-    dropdown_stocks = ft.Dropdown(
-        label=ft.Text("Sélectionnez une entreprise", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-        value=stock_default,
-        options=[ft.dropdown.Option(i) for i in liste_stocks],
-        width=300,
-        on_change=lambda e: ajouter_indice(e.control.value),
-        )
-    
+    dropdown_stocks = dropdown ("Sélectionnez une crypto", stock_default, liste_stocks, handler= lambda e: ajouter_indice(e.control.value))
     # Dropdown cryptos :  (menu déroulant)
-    dropdown_cryptos = ft.Dropdown(
-        label=ft.Text("Sélectionnez une crypto", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-        value=crypto_default,
-        options=[ft.dropdown.Option(i) for i in liste_cryptos],
-        width=300,
-        on_change=lambda e: ajouter_indice(e.control.value),
-        )
-
-
+    dropdown_cryptos = dropdown ("Sélectionnez une crypto", crypto_default, liste_cryptos, handler= lambda e: ajouter_indice(e.control.value))
 
     # Conteneur pour les indices sélectionnés
     indices_selectionnes = [indice_default, stock_default, crypto_default]  # affichés au début
@@ -102,13 +71,8 @@ def create_rendement_section(page):
     # Text pour période à ajouter
     text_periode = ft.Text("Ajouter une période (en mois)", size=11,style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),)
 
-    # Input période à ajouter
-    input_periode = ft.TextField(width=200,
-                                keyboard_type=ft.KeyboardType.NUMBER, 
-                                label="Ex: 3, 9, 18...", 
-                                label_style=ft.TextStyle(size=12, italic=True),
-                                on_submit=lambda e: ajouter_periode(e.control.value), 
-                                text_style=ft.TextStyle(size=11))
+    # Fonction : input période à ajouter 
+    input_periode = periode_input(fonc_ajouter_periode=lambda e: ajouter_periode(e.control.value))
     
     # Bouton "+" pour ajouter la période
     bouton_ajouter_periode = ft.IconButton(icon=ft.Icons.ADD, 
@@ -137,17 +101,15 @@ def create_rendement_section(page):
                                 alignment=ft.alignment.top_left)
 
     # Tableau des rendements
-    table = ft.DataTable(
-        expand=True,
-        column_spacing=10,
-        heading_row_height=25,
-        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
-        data_row_min_height=35,
-        data_row_max_height=35,
-        divider_thickness=0.5,
-        columns=[],
-        rows=[],
-    )
+    table = ft.DataTable(expand=True,
+                        column_spacing=10,
+                        heading_row_height=25,
+                        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
+                        data_row_min_height=35,
+                        data_row_max_height=35,
+                        divider_thickness=0.5,
+                        columns=[],
+                        rows=[],)
 
     cadre_tableau = ft.Container(content=ft.Row([table], scroll=ft.ScrollMode.AUTO, alignment=ft.MainAxisAlignment.CENTER),
                                  border=ft.border.all(0.5, couleur_titre_separateur),
@@ -257,16 +219,7 @@ def create_rendement_section(page):
     update_periodes_list()
     update_table()
 
-    return [
-        text_rendement,
-        separation,
-        dropdown_indice,
-        dropdown_stocks,
-        dropdown_cryptos,
-        cadre_text,
-        cadre_periodes,
-        cadre_tableau
-    ]
+    return [*titre,dropdown_indices,dropdown_stocks,dropdown_cryptos,cadre_text,cadre_periodes,cadre_tableau]
 
 
 

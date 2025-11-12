@@ -3,10 +3,11 @@ from flet.plotly_chart import PlotlyChart
 import plotly.graph_objects as go
 from src.models.control_datas.connexion_db_datas import *
 from src.controllers.LP_VS_DCA import *
+from src.components.components_views import *
 
 # -------------------- Connexion DB --------------------
-datas_indices = FinanceDatabaseIndice(db_path="data.db")
-liste_actifs = datas_indices.get_list_indices()
+datas_actifs = FinanceDatabaseIndice(db_path="data.db")
+liste_actifs = datas_actifs.get_list_indices()
 actif_default = "S&P 500"
 
 # -------------------- Styles --------------------
@@ -18,31 +19,15 @@ titre_size = 20
 ################################## INPUT SECTION ##################################
 def create_input_section():
 
-       # Titre
-    text_graphique = ft.Text(
-        " 📊 Simulation DCA vs Lump Sum",
-        color=couleur_titre_separateur,
-        weight="bold",
-        size=titre_size
-    )
-    separation = ft.Divider(thickness=2, color=couleur_titre_separateur)
+        # fonction : titre + séparateur dans conteneur
+    titre = titre_separateur(text = "📊 Simulation DCA vs LS", 
+                            padding_text_top = 0, 
+                            couleur_titre_separateur = couleur_titre_separateur)
 
-    # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
-    text_separateur = ft.Column(controls=[text_graphique, separation],
-                                    spacing=0,  # pas d'espace entre les deux
-                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                    tight=True,  # réduit les marges
-                                    )
+    # Fonction : Dropdown (menu déroulant)
+    dropdown_actif = dropdown("Sélectionnez un indice pour le graphique", actif_default, liste_actifs, handler= None)
 
-    dropdown_indice = ft.Dropdown(
-        label=ft.Text("Sélectionnez un indice pour le graphique", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-        value=actif_default,
-        options=[ft.dropdown.Option(indice) for indice in liste_actifs],
-        border_radius=8,
-        border_color=ft.Colors.WHITE30,
-        expand=True
-    )
-
+    # Input
     input_montant = ft.TextField(
         label="💰 Montant à investir (€)",
         value="100000",
@@ -50,8 +35,7 @@ def create_input_section():
         border=ft.InputBorder.OUTLINE,
         border_radius=8,
         border_color=ft.Colors.WHITE30,
-        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-    )
+        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
 
     input_durees = ft.TextField(
         label="⏳ Durées d'investissement (en années)",
@@ -73,7 +57,7 @@ def create_input_section():
         label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
     )
    
-    return text_separateur, dropdown_indice, input_montant, input_durees, input_mois_dca
+    return [*titre, dropdown_actif, input_montant, input_durees, input_mois_dca]
 
 
 
@@ -88,7 +72,10 @@ def create_simulation_handler(page: ft.Page, dropdown_indice, input_montant, inp
         mois_dca_list = [int(i.strip()) for i in input_mois_dca.value.split(",") if i.strip().isdigit()]
 
         # Loader
-        output_zone.controls.append(ft.ProgressRing(color=couleur_titre_separateur, width=50, height=50))
+        output_zone.controls.append(ft.Container(content=ft.ProgressRing(color=couleur_titre_separateur,
+                                                                     width=50,height=50),
+                                            padding=ft.padding.only(top=20),  # 👈 espace au-dessus du loader
+                                            alignment=ft.alignment.center ))     # 👈 pour le centrer proprement
         page.update()
 
         # --- Calculs ---
@@ -99,74 +86,28 @@ def create_simulation_handler(page: ft.Page, dropdown_indice, input_montant, inp
         output_zone.controls.clear()
 
         # ======================================================== GRAPHIQUE 1 ======================================================== #
-        graph1_text = ft.Container(
-            content=ft.Text("📊 Gains par durée", 
-                            color=couleur_titre_separateur, 
-                            weight=ft.FontWeight.BOLD, 
-                            size=titre_size),
-            padding=ft.padding.only(top=35),
-        )
-
-        separation1 = ft.Container(
-            content=ft.Divider(thickness=2, color=couleur_titre_separateur),
-            padding=ft.padding.only(bottom=15)
-        )
-
-        # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
-        graph1_text_separateur = ft.Column(controls=[graph1_text, separation1],
-                                        spacing=0,  # pas d'espace entre les deux
-                                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                        tight=True,  # réduit les marges
-                                        )
+        titre_graph1 = titre_separateur(text = "📊 Gains par durée", 
+                        padding_text_top = 35, 
+                        couleur_titre_separateur = couleur_titre_separateur)
 
         fig1 = graphe_barre(df_resultats)
+
         graphe1_graphe = PlotlyChart(fig1, expand=True)
 
         # ======================================================== GRAPHIQUE 2 ======================================================== #
-        graph2_text = ft.Container(
-            content=ft.Text("📈 Évolution de l’actif",
-                            color=couleur_titre_separateur,
-                            weight=ft.FontWeight.BOLD,
-                            size=titre_size),
-            padding=ft.padding.only(top=35),
-        )
-
-        separation2 = ft.Container(
-            content=ft.Divider(thickness=2, color=couleur_titre_separateur),
-            padding=ft.padding.only(bottom=15)
-        )
-
-         # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
-        graph2_text_separateur = ft.Column(controls=[graph2_text, separation2],
-                                        spacing=0,  # pas d'espace entre les deux
-                                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                        tight=True,  # réduit les marges
-                                        )
+        titre_graph2 = titre_separateur(text = "📈 Évolution de l’actif", 
+                        padding_text_top = 35, 
+                        couleur_titre_separateur = couleur_titre_separateur)
 
         fig2 = graphe_line(df, somme_investie)
+
         graphe2_graphe = PlotlyChart(fig2, expand=True)
 
         # ======================================================== TITRE TABLEAU ======================================================== #
-        tableau_text = ft.Container(
-            content=ft.Text("📋 Résultats en tableau",
-                            color=couleur_titre_separateur,
-                            weight=ft.FontWeight.BOLD,
-                            size=titre_size),
-            padding=ft.padding.only(top=35),
-        )
-
-        separation3 = ft.Container(
-            content=ft.Divider(thickness=2, color=couleur_titre_separateur),
-            padding=ft.padding.only(bottom=15)
-        )
-
-         # Contenair pour avoir texte + separateur sans le spacing 20 du output_zone
-        tableau_text_separateur = ft.Column(controls=[tableau_text, separation3],
-                                        spacing=0,  # pas d'espace entre les deux
-                                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                        tight=True,  # réduit les marges
-                                        )
-
+        titre_tableau = titre_separateur(text = "📋 Résultats en tableau", 
+                        padding_text_top = 35, 
+                        couleur_titre_separateur = couleur_titre_separateur)
+        
         #============================================= TABLEAU 1 ============================================#
         titre_tableau1 = ft.Text("Montants finaux par durée", weight="bold", size=18, 
                                  text_align=ft.TextAlign.CENTER,
@@ -223,7 +164,7 @@ def create_simulation_handler(page: ft.Page, dropdown_indice, input_montant, inp
         )
 
         # Ajout dans la zone d'affichage
-        output_zone.controls.extend([graph1_text_separateur, graphe1_graphe, graph2_text_separateur, graphe2_graphe, tableau_text_separateur, 
+        output_zone.controls.extend([*titre_graph1, graphe1_graphe, *titre_graph2, graphe2_graphe, *titre_tableau,
                                      titre_tableau1_contenair, cadre_tableau1, titre_tableau2_contenair, cadre_tableau2])
 
         page.update()
@@ -240,67 +181,40 @@ def dca_lp_page(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.DARK
 
+    # Fonction bouton retour haut
+    bouton_retour_haut=bout_ret_haut(couleur_bouton_fleche, handler = lambda e: page.go("/"))
 
-    # Flèche retour en haut à droite
-    bouton_retour_haut = ft.IconButton(
-        icon=ft.Icons.ARROW_BACK,  # flèche gauche
-        icon_color=couleur_bouton_fleche,  # même couleur que le bouton accueil
-        tooltip="Retour accueil",
-        on_click=lambda e: page.go("/")
-    )
+    # Bouton retour acceuol en bas
+    bouton_acceuil = bout_ret_acceuil(couleur_bouton_fleche, handler = lambda e: page.go("/"))
 
-    # Container pour aligner à gauche la flèche retour
-    container_retour_haut = ft.Container(
-        content=ft.Row([bouton_retour_haut], alignment=ft.MainAxisAlignment.START),
-        padding=ft.padding.all(0),        # plus aucun padding
-        height=30, 
-    )
-
-    
      # Création de la zobe out_put vide pour être accessible dans la fonction interne
     output_zone = ft.Column(horizontal_alignment=ft.CrossAxisAlignment.CENTER)  # centre les enfants directs
 
     # --- Inputs (renvoie un tuple) ---
     inputs = create_input_section()
-    text_separateur = inputs[0]
-    dropdown_indice = inputs[1]
-    input_montant = inputs[2]
-    input_durees = inputs[3]
-    input_mois_dca = inputs[4]
+    text_separateur_1 = inputs[0]
+    text_separateur_2 = inputs[1]
+    dropdown_indice = inputs[2]
+    input_montant = inputs[3]
+    input_durees = inputs[4]
+    input_mois_dca = inputs[5]
 
     # --- Simulation handler ---
     lancer_simulation = create_simulation_handler(page, dropdown_indice, input_montant, input_durees, input_mois_dca, output_zone)
 
     # --- Bouton simulation ---
-    bouton_simulation = ft.ElevatedButton(
-        content=ft.Text("🚀 Lancer la simulation", weight=ft.FontWeight.BOLD),
-        on_click=lancer_simulation,
-        expand=True,
-        width=600,
-        style=ft.ButtonStyle(
-            bgcolor=ft.Colors.RED_200,
-            color=ft.Colors.RED_700,
-            padding=ft.padding.symmetric(vertical=20),
-        )
-    )
-
-    # --- Bouton retour ---
-    bouton_retour = ft.ElevatedButton(
-        "Retour accueil",
-        icon=ft.Icons.HOME,
-        on_click=lambda e: page.go("/"),
-        style=ft.ButtonStyle(bgcolor=couleur_bouton_fleche, color=ft.Colors.WHITE)
-    )
-    # Container pour centrer le bouton retour
-    container_bouton = ft.Container(
-        content=bouton_retour,
-        alignment=ft.alignment.center,
-        padding=ft.padding.only(top=30, bottom=20)  # Espacement avant et après
-    )
+    bouton_simulation = ft.ElevatedButton(content=ft.Text("🚀 Lancer la simulation", weight=ft.FontWeight.BOLD),
+                                                on_click=lancer_simulation,
+                                                expand=True,
+                                                width=600,
+                                          style=ft.ButtonStyle(
+                                              bgcolor=ft.Colors.RED_200,
+                                              color=ft.Colors.RED_700,
+                                              padding=ft.padding.symmetric(vertical=20),))
 
     # Construis la colonne des contrôles (centrée horizontalement)
     controls_column = ft.Column(
-        controls=[*inputs, bouton_simulation,],
+        controls=[dropdown_indice,input_montant, input_durees, input_mois_dca , bouton_simulation,],
         spacing=25,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,      # centre horizontalement les widgets
         alignment=ft.MainAxisAlignment.START,                   # position verticale à l'intérieur du conteneur
@@ -309,4 +223,4 @@ def dca_lp_page(page: ft.Page):
 
  
     # Ajout à la page : container centré + zone de sortie en dessous (ou à droite selon layout souhaité)
-    page.add(container_retour_haut, controls_column, output_zone, container_bouton)
+    page.add(bouton_retour_haut,text_separateur_1, text_separateur_2, controls_column, output_zone, bouton_acceuil)

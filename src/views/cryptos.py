@@ -129,7 +129,7 @@ def create_rendement_section(page):
     # Text pour période à ajouter
     text_periode = ft.Text("Ajouter une période (en mois)", size=11,style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),)
 
-     # Fonction : input période à ajouter 
+    # Fonction : input période à ajouter 
     input_periode = periode_input(fonc_ajouter_periode=lambda e: ajouter_periode(e.control.value))
 
     # Bouton "+" pour ajouter la période
