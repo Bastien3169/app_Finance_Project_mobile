@@ -10,16 +10,10 @@ couleur_bouton_fleche = ft.Colors.GREEN_700
 def login_view(page: ft.Page):
 
     # --- Titre ---
-    text_rendement = ft.Container(
-        content=ft.Text("🔐 Connexion requise",
-                        color=couleur_titre_separateur,
-                        weight=ft.FontWeight.BOLD,
-                        size=21),
-    )
+    text_rendement = ft.Text("🔐 Connexion requise", color=couleur_titre_separateur, weight=ft.FontWeight.BOLD, size=21)
 
     # --- Séparateur ---
-    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur),
-                              padding=ft.padding.only(bottom=15))
+    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur), padding=ft.padding.only(bottom=15))
 
     # --- Email input ---
     email_field = ft.TextField(label="📧 Email", 
@@ -72,11 +66,8 @@ def login_view(page: ft.Page):
                                                                weight=ft.FontWeight.BOLD,),
                                                  on_click=on_click_inscription,),])
 
-    return ft.Column([text_rendement, separation, email_field, password_field, bout_connexion, feedback, inscription_text],
-                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                     alignment=ft.MainAxisAlignment.CENTER,
-                     )
-
+    #return ft.Column([text_rendement, separation, email_field, password_field, bout_connexion, feedback, inscription_text],horizontal_alignment=ft.CrossAxisAlignment.CENTER,)
+    return [text_rendement, separation, email_field, password_field, bout_connexion, feedback, inscription_text]
     
 ################################### FONCTION PRINCIPALE ################################
 
@@ -124,5 +115,5 @@ def auth_manage_page(page: ft.Page):
     
     page.add(
         container_retour_haut,
-        vu_login,
+        *vu_login,
         container_bouton)

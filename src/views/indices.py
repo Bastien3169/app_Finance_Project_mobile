@@ -10,13 +10,14 @@ import flet as ft
 from flet.plotly_chart import PlotlyChart
 import plotly.graph_objects as go
 from src.models.control_datas.connexion_db_datas import *
+from src.components.components_views import *
 
 
 # Connexion DB et récupération des données
-datas_indices = FinanceDatabaseIndice(db_path="data.db")
-liste_indices = datas_indices.get_list_indices()
-infos_indices = datas_indices.get_infos_indices()
-indice_default = "S&P 500"
+datas_actifs = FinanceDatabaseIndice(db_path="data.db")
+liste_actifs = datas_actifs.get_list_indices()
+infos_actifs = datas_actifs.get_infos_indices()
+actif_default = "S&P 500"
 
 couleur_titre_separateur = ft.Colors.AMBER_200
 couleur_bouton_fleche = ft.Colors.AMBER_700
@@ -25,25 +26,19 @@ couleur_bouton_fleche = ft.Colors.AMBER_700
 def create_graph_section(page):
     page.scroll = "auto"
 
-    # Widget : titre
-    text_graphique = ft.Text("📈 Graphiques des indices", color=couleur_titre_separateur, weight=ft.FontWeight.BOLD, size=21)
+    # fonction : titre + séparateur dans conteneur
+    titre = titre_separateur(text = "📈 Graphiques entreprise", 
+                            padding_text_top = 0, 
+                            couleur_titre_separateur = couleur_titre_separateur)
 
-    # Widget : ligne de séparation dans un container pour avoir padding que en dessous
-    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur),padding=ft.padding.only(bottom=15))
-
-    # Widget : Dropdown (menu déroulant)
-    dropdown_indice = ft.Dropdown(
-        label=ft.Text("Sélectionnez un indice", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-        value=indice_default,
-        options=[ft.dropdown.Option(indice) for indice in liste_indices],
-        width=300
-    )
+    # Fonction : Dropdown (menu déroulant)
+    dropdown_actif = dropdown ("Sélectionnez un indice", actif_default, liste_actifs, handler= None)
 
     # Widget : graphique PlotlyChart vide
     graphique = PlotlyChart(figure=go.Figure(), visible=False)
 
-    # Widget : loader (anneau de chargement)
-    loader = ft.ProgressRing(color=couleur_titre_separateur, visible=False, width=50, height=50)
+    # Fonction : loader (anneau de chargement)
+    loader = loader_page(couleur_titre_separateur)
 
     def update_graph(e):  # Met à jour le graphique quand on change l'indice
         loader.visible = True
@@ -51,19 +46,16 @@ def create_graph_section(page):
         page.update()
 
         # Récupérer l'indice sélectionné
-        selected_indice = dropdown_indice.value
+        selected_indice = dropdown_actif.value
 
         # Récupérer les données de l'indice sélectionné
-        df = datas_indices.get_prix_date(selected_indice)
+        df = datas_actifs.get_prix_date(selected_indice)
 
         # Convertir les dates en string
         df['Date'] = df['Date'].astype(str)
 
         # Créer le graphique avec Plotly
-        fig = go.Figure(go.Scatter(
-            x=df["Date"], y=df["Close"], mode='lines', name=selected_indice,
-            line=dict(color='#6DBE8C', width=2)
-        ))
+        fig = go.Figure(go.Scatter(x=df["Date"], y=df["Close"], mode='lines', name=selected_indice, line=dict(color='#6DBE8C', width=2)))
 
         # Personnalisation du graphique
         fig.update_layout(
@@ -94,12 +86,12 @@ def create_graph_section(page):
         page.update()
 
     # Lier "dropdown_indice" à la fonction "update_graph" grace à l'événement "on_change"  qui est un callback
-    dropdown_indice.on_change = update_graph
+    dropdown_actif.on_change = update_graph
 
     # Appel initial pour afficher le graphique par défaut
     update_graph(None)
 
-    return [text_graphique, separation, dropdown_indice, loader, graphique]
+    return titre + [dropdown_actif, loader, graphique]
     
 
 
@@ -109,33 +101,25 @@ def create_rendement_section(page):
 
     periods_selectionnees = [6, 12, 24, 60, 120, 180]  # affichées au début
 
-    # Titre
-    text_rendement = ft.Container(
-        content=ft.Text("💯 Rendements des indices (%)",
-                        color=couleur_titre_separateur,
-                        weight=ft.FontWeight.BOLD,
-                        size=21),
-        padding=ft.padding.only(top=35),
-    )
+ # fonction : titre + séparateur dans conteneur
+    titre = titre_separateur(text = "💯 Rendements des indices (%)", 
+                            padding_text_top = 35, 
+                            couleur_titre_separateur = couleur_titre_separateur)
 
-    # Séparateur
-    separation = ft.Container(
-        content=ft.Divider(thickness=2, color=couleur_titre_separateur),
-        padding=ft.padding.only(bottom=15)
-    )
 
-    # Sélection des indices
-    dropdown_multi = ft.Dropdown(label="Sélectionnez les indices à comparer",
-                                hint_text="Choisissez un ou plusieurs indices",
-                                label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
-                                hint_style=ft.TextStyle(color=ft.Colors.GREY),
-                                width=300,
-                                options=[ft.dropdown.Option(i) for i in liste_indices],
-                                on_change=lambda e: ajouter_indice(e.control.value),
-                                value=indice_default
-                            )
+    # Fonction : Dropdown (menu déroulant)
+    dropdown_actif = dropdown ("Sélectionnez les indices à comparer", actif_default, liste_actifs, handler= lambda e: ajouter_indice(e.control.value))
 
-    indices_selectionnes = [indice_default]
+    # fonction : titre + séparateur dans conteneur
+    titre = titre_separateur(text = "📈 Graphiques entreprise", 
+                            padding_text_top = 0, 
+                            couleur_titre_separateur = couleur_titre_separateur)
+
+    # Fonction : Dropdown (menu déroulant)
+    dropdown_actif = dropdown ("Sélectionnez un indice", actif_default, liste_actifs, handler= None)
+    
+    # Mettre les indices en liste
+    indices_selectionnes = [actif_default]
 
     # Text pour liste des indices sélectionnés
     text_liste_indices = ft.Text("Indices sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
@@ -155,13 +139,8 @@ def create_rendement_section(page):
     # Text pour période à ajouter
     text_periode = ft.Text("Ajouter une période (en mois)", size=11,style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),)
 
-    # Input période à ajouter
-    input_periode = ft.TextField(width=200,
-                                keyboard_type=ft.KeyboardType.NUMBER, 
-                                label="Ex: 3, 9, 18...", 
-                                label_style=ft.TextStyle(size=12, italic=True),
-                                on_submit=lambda e: ajouter_periode(e.control.value), 
-                                text_style=ft.TextStyle(size=11))
+    # Fonction : input période à ajouter 
+    input_periode = periode_input(fonc_ajouter_periode=lambda e: ajouter_periode(e.control.value))
     
     # Bouton "+" pour ajouter la période
     bouton_ajouter_periode = ft.IconButton(icon=ft.Icons.ADD, 
@@ -285,7 +264,7 @@ def create_rendement_section(page):
         table.columns = columns
 
         for indice in indices_selectionnes:
-            df = datas_indices.get_prix_date(indice)
+            df = datas_actifs.get_prix_date(indice)
             if not df.empty:
                 rendements = calculate_rendement(df, periods_selectionnees)
                 cells = [ft.DataCell(ft.Text(indice, size=11))]
@@ -312,33 +291,21 @@ def create_rendement_section(page):
     update_periodes_list()
     update_table()
 
-    return [text_rendement, separation, dropdown_multi, cadre_text, cadre_periodes, cadre_tableau]
+    return titre + [dropdown_actif, cadre_text, cadre_periodes, cadre_tableau]
 
 
 ################################## COMPOSITION INDICES  ################################
 
 def create_composition_section(page):
     
-     # Widget : titre dans container pour le padding
-    text_composition = ft.Container(content=ft.Text("🗂 Composition des indices",
-                                                    color=couleur_titre_separateur,
-                                                    weight=ft.FontWeight.BOLD,
-                                                    size=21),
-                                                    padding=ft.padding.only(top=35))
+     # fonction : titre + séparateur dans conteneur
+    titre = titre_separateur(text = "🗂 Composition des indices", 
+                            padding_text_top = 35,
+                            couleur_titre_separateur = couleur_titre_separateur)
 
-    # Widget : ligne de séparation dans un container pour avoir padding que en dessous
-    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur),
-                              padding=ft.padding.only(bottom=15))
 
-    # Widget : Dropdown (menu déroulant)        
-    dropdown_composition = ft.Dropdown(
-        label="Sélectionnez la composition de l'indice",
-        hint_text="Choisissez un indice",
-        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
-        width=300,
-        options=[ft.dropdown.Option(i) for i in liste_indices],
-        value=indice_default
-    )
+    # Fonction : Dropdown (menu déroulant)
+    dropdown_actif = dropdown ("Sélectionnez la composition de l'indice", actif_default, liste_actifs, handler= None)
 
     # Widget : tableau de la composition
     table_composition = ft.DataTable(
@@ -362,7 +329,7 @@ def create_composition_section(page):
 
     # Fonction pour mettre à jour le tableau de composition
     def update_table_composition(indice):
-        df = datas_indices.get_composition_indice(indice)
+        df = datas_actifs.get_composition_indice(indice)
         table_composition.columns.clear()
         table_composition.rows.clear()
         for col in df.columns:
@@ -372,12 +339,12 @@ def create_composition_section(page):
         page.update()
 
     # Lier "dropdown_composition" à la fonction "update_table_composition" grace à l'événement "on_change"  qui est un callback
-    dropdown_composition.on_change = lambda e: update_table_composition(e.control.value)
+    dropdown_actif.on_change = lambda e: update_table_composition(e.control.value)
     
     # Appel initial pour afficher la composition par défaut
-    update_table_composition(indice_default)
+    update_table_composition(actif_default)
 
-    return [text_composition, separation, dropdown_composition, cadre_table_composition]
+    return titre + [dropdown_actif, cadre_table_composition]
 
 
 ################################### FONCTION PRINCIPALE ################################
@@ -390,58 +357,29 @@ def indices_page(page: ft.Page):
     page.theme_mode = ft.ThemeMode.DARK
 
 
-    # Création Loader général
-    loader_global = ft.Container(content=ft.ProgressRing(color=ft.Colors.AMBER_200, width=60, height=60),
-                                 alignment=ft.alignment.center,
-                                 visible=True)
+    # Fonction Loader général
+    loader_global = loader_globale(couleur_titre_separateur)
     page.add(loader_global)
-
 
     # Récupère tous les éléments
     graph_elements = create_graph_section(page)
     rendement_elements = create_rendement_section(page)
     composition_elements = create_composition_section(page)
 
-    # Bouton retour en haut à droite
-    bouton_retour_haut = ft.IconButton(
-        icon=ft.Icons.ARROW_BACK,  # flèche gauche
-        icon_color=couleur_bouton_fleche,  # même couleur que le bouton accueil
-        tooltip="Retour accueil",
-        on_click=lambda e: page.go("/"))
+    # Fonction bouton retour haut
+    bouton_retour_haut=bout_ret_haut(couleur_bouton_fleche, handler = lambda e: page.go("/"))
 
-    container_retour_haut = ft.Container(
-        content=ft.Row([bouton_retour_haut], alignment=ft.MainAxisAlignment.START),
-        padding=ft.padding.all(0),        # plus aucun padding
-        height=30,)
-
-
-    # Bouton Retour accueil
-    bouton_retour = ft.ElevatedButton(
-        "Retour accueil",
-        icon=ft.Icons.HOME, # ajoute icône à gauche du texte
-        style=ft.ButtonStyle(
-            color=ft.Colors.WHITE,
-            bgcolor=couleur_bouton_fleche,
-            padding=ft.padding.symmetric(horizontal=20, vertical=15)
-        ),
-        on_click=lambda e: page.go("/")  # Redirection vers la page d'accueil
-    )
-
-    container_bouton = ft.Container(
-        content=bouton_retour,
-        alignment=ft.alignment.center,
-        padding=ft.padding.only(top=30, bottom=20)  # Espacement avant et après
-    )
-
+    # Bouton retour acceuol en bas
+    bouton_acceuil = bout_ret_acceuil(couleur_bouton_fleche, handler = lambda e: page.go("/"))
 
     # Suppression du loader
     loader_global.visible = False
 
     # Un seul page.add() avec tous les éléments avec décompression des listes grace à l'étoile *
     page.add(
-        container_retour_haut,  # Bouton en haut à droite
+        bouton_retour_haut,  # Bouton en haut à droite
         *graph_elements,
         *rendement_elements, 
         *composition_elements,
-        container_bouton  # Bouton en dernier
-    )
+        bouton_acceuil)  # Bouton en dernier
+    
