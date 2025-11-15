@@ -232,16 +232,12 @@ def users_admin_flet(page: ft.Page):
             page.update()
 
         # Texte de la card de modification 
-        text_edition = text_edition = ft.Column([ft.Container(
-                                                    ft.Text("✏️ Modification de l'utilisateur", 
-                                                            weight=ft.FontWeight.BOLD, 
-                                                            text_align=ft.TextAlign.CENTER, 
-                                                            color=couleur_titre,
-                                                            size=15)),
-                                                
-                                                ft.Container(
-                                                    content=ft.Divider(height=2, color=couleur_titre),)],
-                                                spacing=2)
+        text_edition = ft.Column([ft.Container(ft.Text("✏️ Modification de l'utilisateur", 
+                                                       weight=ft.FontWeight.BOLD, 
+                                                       text_align=ft.TextAlign.CENTER, 
+                                                       color=couleur_titre,size=15)),
+                                  ft.Container(content=ft.Divider(height=2, color=couleur_titre),)],
+                                spacing=2)
     
         
         # Bouton valider les modifications
