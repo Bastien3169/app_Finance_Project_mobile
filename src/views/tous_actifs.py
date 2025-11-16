@@ -42,6 +42,7 @@ def create_rendement_section(page):
 
     periods_selectionnees = [6, 12, 24, 60, 120, 180]  # affichées au début
 
+    # Fonction pour titre et séparateur
     titre = titre_separateur(text = "💯 Rendements actifs (%)", 
                             padding_text_top = 0, 
                             couleur_titre_separateur = couleur_titre_separateur)
@@ -51,7 +52,7 @@ def create_rendement_section(page):
     # Dropdown indice : (menu déroulant)
     dropdown_indices = dropdown ("Sélectionnez un indice", indice_default, liste_indices, handler= lambda e: ajouter_indice(e.control.value))
     # Dropdown stocks :  (menu déroulant)
-    dropdown_stocks = dropdown ("Sélectionnez une crypto", stock_default, liste_stocks, handler= lambda e: ajouter_indice(e.control.value))
+    dropdown_stocks = dropdown ("Sélectionnez une entreprise", stock_default, liste_stocks, handler= lambda e: ajouter_indice(e.control.value))
     # Dropdown cryptos :  (menu déroulant)
     dropdown_cryptos = dropdown ("Sélectionnez une crypto", crypto_default, liste_cryptos, handler= lambda e: ajouter_indice(e.control.value))
 
@@ -59,11 +60,11 @@ def create_rendement_section(page):
     indices_selectionnes = [indice_default, stock_default, crypto_default]  # affichés au début
     liste_selection = ft.Row(scroll=ft.ScrollMode.AUTO)
 
-    cadre_text = ft.Container(content=ft.Column([ft.Text("Entreprise sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)), 
+    cadre_text = ft.Container(content=ft.Column([ft.Text("Actifs sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)), 
                                                  liste_selection],
                                             horizontal_alignment=ft.CrossAxisAlignment.START),
                                         padding=5,
-                                        border=ft.border.all(0.5, ft.Colors.WHITE30),
+                                        border=ft.border.all(2, ft.Colors.WHITE30),
                                         border_radius=10,
                                         expand=True,
                                         alignment=ft.alignment.top_left)
@@ -87,15 +88,15 @@ def create_rendement_section(page):
     # Conteneur pour les périodes sélectionnées
     liste_periodes = ft.Row(scroll=ft.ScrollMode.AUTO)
 
-    # Cadre complet regroupant tout
+    # Cadre complet regroupant tout pour les indices selectionnés
     cadre_periodes = ft.Container(content=ft.Column([text_periode,
                                                      ligne_ajout_periode,
                                                      ft.Text("Périodes sélectionnées (en mois) :", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-                                                    liste_periodes,],  # <= ici on l’ajoute DANS le cadre
+                                                    liste_periodes,],  
                                                     spacing=10,
                                                     alignment=ft.MainAxisAlignment.START),
                                 padding=10,
-                                border=ft.border.all(0.5, ft.Colors.WHITE30),
+                                border=ft.border.all(2, ft.Colors.WHITE30),
                                 border_radius=10,
                                 expand=True,
                                 alignment=ft.alignment.top_left)
@@ -112,7 +113,7 @@ def create_rendement_section(page):
                         rows=[],)
 
     cadre_tableau = ft.Container(content=ft.Row([table], scroll=ft.ScrollMode.AUTO, alignment=ft.MainAxisAlignment.CENTER),
-                                 border=ft.border.all(0.5, couleur_titre_separateur),
+                                 border=ft.border.all(2, couleur_titre_separateur),
                                  border_radius=10,
                                  padding=5,
                                  alignment=ft.alignment.center,)
@@ -219,8 +220,21 @@ def create_rendement_section(page):
     update_periodes_list()
     update_table()
 
-    return [*titre,dropdown_indices,dropdown_stocks,dropdown_cryptos,cadre_text,cadre_periodes,cadre_tableau]
+    '''
+    contenu = ft.Column([*titre,
+                         ft.Column([dropdown_indices,dropdown_stocks,dropdown_cryptos,cadre_text,cadre_periodes,cadre_tableau],
+                                   spacing=15,     
+                                   horizontal_alignment=ft.CrossAxisAlignment.CENTER,),])'''
+    
 
+    contenu = ft.Column(controls=[*titre,
+                                ft.Column(controls=[dropdown_indices, dropdown_stocks, dropdown_cryptos, cadre_text, cadre_periodes, cadre_tableau],
+                                    spacing=15,
+                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER)],
+                    spacing=5,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+
+    return [contenu]
 
 
 ################################### FONCTION PRINCIPALE ################################
@@ -233,53 +247,26 @@ def actifs_page(page: ft.Page):
     page.theme_mode = ft.ThemeMode.DARK
 
      # Création Loader général
-    loader_global = ft.Container(content=ft.ProgressRing(color=ft.Colors.GREEN_200, width=60, height=60),
-                                 alignment=ft.alignment.center,
-                                 visible=True)
+    loader_global = loader_globale(couleur_titre_separateur)
+    # Mise en place du loader_global
     page.add(loader_global)
 
     # Récupère tous les éléments
     rendement_elements = create_rendement_section(page)
 
     # Bouton retour en haut à droite
-    bouton_retour_haut = ft.IconButton(
-        icon=ft.Icons.ARROW_BACK,  # flèche gauche
-        icon_color=couleur_bouton_fleche,  # même couleur que le bouton accueil
-        tooltip="Retour accueil",
-        on_click=lambda e: page.go("/"))
-
-    container_retour_haut = ft.Container(
-        content=ft.Row([bouton_retour_haut], alignment=ft.MainAxisAlignment.START),
-        padding=ft.padding.all(0),        # plus aucun padding
-        height=30,)
-
+    bouton_retour_haut = bout_ret_haut(couleur_bouton_fleche, handler = lambda e: page.go("/"))
 
     # Bouton Retour accueil
-    bouton_retour = ft.ElevatedButton(
-        "Retour accueil",
-        icon=ft.Icons.HOME, # ajoute icône à gauche du texte
-        style=ft.ButtonStyle(
-            color=ft.Colors.WHITE,
-            bgcolor=couleur_bouton_fleche,
-            padding=ft.padding.symmetric(horizontal=20, vertical=15)
-        ),
-        on_click=lambda e: page.go("/"))  # Redirection vers la page d'accueil
+    bouton_retour = bout_ret_acceuil(couleur_bouton_fleche, handler = lambda e: page.go("/"))
 
-
-    container_bouton = ft.Container(
-        content=bouton_retour,
-        alignment=ft.alignment.center,
-        padding=ft.padding.only(top=30, bottom=20))  # Espacement avant et après
-
-
-    # Suppresion du loader
+    # Suppresion du loader_global
     loader_global.visible = False
-
 
     # Un seul page.add() avec tous les éléments avec décompression des listes grace à l'étoile *
     page.add(
-        container_retour_haut,  # Bouton en haut à droite
+        bouton_retour_haut,  # Bouton en haut à droite
         *rendement_elements, # Tous les éléments de la section rendements
-        container_bouton  # Bouton en dernier
+        bouton_retour  # Bouton en dernier
     )
 

@@ -53,7 +53,7 @@ def dropdown (text, actif_default, liste_actifs, handler= None):
 
 
 # ------- input (periode actif) -------
-def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None): 
+def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=250, fonc_ajouter_periode=None): 
     input_periode = ft.TextField(label=text_label, 
                                 label_style=ft.TextStyle(size=12, italic=True),
                                 border_radius=8,
@@ -83,6 +83,16 @@ def dcavsls_input (labels, values, hint_texte):
                                 keyboard_type=ft.KeyboardType.NUMBER,)
     return  input_montant
 
+
+
+# ------- Regourpement des widget par section -------
+def contenu_widget(titre, liste_widget):
+    contenu = ft.Column(controls=[*titre,ft.Column(controls=[*liste_widget],
+                                                    spacing=10,
+                                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,),],
+                            spacing=5,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,)
+    return contenu
 
 # ------- Bouton retour en haut à gauche -------
 def bout_ret_haut(couleur_bouton_fleche, handler = None):

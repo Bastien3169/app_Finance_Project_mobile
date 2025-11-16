@@ -27,7 +27,7 @@ def create_graph_section(page):
     page.scroll = "auto"
     
     # fonction : titre + séparateur dans conteneur
-    titre = titre_separateur(text = "📈 Graphiques des cryptos", 
+    titre = titre_separateur(text = "📈 Graphiques de la crypto", 
                             padding_text_top = 0, 
                             couleur_titre_separateur = couleur_titre_separateur)
 
@@ -91,7 +91,10 @@ def create_graph_section(page):
     # Appel initial pour afficher le graphique par défaut
     update_graph(None)
 
-    return titre + [dropdown_actif, loader, graphique]
+    # Regroupement widger section
+    contenu = contenu_widget(titre, [dropdown_actif, loader, graphique])
+
+    return [contenu]
     
 
 
@@ -120,7 +123,7 @@ def create_rendement_section(page):
         ],
             horizontal_alignment=ft.CrossAxisAlignment.START),
         padding=5,
-        border=ft.border.all(0.5, ft.Colors.WHITE30),
+        border=ft.border.all(2, ft.Colors.WHITE30),
         border_radius=10,
         expand=True,
         alignment=ft.alignment.top_left
@@ -153,7 +156,7 @@ def create_rendement_section(page):
                                                     spacing=10,
                                                     alignment=ft.MainAxisAlignment.START),
                                 padding=10,
-                                border=ft.border.all(0.5, ft.Colors.WHITE30),
+                                border=ft.border.all(2, ft.Colors.WHITE30),
                                 border_radius=10,
                                 expand=True,
                                 alignment=ft.alignment.top_left)
@@ -175,7 +178,7 @@ def create_rendement_section(page):
         content=ft.Row([table],
                        scroll=ft.ScrollMode.AUTO,
                        alignment=ft.MainAxisAlignment.CENTER),
-        border=ft.border.all(0.5, couleur_titre_separateur),
+        border=ft.border.all(2, couleur_titre_separateur),
         border_radius=10,
         padding=5,
         alignment=ft.alignment.center,
@@ -272,31 +275,21 @@ def create_rendement_section(page):
     update_periodes_list()
     update_table()
 
-    return titre + [dropdown_actif, cadre_text, cadre_periodes, cadre_tableau]
+    # Regroupement widger section
+    contenu = contenu_widget(titre, [dropdown_actif, cadre_text, cadre_periodes, cadre_tableau])
 
+    return [contenu]
 
 ################################## INFO CRYPTOS  ################################
 
 def create_composition_section(page):
     
-     # Widget : titre dans container pour le padding
-    text_composition = ft.Container(content=ft.Text("🗂 Informations crypto",
-                                                    color=couleur_titre_separateur,
-                                                    weight=ft.FontWeight.BOLD,
-                                                    size=21),
-                                                    padding=ft.padding.only(top=35))
-
-    # Widget : ligne de séparation dans un container pour avoir padding que en dessous
-    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur),
-                              padding=ft.padding.only(bottom=15))
+    # Fonction : titre + séparateur dans conteneur
+    titre = titre_separateur("🗂 Informations crypto",couleur_titre_separateur, padding_text_top = 35)
 
     # Widget : Dropdown (menu déroulant)
-    dropdown_indice = ft.Dropdown(
-        label=ft.Text("Sélectionnez une crypto", style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-        value=actif_default,
-        options=[ft.dropdown.Option(indice) for indice in liste_actifs],
-        width=300
-    )
+    dropdown_indice = dropdown ("Sélectionnez une crypto", actif_default, liste_actifs, handler= None)
+    
     # Widget : tableau de la composition
     table_composition = ft.DataTable(
         column_spacing=10,
@@ -305,17 +298,14 @@ def create_composition_section(page):
         data_row_min_height=25,
         divider_thickness=0.5,
         columns=[ft.DataColumn(ft.Text("Chargement...", size=11))],
-        rows=[]
-    )
+        rows=[])
 
     # Cadre autour du tableau
     cadre_table_composition = ft.Container(
         content=ft.Column([ft.Row([table_composition], scroll=ft.ScrollMode.AUTO)], scroll=ft.ScrollMode.AUTO),
-        border=ft.border.all(0.5, couleur_titre_separateur),
+        border=ft.border.all(2, couleur_titre_separateur),
         border_radius=10,
-        padding=5,
-    )
-
+        padding=5,)
 
     # Fonction pour mettre à jour le tableau de composition
     def update_table_composition(e):
@@ -337,14 +327,16 @@ def create_composition_section(page):
     update_table_composition(actif_default)
     page.update()
 
-    return [text_composition, separation, dropdown_indice, cadre_table_composition]
+    # Regroupement widger section
+    contenu = contenu_widget(titre, [dropdown_indice, cadre_table_composition])
 
+    return [contenu]
 
 ################################### FONCTION PRINCIPALE ################################
 
 def cryptos_page(page: ft.Page):
     page.clean()
-    page.title = "Les cryptomonais"
+    page.title =  "Les cryptomonais"
     page.scroll = "auto"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.DARK

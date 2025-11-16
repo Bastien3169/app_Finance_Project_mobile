@@ -27,7 +27,7 @@ def create_graph_section(page):
     page.scroll = "auto"
 
     # fonction : titre + séparateur dans conteneur
-    titre = titre_separateur(text = "📈 Graphiques entreprise", 
+    titre = titre_separateur(text = "📈 Graphique de l'indice", 
                             padding_text_top = 0, 
                             couleur_titre_separateur = couleur_titre_separateur)
 
@@ -291,7 +291,7 @@ def create_rendement_section(page):
 def create_composition_section(page):
     
      # fonction : titre + séparateur dans conteneur
-    titre = titre_separateur(text = "🗂 Composition des indices", 
+    titre = titre_separateur(text = "🗂 Composition de l'indice", 
                             padding_text_top = 35,
                             couleur_titre_separateur = couleur_titre_separateur)
 
