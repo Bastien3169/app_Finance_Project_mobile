@@ -109,14 +109,6 @@ def create_rendement_section(page):
 
     # Fonction : Dropdown (menu déroulant)
     dropdown_actif = dropdown ("Sélectionnez les indices à comparer", actif_default, liste_actifs, handler= lambda e: ajouter_indice(e.control.value))
-
-    # fonction : titre + séparateur dans conteneur
-    titre = titre_separateur(text = "📈 Graphiques entreprise", 
-                            padding_text_top = 0, 
-                            couleur_titre_separateur = couleur_titre_separateur)
-
-    # Fonction : Dropdown (menu déroulant)
-    dropdown_actif = dropdown ("Sélectionnez un indice", actif_default, liste_actifs, handler= None)
     
     # Mettre les indices en liste
     indices_selectionnes = [actif_default]

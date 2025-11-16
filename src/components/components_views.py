@@ -45,29 +45,21 @@ def dropdown (text, actif_default, liste_actifs, handler= None):
                                 width=300,)
     return dropdown_multi
 
-# ------- input (DCAvsLS) -------
-def input_dca(): 
-    input_montant = ft.TextField(
-        label="💰 Montant à investir (€)",
-        value="100000",
-        keyboard_type=ft.KeyboardType.NUMBER,
-        border=ft.InputBorder.OUTLINE,
-        border_radius=8,
-        border_color=ft.Colors.WHITE30,
-        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),)
-
-    return input_montant
 
 # ------- input (periode actif) -------
-def periode_input(fonc_ajouter_periode): 
-    input_periode = ft.TextField(width=200,
-                                keyboard_type=ft.KeyboardType.NUMBER, 
-                                label="Ex: 3, 9, 18...", 
+def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=200, fonc_ajouter_periode=None): 
+    input_periode = ft.TextField(label=text_label, 
                                 label_style=ft.TextStyle(size=12, italic=True),
-                                on_submit=fonc_ajouter_periode, 
                                 border_radius=8,
                                 border_color=ft.Colors.WHITE30,
-                                text_style=ft.TextStyle(size=11))
+                                hint_text = hint_texte,
+                                hint_style = hint_styl,
+                                text_style=ft.TextStyle(size=11),
+                                password=passwords,
+                                can_reveal_password=oeil,
+                                width=widths,
+                                keyboard_type=ft.KeyboardType.NUMBER, 
+                                on_submit=fonc_ajouter_periode,)
     return input_periode
 
 

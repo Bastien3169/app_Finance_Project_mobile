@@ -2,33 +2,29 @@
 import flet as ft
 from src.models.users_db.models_db_users_test import AuthManager, AdminManager
 from src.models.datas_db.main_db_datas import *  # Pour les updates BDD
+from src.components.components_views import *
 
 # Instanciations
 auth_manager = AuthManager()
 admin_manager = AdminManager()
 
 # Couleurs et tailles
-couleur_titre = ft.Colors.CYAN_200
+couleur_titre_separateur = ft.Colors.CYAN_200
 couleur_bouton = ft.Colors.CYAN_600
 taille_titre = 20
 
 
-############################### FONCTIONS POUR LES TITRES ##############################
-
-def data_maj_widgets():
-    titre = ft.Text("🔄 Mise à jour BDD datas", color=couleur_titre, weight=ft.FontWeight.BOLD, size=taille_titre)
-    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre), padding=ft.padding.only(bottom=15))
-    return [titre, separation]
-
-def users_maj_widgets():
-    titre = ft.Text("📝 Modifications BDD users", color=couleur_titre, weight=ft.FontWeight.BOLD, size=taille_titre)
-    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre), padding=ft.padding.only(bottom=15))
-    return [titre, separation]
 
 ############################## FONCTION INTERACTIVE MAJ BDD ##############################
 
 def add_update_database(page: ft.Page, dossier_csv: str, csv_bdd: str, db_path: str):
     
+    # fonction : titre + séparateur dans conteneur
+    titre =  titre_separateur("🔄 Mise à jour BDD datas", 
+                              couleur_titre_separateur, 
+                              padding_text_top = 0)
+
+
     # Création de la colonne pour les messages de suivi d'avancement
     messages = ft.Column(spacing=5)
     
@@ -106,12 +102,27 @@ def add_update_database(page: ft.Page, dossier_csv: str, csv_bdd: str, db_path: 
                           visible=False,)
     
 
-    return [bouton, info, loader, progress_bar, messages]
+    return titre + [bouton, info, loader, progress_bar, messages]
 
 
 #################################### GESTION UTILISATEURS ####################################
 
 def users_admin_flet(page: ft.Page):
+    
+    # fonction : titre + séparateur dans conteneur
+    titre =  titre_separateur("📝 Modifications BDD users", 
+                              couleur_titre_separateur, 
+                              padding_text_top = 0)
+    
+    # Sous-titre pour modification user
+    sous_titre = ft.Text("Modification users", weight="bold", size=18, 
+                                 text_align=ft.TextAlign.CENTER,
+                                 style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
+    
+    sous_titre_contenair = ft.Container(content=sous_titre, alignment=ft.alignment.center)
+
+
+    # Input pour recherche users
     search_field = ft.TextField(label="🔍 Rechercher par email ou username", 
                                 label_style=ft.TextStyle(size=12, italic=True),
                                 width=400, 
@@ -119,7 +130,8 @@ def users_admin_flet(page: ft.Page):
                                 border_radius=8,
                                 border_color=ft.Colors.WHITE30,)
     
-    results_column = ft.Column(spacing=15)
+    results_column = ft.Column()
+
 
     # Dictionnaire pour suivre l'état d'édition
     edit_state = {}
@@ -207,12 +219,14 @@ def users_admin_flet(page: ft.Page):
                                     width=300,
                                     border_radius=8,
                                     border_color=ft.Colors.WHITE30,)
+        
         new_role = ft.Dropdown(label="Nouveau rôle",
                                options=[ft.dropdown.Option("admin"), ft.dropdown.Option("user")],
                                value=role,
                                width=300,
                                border_radius=8,
                                border_color=ft.Colors.WHITE30,)
+        
         new_password = ft.TextField(label="Nouveau mot de passe", 
                                     hint_text="Ex : 1234",
                                     width=300,
@@ -235,8 +249,8 @@ def users_admin_flet(page: ft.Page):
         text_edition = ft.Column([ft.Container(ft.Text("✏️ Modification de l'utilisateur", 
                                                        weight=ft.FontWeight.BOLD, 
                                                        text_align=ft.TextAlign.CENTER, 
-                                                       color=couleur_titre,size=15)),
-                                  ft.Container(content=ft.Divider(height=2, color=couleur_titre),)],
+                                                       color=couleur_titre_separateur,size=15)),
+                                  ft.Container(content=ft.Divider(height=2, color=couleur_titre_separateur),)],
                                 spacing=2)
     
         
@@ -263,11 +277,161 @@ def users_admin_flet(page: ft.Page):
                                         on_click=validate_search,)
 
 
-    return ft.Column([ft.Column([search_field, validate_button], 
-                                spacing=10, horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+    return ft.Column([ft.Column(titre + [sous_titre_contenair, search_field, validate_button], 
+                                horizontal_alignment=ft.CrossAxisAlignment.CENTER),
                       results_column,],
-                      spacing=20,
                       horizontal_alignment=ft.CrossAxisAlignment.CENTER,)
+
+
+#################################### DATAFRAME USERS ####################################
+def users_table_simple():
+
+    # Récupérer tous les users
+    all_users = admin_manager.get_all_users()
+    # all_users = [(id, username, email, role, registration_date), ...]
+
+    users_table = ft.DataTable(
+        column_spacing=10,
+        heading_row_height=30,
+        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
+        data_row_min_height=25,
+        divider_thickness=0.5,
+        columns=[
+            ft.DataColumn(ft.Text("ID", size=11)),
+            ft.DataColumn(ft.Text("Username", size=11)),
+            ft.DataColumn(ft.Text("Email", size=11)),
+            ft.DataColumn(ft.Text("Rôle", size=11)),
+            ft.DataColumn(ft.Text("Date inscription", size=11)),
+        ],
+        rows=[
+            ft.DataRow(
+                cells=[
+                    ft.DataCell(ft.Text(str(id), size=11)),
+                    ft.DataCell(ft.Text(username, size=11)),
+                    ft.DataCell(ft.Text(email, size=11)),
+                    ft.DataCell(ft.Text(role, size=11)),
+                    ft.DataCell(ft.Text(str(registration_date), size=11)),
+                ]
+            )
+            for (id, username, email, role, registration_date) in all_users
+        ],
+    )
+
+    # Optionnel : cadre scrollable (comme tes autres tableaux)
+    cadre_table_users = ft.Container(
+        content=ft.Column(
+            [ft.Row([users_table], scroll=ft.ScrollMode.AUTO)],
+            scroll=ft.ScrollMode.AUTO,
+        ),
+        border=ft.border.all(0.5, couleur_titre_separateur),
+        border_radius=10,
+        padding=5,
+        height=300,
+    )
+
+    return cadre_table_users
+
+
+#################################### AJOUT USER ####################################
+def users_add_form(page: ft.Page):
+    
+    # Sous-titre pour modification user
+    sous_titre = ft.Text("Ajout users", weight="bold", size=18, 
+                                 text_align=ft.TextAlign.CENTER,
+                                 style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
+    
+    sous_titre_contenair = ft.Container(content=sous_titre, alignment=ft.alignment.center)
+    
+    # Champs du formulaire
+    username_field = periode_input(fonc_ajouter_periode = None, 
+                                text_label = "👤 Username", 
+                                hint_texte=None,
+                                hint_styl = None,
+                                widths=None,)
+
+    email_field = periode_input(fonc_ajouter_periode = None, 
+                                text_label = "📧 Email", 
+                                hint_texte=None,
+                                hint_styl = None,
+                                widths=None,)
+
+    password_field = periode_input(text_label="🔑 Mot de passe", 
+                                   hint_texte="Min 5 car., maj, min, chiffre, caractère spécial", 
+                                   hint_styl=ft.TextStyle(size=10, italic=True,), 
+                                   widths=None,
+                                   passwords=True, 
+                                   oeil=True)
+
+    role_field = ft.Dropdown(label="🛡️ Rôle",
+                            label_style=ft.TextStyle(size=12, italic=True),
+                            options=[ft.dropdown.Option("user"), ft.dropdown.Option("admin"),],
+                            value="user",
+                            width=None,
+                            border_radius=8,
+                            text_style=ft.TextStyle(size=11),
+                            border_color=ft.Colors.WHITE30,
+                            expand=True,)
+
+    message_text = ft.Text(size=11, italic=True)
+
+    # Action au clic sur "Créer l'utilisateur"
+    def on_create_user(e):
+        username = username_field.value.strip() # Enlève espace début et fin
+        email = email_field.value.strip()
+        password = password_field.value.strip()
+        role = role_field.value
+
+        # Vérif côté front
+        if not username or not email or not password:
+            message_text.value = "❌ Merci de remplir tous les champs."
+            message_text.color = ft.Colors.RED
+            page.update()
+            return
+
+        # Création via AuthManager (validation mail + mdp inclue)
+        success, msg = auth_manager.register(username, email, password) # “J’appelle register(...), qui me renvoie 2 valeurs, et je les range dans deux variables : success et msg.”
+
+        message_text.value = msg
+        message_text.color = ft.Colors.GREEN if success else ft.Colors.RED
+        page.update()
+
+        if not success:
+            return
+
+        # Si succès et rôle différent de 'user', on met à jour via AdminManager
+        if role != "user":
+            admin_manager.update_user(email=email, role=role)
+
+        # Optionnel : vider les champs après succès
+        username_field.value = ""
+        email_field.value = ""
+        password_field.value = ""
+        role_field.value = "user"
+        page.update()
+
+    # Bouton de création
+    create_button = ft.ElevatedButton(
+        "Créer l'utilisateur",
+        icon=ft.Icons.PERSON_ADD,
+        bgcolor=couleur_bouton,
+        color=ft.Colors.WHITE,
+        on_click=on_create_user,)
+
+    # Card globale du formulaire
+    form_container = ft.Container(
+        padding=ft.padding.only(top=20, left=20, right=20),
+        content=ft.Column(
+            [sous_titre_contenair,
+            username_field,
+            email_field,
+            password_field,
+            role_field,
+            create_button,
+            message_text,],
+        spacing=10,
+        horizontal_alignment=ft.CrossAxisAlignment.START,),)
+
+    return form_container
 
 
 #################################### PAGE ADMIN PRINCIPALE ####################################
@@ -289,14 +453,17 @@ def admin_flet(page: ft.Page):
 
 
     # Section mise à jour BDD
-    widget_datas_bdd = data_maj_widgets()
     maj_datas_bdd = add_update_database(page, dossier_csv="csv", csv_bdd="csv/csv_bdd", db_path="datas.bd")
 
 
     # Section gestion utilisateurs
-    widget_users_bdd = users_maj_widgets()
     maj_userss_bdd = users_admin_flet(page)
 
+    # Dataframe users
+    dataframe_users = users_table_simple()
+
+    # Ajout user
+    ajout_user = users_add_form(page)
 
     # Création bouton retour accueil
     bouton_retour = ft.ElevatedButton("Retour accueil",
@@ -311,5 +478,5 @@ def admin_flet(page: ft.Page):
 
 
     # Ajout de tout à la page
-    page.add(container_fleche, *widget_datas_bdd, *maj_datas_bdd, *widget_users_bdd, maj_userss_bdd, container_bouton)
+    page.add(container_fleche, *maj_datas_bdd, maj_userss_bdd, dataframe_users, ajout_user, container_bouton)
     page.update()
