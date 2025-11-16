@@ -1,5 +1,11 @@
 import flet as ft
 
+'''
+label_style → stylise le label
+hint_style → stylise le placeholder
+text_style → stylise le texte saisi / affiché (donc ce qui vient de value ou ce que tape l’utilisateur)
+'''
+
 # ------- titre + séparateur dans conteneur -------
 def titre_separateur(text,couleur_titre_separateur, padding_text_top = 35):
     
@@ -42,12 +48,12 @@ def dropdown (text, actif_default, liste_actifs, handler= None):
                                 on_change=handler,
                                 value=actif_default,
                                 expand=True,
-                                width=300,)
+                                width=400,)
     return dropdown_multi
 
 
 # ------- input (periode actif) -------
-def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=200, fonc_ajouter_periode=None): 
+def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None): 
     input_periode = ft.TextField(label=text_label, 
                                 label_style=ft.TextStyle(size=12, italic=True),
                                 border_radius=8,
@@ -61,6 +67,21 @@ def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None,
                                 keyboard_type=ft.KeyboardType.NUMBER, 
                                 on_submit=fonc_ajouter_periode,)
     return input_periode
+
+
+# ------- input (DCAvsLS) -------
+def dcavsls_input (labels, values, hint_texte):
+    input_montant = ft.TextField(label=labels,
+                                label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
+                                value=values,
+                                text_style=ft.TextStyle(size=12,italic=True,weight=ft.FontWeight.BOLD,),
+                                border_radius=8,
+                                border_color=ft.Colors.WHITE30,
+                                hint_text = hint_texte,
+                                hint_style = ft.TextStyle(size=10, italic=True,),
+                                width=400,
+                                keyboard_type=ft.KeyboardType.NUMBER,)
+    return  input_montant
 
 
 # ------- Bouton retour en haut à gauche -------

@@ -28,37 +28,13 @@ def create_input_section():
     dropdown_actif = dropdown("Sélectionnez un indice pour le graphique", actif_default, liste_actifs, handler= None)
 
     # Input
-    input_montant = ft.TextField(
-        label="💰 Montant à investir (€)",
-        value="100000",
-        keyboard_type=ft.KeyboardType.NUMBER,
-        border=ft.InputBorder.OUTLINE,
-        border_radius=8,
-        border_color=ft.Colors.WHITE30,
-        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
+    input_montant = dcavsls_input (labels = "💰 Montant à investir (€)", values = "100000", hint_texte = "Ex: 100000")
 
-    input_durees = ft.TextField(
-        label="⏳ Durées d'investissement (en années)",
-        value="5,10,15,20,25",
-        hint_text="Ex: 5,10,15,20,25",
-        border=ft.InputBorder.OUTLINE,
-        border_radius=8,
-        border_color=ft.Colors.WHITE30,
-        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-    )
+    input_durees = dcavsls_input (labels = "⏳ Durées d'investissement (en années)", values = "5,10,15,20,25", hint_texte = "Ex: 5,10,15,20,25")
 
-    input_mois_dca = ft.TextField(
-        label="📆 Mois de DCA",
-        value="6,12,24",
-        hint_text="Ex: 6,12,24",
-        border=ft.InputBorder.OUTLINE,
-        border_radius=8,
-        border_color=ft.Colors.WHITE30,
-        label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-    )
-   
+    input_mois_dca = dcavsls_input (labels ="📆 Mois de DCA", values = "6,12,24", hint_texte = "Ex: 6,12,24")
+
     return [*titre, dropdown_actif, input_montant, input_durees, input_mois_dca]
-
 
 
 ################################## SIMULATION HANDLER ##################################
