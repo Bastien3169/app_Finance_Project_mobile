@@ -96,13 +96,13 @@ def add_update_database(page: ft.Page, dossier_csv: str, csv_bdd: str, db_path: 
                                 margin=ft.margin.only(top = 10, bottom=40),)
 
     # Création du conteneur loader
-    loader = ft.Container(content=ft.ProgressRing(color=ft.Colors.CYAN_400, width=25, height=25),
-                          padding=ft.padding.symmetric(vertical=15), 
-                          alignment=ft.alignment.center,
-                          visible=False,)
-    
+    loader = loader_page(couleur_titre_separateur)
 
-    return titre + [bouton, info, loader, progress_bar, messages]
+    # fonction pour regroupement widger section
+    contenu = contenu_widget(titre, [bouton, info, loader, progress_bar, messages])
+    
+    return [contenu]
+
 
 
 #################################### GESTION UTILISATEURS ####################################
@@ -122,14 +122,9 @@ def users_admin_flet(page: ft.Page):
     sous_titre_contenair = ft.Container(content=sous_titre, alignment=ft.alignment.center)
 
 
-    # Input pour recherche users
-    search_field = ft.TextField(label="🔍 Rechercher par email ou username", 
-                                label_style=ft.TextStyle(size=12, italic=True),
-                                width=400, 
-                                #border_color=ft.Colors.CYAN_400,
-                                border_radius=8,
-                                border_color=ft.Colors.WHITE30,)
-    
+    # Fonction input pour recherche users
+    search_field = periode_input(text_label="🔍 Rechercher par email ou username", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None)
+
     results_column = ft.Column()
 
 
@@ -219,7 +214,7 @@ def users_admin_flet(page: ft.Page):
                                     width=300,
                                     border_radius=8,
                                     border_color=ft.Colors.WHITE30,)
-        
+
         new_role = ft.Dropdown(label="Nouveau rôle",
                                options=[ft.dropdown.Option("admin"), ft.dropdown.Option("user")],
                                value=role,
@@ -276,20 +271,18 @@ def users_admin_flet(page: ft.Page):
                                         color=ft.Colors.WHITE,
                                         on_click=validate_search,)
 
+    # Regroupement widger section
+    contenu = contenu_widget(titre, [sous_titre_contenair, search_field, validate_button])
 
-    return ft.Column([ft.Column(titre + [sous_titre_contenair, search_field, validate_button], 
-                                horizontal_alignment=ft.CrossAxisAlignment.CENTER),
-                      results_column,],
-                      horizontal_alignment=ft.CrossAxisAlignment.CENTER,)
-
+    return [contenu, results_column]
 
 #################################### DATAFRAME USERS ####################################
 def users_table_simple():
 
     # Récupérer tous les users
     all_users = admin_manager.get_all_users()
-    # all_users = [(id, username, email, role, registration_date), ...]
 
+    # Création du tableau
     users_table = ft.DataTable(
         column_spacing=10,
         heading_row_height=30,
@@ -323,7 +316,7 @@ def users_table_simple():
             [ft.Row([users_table], scroll=ft.ScrollMode.AUTO)],
             scroll=ft.ScrollMode.AUTO,
         ),
-        border=ft.border.all(0.5, couleur_titre_separateur),
+        border=ft.border.all(2, couleur_titre_separateur),
         border_radius=10,
         padding=5,
         height=300,
@@ -343,30 +336,23 @@ def users_add_form(page: ft.Page):
     sous_titre_contenair = ft.Container(content=sous_titre, alignment=ft.alignment.center)
     
     # Champs du formulaire
-    username_field = periode_input(fonc_ajouter_periode = None, 
-                                text_label = "👤 Username", 
-                                hint_texte=None,
-                                hint_styl = None,
-                                widths=None,)
+    username_field = periode_input(text_label="👤 Username", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None)
 
-    email_field = periode_input(fonc_ajouter_periode = None, 
-                                text_label = "📧 Email", 
-                                hint_texte=None,
-                                hint_styl = None,
-                                widths=None,)
-
+    email_field = periode_input(text_label="📧 Email", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None)
+    
     password_field = periode_input(text_label="🔑 Mot de passe", 
                                    hint_texte="Min 5 car., maj, min, chiffre, caractère spécial", 
                                    hint_styl=ft.TextStyle(size=10, italic=True,), 
-                                   widths=None,
                                    passwords=True, 
-                                   oeil=True)
+                                   oeil=True,
+                                   widths=400,
+                                   fonc_ajouter_periode=None)
 
     role_field = ft.Dropdown(label="🛡️ Rôle",
-                            label_style=ft.TextStyle(size=12, italic=True),
+                            label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE, size=16),
                             options=[ft.dropdown.Option("user"), ft.dropdown.Option("admin"),],
                             value="user",
-                            width=None,
+                            width=400,
                             border_radius=8,
                             text_style=ft.TextStyle(size=11),
                             border_color=ft.Colors.WHITE30,
@@ -419,7 +405,7 @@ def users_add_form(page: ft.Page):
 
     # Card globale du formulaire
     form_container = ft.Container(
-        padding=ft.padding.only(top=20, left=20, right=20),
+        padding=ft.padding.only(top=20),
         content=ft.Column(
             [sous_titre_contenair,
             username_field,
@@ -433,7 +419,7 @@ def users_add_form(page: ft.Page):
 
     return form_container
 
-
+    
 #################################### PAGE ADMIN PRINCIPALE ####################################
 
 def admin_flet(page: ft.Page):
@@ -444,17 +430,10 @@ def admin_flet(page: ft.Page):
 
 
     # Création flèche retour
-    fleche_retour = ft.IconButton(icon=ft.Icons.ARROW_BACK,
-                                  icon_color=ft.Colors.CYAN_900,
-                                  tooltip="Retour accueil",
-                                  on_click=lambda e: page.go("/"))
-
-    container_fleche = ft.Container(content=ft.Row([fleche_retour], alignment=ft.MainAxisAlignment.START), height=30)
-
+    fleche_retour = bout_ret_haut(couleur_titre_separateur, handler = lambda e: page.go("/"))
 
     # Section mise à jour BDD
     maj_datas_bdd = add_update_database(page, dossier_csv="csv", csv_bdd="csv/csv_bdd", db_path="datas.bd")
-
 
     # Section gestion utilisateurs
     maj_userss_bdd = users_admin_flet(page)
@@ -466,17 +445,8 @@ def admin_flet(page: ft.Page):
     ajout_user = users_add_form(page)
 
     # Création bouton retour accueil
-    bouton_retour = ft.ElevatedButton("Retour accueil",
-                                      icon=ft.Icons.HOME,
-                                      bgcolor=ft.Colors.CYAN_900,
-                                      style=ft.ButtonStyle(color=ft.Colors.WHITE, padding=ft.padding.symmetric(20, 15)),
-                                      on_click=lambda e: page.go("/"))
-
-    container_bouton = ft.Container(content=bouton_retour,
-                                    alignment=ft.alignment.center,
-                                    padding=ft.padding.only(top=30, bottom=20),)
-
+    bouton_retour = bout_ret_acceuil(couleur_titre_separateur, handler = lambda e: page.go("/"))
 
     # Ajout de tout à la page
-    page.add(container_fleche, *maj_datas_bdd, maj_userss_bdd, dataframe_users, ajout_user, container_bouton)
+    page.add(fleche_retour, *maj_datas_bdd, *maj_userss_bdd, dataframe_users, ajout_user, bouton_retour)
     page.update()

@@ -91,9 +91,9 @@ def create_graph_section(page):
     # Appel initial pour afficher le graphique par défaut
     update_graph(None)
 
-    return titre + [dropdown_actif, loader, graphique]
+    contenu = contenu_widget(titre, [dropdown_actif, loader, graphique])
     
-
+    return [contenu]
 
 ################################## TABLEAU COMPARATIF RENDEMENTS ################################
 
@@ -122,7 +122,7 @@ def create_rendement_section(page):
     # Cadre autour de la liste des indices sélectionnés
     cadre_text = ft.Container(content=ft.Column([text_liste_indices, liste_selection],horizontal_alignment=ft.CrossAxisAlignment.START),
                               padding=5,
-                              border=ft.border.all(0.5, ft.Colors.WHITE30),
+                              border=ft.border.all(2, ft.Colors.WHITE30),
                               border_radius=10,
                               expand=True,
                               alignment=ft.alignment.top_left)
@@ -155,7 +155,7 @@ def create_rendement_section(page):
                                                     spacing=10,
                                                     alignment=ft.MainAxisAlignment.START),
                                 padding=10,
-                                border=ft.border.all(0.5, ft.Colors.WHITE30),
+                                border=ft.border.all(2, ft.Colors.WHITE30),
                                 border_radius=10,
                                 expand=True,
                                 alignment=ft.alignment.top_left)
@@ -177,7 +177,7 @@ def create_rendement_section(page):
         content=ft.Row([table],
                        scroll=ft.ScrollMode.AUTO,
                        alignment=ft.MainAxisAlignment.CENTER),
-        border=ft.border.all(0.5, couleur_titre_separateur),
+        border=ft.border.all(2, couleur_titre_separateur),
         border_radius=10,
         padding=5,
         alignment=ft.alignment.center,
@@ -283,8 +283,10 @@ def create_rendement_section(page):
     update_periodes_list()
     update_table()
 
-    return titre + [dropdown_actif, cadre_text, cadre_periodes, cadre_tableau]
 
+    contenu = contenu_widget(titre, [dropdown_actif, cadre_text, cadre_periodes, cadre_tableau])
+    
+    return [contenu]
 
 ################################## COMPOSITION INDICES  ################################
 
@@ -313,7 +315,7 @@ def create_composition_section(page):
     # Cadre autour du tableau
     cadre_table_composition = ft.Container(
         content=ft.Column([ft.Row([table_composition], scroll=ft.ScrollMode.AUTO)], scroll=ft.ScrollMode.AUTO),
-        border=ft.border.all(0.5, couleur_titre_separateur),
+        border=ft.border.all(2, couleur_titre_separateur),
         border_radius=10,
         padding=5,
         height=300,
@@ -336,7 +338,9 @@ def create_composition_section(page):
     # Appel initial pour afficher la composition par défaut
     update_table_composition(actif_default)
 
-    return titre + [dropdown_actif, cadre_table_composition]
+    contenu = contenu_widget(titre, [dropdown_actif, cadre_table_composition])
+    
+    return [contenu]
 
 
 ################################### FONCTION PRINCIPALE ################################

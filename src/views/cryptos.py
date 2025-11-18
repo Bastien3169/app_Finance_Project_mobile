@@ -93,9 +93,8 @@ def create_graph_section(page):
 
     # Regroupement widger section
     contenu = contenu_widget(titre, [dropdown_actif, loader, graphique])
-
-    return [contenu]
     
+    return [contenu]
 
 
 ################################## TABLEAU COMPARATIF RENDEMENTS ################################

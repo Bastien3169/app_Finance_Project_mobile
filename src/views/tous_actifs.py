@@ -226,14 +226,8 @@ def create_rendement_section(page):
                                    spacing=15,     
                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,),])'''
     
-
-    contenu = ft.Column(controls=[*titre,
-                                ft.Column(controls=[dropdown_indices, dropdown_stocks, dropdown_cryptos, cadre_text, cadre_periodes, cadre_tableau],
-                                    spacing=15,
-                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER)],
-                    spacing=5,
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER)
-
+    contenu = contenu_widget(titre, [dropdown_indices, dropdown_stocks, dropdown_cryptos, cadre_text, cadre_periodes, cadre_tableau])
+    
     return [contenu]
 
 

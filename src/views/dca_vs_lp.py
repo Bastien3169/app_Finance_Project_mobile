@@ -88,6 +88,7 @@ def create_simulation_handler(page: ft.Page, dropdown_indice, input_montant, inp
         titre_tableau1 = ft.Text("Montants finaux par durée", weight="bold", size=18, 
                                  text_align=ft.TextAlign.CENTER,
                                  style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
+        
         titre_tableau1_contenair = ft.Container(content=titre_tableau1, alignment=ft.alignment.center)
 
         tableau1 = ft.DataTable(
@@ -116,6 +117,7 @@ def create_simulation_handler(page: ft.Page, dropdown_indice, input_montant, inp
                                  weight="bold", size=18,
                                  text_align=ft.TextAlign.CENTER,
                                  style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
+        
         titre_tableau2_contenair = ft.Container(content=titre_tableau2, alignment=ft.alignment.center, padding=ft.padding.only(top=35))
 
         tableau2 = ft.DataTable(
