@@ -1,14 +1,37 @@
 import flet as ft
+from src.components.components_views import *
 
+couleur_titre_separateur = ft.Colors.PURPLE_200
+couleur_bouton_fleche = ft.Colors.PURPLE_700
 
 def main_page(page: ft.Page):
     page.clean()
 
-    texte_bienvenu = ft.Container(content=ft.Text("Bienvenue sur Finance Facile !", color=ft.Colors.TEAL_700, weight=ft.FontWeight.BOLD, size=22, text_align=ft.TextAlign.CENTER,),
-                                  padding=ft.padding.symmetric(vertical=12, horizontal=20),
-                                  border=ft.border.all(2, ft.Colors.TEAL_300),  # bordure fine et élégante
-                                  border_radius=ft.border_radius.all(12),
-                                  alignment=ft.alignment.center,)
+    # --- Titre + séparation ---
+    titre = titre_separateur("🏠 Accueil",couleur_titre_separateur, padding_text_top = 0)
+
+    # Texte de bienvenue
+    texte_bienvenu = ft.Container(content=ft.Text("Bienvenue sur Finance Facile !",
+                                                weight=ft.FontWeight.BOLD,
+                                                size=18,
+                                                color="rgba(255,255,255,0.5)",
+                                                text_align=ft.TextAlign.CENTER,),
+                                        border=ft.border.all(0.5, "rgba(255,255,255,0.5)"),
+                                        border_radius=10,
+                                        padding=ft.padding.all(10),
+                                        alignment=ft.alignment.center)
+
+    #Texte explicatif application
+    texte_explication = ft.Container(content=ft.Text("Cette application vous permet de comparer facilement différents actifs financiers et d’analyser " \
+                                                "leurs performances historiques. \nElle simule deux stratégies d’investissement : le DCA (investissement progressif) et le Lump Sum "
+                                                "(investissement en une seule fois), pour vous aider à visualiser laquelle est la plus adaptée à vos objectifs. \nElle n’a pas pour but de " \
+                                                "vous inciter à investir, mais uniquement de proposer un outil pédagogique basé sur des données officielles passées.", 
+                                                 color="rgba(255,255,255,0.5)", 
+                                                 size=12, 
+                                                 text_align=ft.TextAlign.JUSTIFY,),
+                                padding=ft.padding.symmetric(vertical=10, horizontal=10),
+                                alignment=ft.alignment.center,)
+
 
     # Liste des tuiles
     tiles_button = [
@@ -21,7 +44,6 @@ def main_page(page: ft.Page):
         ("Admin", ft.Colors.BLUE_500, "/admin"),       # Bleu clair
         ("Auth manag", ft.Colors.BLUE_500, "/auth_manag"),       # Bleu clair
         ("Test", ft.Colors.CYAN_500, "/test"),       # Bleu clair
-        ("Test2", "#4E6E81", "/test2"),       # Bleu 
     ]
 
 
@@ -53,10 +75,10 @@ def main_page(page: ft.Page):
     # Ajouter le padding en passant par un Container
     grid_avec_espace = ft.Container(
         content=centered_grid,
-        padding=ft.padding.only(top=100)
+        padding=ft.padding.only(top=20)
     )
     
-    page.add(texte_bienvenu, grid_avec_espace)
+    page.add(*titre, texte_bienvenu, texte_explication, grid_avec_espace)
 
     page.update()
 

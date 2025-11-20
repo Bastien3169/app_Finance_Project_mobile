@@ -1,6 +1,9 @@
 import flet as ft
 from src.models.users_db.models_db_users_test import AuthManager, AdminManager
+from src.components.components_views import *
 import flet as ft
+
+db_path="users.db"
 
 # Couleurs
 couleur_titre_separateur = ft.Colors.GREEN_200
@@ -9,49 +12,34 @@ couleur_bouton_fleche = ft.Colors.GREEN_700
 ################################## CONNEXION ################################
 def login_view(page: ft.Page):
 
-    # --- Titre ---
-    text_rendement = ft.Text("🔐 Connexion requise", color=couleur_titre_separateur, weight=ft.FontWeight.BOLD, size=21)
+    # --- Titre + séparation ---
+    titre = titre_separateur("🔐 Connexion requise",couleur_titre_separateur, padding_text_top = 35)
 
-    # --- Séparateur ---
-    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur), padding=ft.padding.only(bottom=15))
-
-    # --- Email input ---
-    email_field = ft.TextField(label="📧 Email", 
-                            label_style=ft.TextStyle(size=12, italic=True),
-                            width=400, 
-                            border_radius=8,
-                            border_color=ft.Colors.WHITE30,)
+    # --- Email input ---  
+    email_field = periode_input(text_label="📧 Email", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None)
 
     # --- mdp input ---
-    password_field = ft.TextField(label="🔒 Mot de passe", 
-                                password=True, 
-                                label_style=ft.TextStyle(size=12, italic=True),
-                                width=400, 
-                                border_radius=8,
-                                border_color=ft.Colors.WHITE30,)
+    password_field = periode_input(text_label="🔒 Mot de passe", hint_texte=None, hint_styl=None, passwords=True, oeil=True, widths=400, fonc_ajouter_periode=None)
 
     # --- feedback si connectio réussie ou pas ---
-    feedback = ft.Text("", color=ft.Colors.RED_300)
-
+    feedback = ft.Text("", color=ft.Colors.RED_300, size=12, weight="bold", text_align=ft.TextAlign.CENTER)
 
     # --- Handler feedback ---
     def handle_login(e):
-        if email_field.value == "test@test.com" and password_field.value == "1234":
-            feedback.value = "✅ Connexion réussie"
-            page.update()
-        else:
-            feedback.value = "❌ Identifiants incorrects"
-            page.update()
+        email = email_field.value
+        password = password_field.value
+        
+        auth = AuthManager(db_path)  # chemin correct vers ta BDD
+        success, message = auth.login(email, password)      # utilise la méthode login de AuthManager
 
+        feedback.value = message
+        page.update()
+
+        if success:
+            page.go("/")  # Redirection vers la page home
 
     # --- Bouton connexion avec son handler ---
-    bout_connexion = ft.ElevatedButton("Se connecter",
-                                        height=40,
-                                        width=400,
-                                        icon=ft.Icons.PERSON,
-                                        bgcolor=couleur_titre_separateur,
-                                        color=ft.Colors.WHITE,
-                                        on_click=handle_login,)
+    bout_connexion = bouton_on_click ("Se connecter", on_click=handle_login, icon=ft.Icons.PERSON, couleur_bouton=couleur_titre_separateur)
     
     # --- Handler inscription -- 
     def on_click_inscription(e):
@@ -67,13 +55,17 @@ def login_view(page: ft.Page):
                                                  on_click=on_click_inscription,),])
 
     #return ft.Column([text_rendement, separation, email_field, password_field, bout_connexion, feedback, inscription_text],horizontal_alignment=ft.CrossAxisAlignment.CENTER,)
-    return [text_rendement, separation, email_field, password_field, bout_connexion, feedback, inscription_text]
+    #return titre + [email_field, password_field, bout_connexion, feedback, inscription_text]
+
+    contenu = contenu_widget(titre, [email_field, password_field, bout_connexion, feedback, inscription_text])
+
+    return contenu
     
 ################################### FONCTION PRINCIPALE ################################
 
 def auth_manage_page(page: ft.Page):
     page.clean()
-    page.title = "DCA vs LS"
+    page.title = "Authentification"
     page.scroll = "auto"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.DARK
@@ -115,5 +107,5 @@ def auth_manage_page(page: ft.Page):
     
     page.add(
         container_retour_haut,
-        *vu_login,
+        vu_login,
         container_bouton)

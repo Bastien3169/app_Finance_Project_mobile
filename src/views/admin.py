@@ -13,7 +13,7 @@ couleur_titre_separateur = ft.Colors.CYAN_200
 couleur_bouton = ft.Colors.CYAN_600
 taille_titre = 20
 
-
+bouton_on_click = bouton_on_click
 
 ############################## FONCTION INTERACTIVE MAJ BDD ##############################
 
@@ -30,39 +30,39 @@ def add_update_database(page: ft.Page, dossier_csv: str, csv_bdd: str, db_path: 
     
     def on_click(e):
         messages.controls.clear()
-        messages.controls.append(ft.Text("⏳ Début des étapes de maj 1/6..."))
+        messages.controls.append(ft.Text("⏳ Début des étapes de maj 1/6...",color=ft.Colors.GREEN, size=12, weight="bold", text_align=ft.TextAlign.CENTER))
         progress_bar.value = 0.08
         loader.content.visible = True
         page.update()
 
         try:
             composition_indices.csv_indices(dossier_csv)
-            messages.controls.append(ft.Text("✅ Étape 1/6 terminée - Scraping tickers et composition indices"))
+            messages.controls.append(ft.Text("✅ Étape 1/6 terminée - Scraping tickers et composition indices",color=ft.Colors.GREEN, size=12, weight="bold", text_align=ft.TextAlign.CENTER))
             progress_bar.value = 0.17
             page.update()
 
             infos_stocks.infos_stocks(dossier_csv, csv_bdd)
-            messages.controls.append(ft.Text("✅ Étape 2/6 terminée - Infos entreprises"))
+            messages.controls.append(ft.Text("✅ Étape 2/6 terminée - Infos entreprises",color=ft.Colors.GREEN, size=12, weight="bold", text_align=ft.TextAlign.CENTER))
             progress_bar.value = 0.34
             page.update()
 
             infos_indices.infos_indices(dossier_csv, csv_bdd)
-            messages.controls.append(ft.Text("✅ Étape 3/6 terminée - Infos indices"))
+            messages.controls.append(ft.Text("✅ Étape 3/6 terminée - Infos indices",color=ft.Colors.GREEN, size=12, weight="bold", text_align=ft.TextAlign.CENTER))
             progress_bar.value = 0.50
             page.update()
 
             hist_indices.recuperer_et_clean_indices(csv_bdd)
-            messages.controls.append(ft.Text("✅ Étape 4/6 terminée - Historique indices"))
+            messages.controls.append(ft.Text("✅ Étape 4/6 terminée - Historique indices",color=ft.Colors.GREEN, size=12, weight="bold", text_align=ft.TextAlign.CENTER))
             progress_bar.value = 0.67
             page.update()
 
             hist_stocks.recuperer_et_clean_stocks(csv_bdd)
-            messages.controls.append(ft.Text("✅ Étape 5/6 terminée - Historique entreprises"))
+            messages.controls.append(ft.Text("✅ Étape 5/6 terminée - Historique entreprises",color=ft.Colors.GREEN, size=12, weight="bold", text_align=ft.TextAlign.CENTER))
             progress_bar.value = 0.83
             page.update()
 
             sql_datas.main_creation_db(csv_bdd, db_path)
-            messages.controls.append(ft.Text("✅ Étape 6/6 terminée - Base de données enregistrée"))
+            messages.controls.append(ft.Text("✅ Étape 6/6 terminée - Base de données enregistrée",color=ft.Colors.GREEN, size=12, weight="bold", text_align=ft.TextAlign.CENTER))
             progress_bar.value = 1.0
             page.update()
 
@@ -72,18 +72,15 @@ def add_update_database(page: ft.Page, dossier_csv: str, csv_bdd: str, db_path: 
 
         except Exception as ex:
             loader.visible = False
-            messages.controls.append(ft.Text(f"❌ Erreur : {ex}", color=ft.Colors.RED))
+            messages.controls.append(ft.Text(f"❌ Erreur : {ex}", color=ft.Colors.RED, size=12, weight="bold", text_align=ft.TextAlign.CENTER))
             progress_bar.value = 0
             page.update()
     
     # Création du bouton de mise à jour
-    bouton = ft.ElevatedButton("Cliquez pour la maj de la BDD datas",
-                               on_click=on_click,
-                               style=ft.ButtonStyle(bgcolor=couleur_bouton, color=ft.Colors.WHITE, padding=ft.padding.symmetric(20, 15)),
-                               width=400,)
+    bouton = bouton_on_click(text = "MAJ BDD datas",on_click=on_click, icon=ft.Icons.UPDATE, couleur_bouton=couleur_bouton)
     
     # Création du texte info
-    info = ft.Text("La maj peut prendre entre 20 et 30 min", size=10)
+    info = ft.Text("La maj peut prendre entre 20 et 30 min", color=couleur_titre_separateur, size=12, weight="bold", text_align=ft.TextAlign.CENTER)
 
     # Création de la barre de progression stylée
     progress_bar = ft.Container(content=ft.ProgressBar(value=0, bgcolor=ft.Colors.GREY_800),
@@ -92,14 +89,13 @@ def add_update_database(page: ft.Page, dossier_csv: str, csv_bdd: str, db_path: 
                                 bgcolor=ft.Colors.with_opacity(0.1, ft.Colors.CYAN_700),
                                 border_radius=20,  # arrondi
                                 padding=ft.padding.all(2),  # petit espace intérieur
-                                border=ft.border.all(1, ft.Colors.WHITE30,),  # bord coloré
-                                margin=ft.margin.only(top = 10, bottom=40),)
+                                border=ft.border.all(1, ft.Colors.WHITE30,))  # bord coloré
 
     # Création du conteneur loader
     loader = loader_page(couleur_titre_separateur)
 
     # fonction pour regroupement widger section
-    contenu = contenu_widget(titre, [bouton, info, loader, progress_bar, messages])
+    contenu = contenu_widget(titre, [info, progress_bar, bouton, loader, messages])
     
     return [contenu]
 
@@ -112,14 +108,15 @@ def users_admin_flet(page: ft.Page):
     # fonction : titre + séparateur dans conteneur
     titre =  titre_separateur("📝 Modifications BDD users", 
                               couleur_titre_separateur, 
-                              padding_text_top = 0)
+                              padding_text_top = 35)
     
     # Sous-titre pour modification user
-    sous_titre = ft.Text("Modification users", weight="bold", size=18, 
+    sous_titre = ft.Text("Chercher un users", weight="bold", size=18, 
                                  text_align=ft.TextAlign.CENTER,
                                  style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
     
-    sous_titre_contenair = ft.Container(content=sous_titre, alignment=ft.alignment.center)
+    # Création du conteneur pour le sous-titre
+    sous_titre_contenair = ft.Container(content=sous_titre, alignment=ft.alignment.center, padding=ft.padding.only(top=35))
 
 
     # Fonction input pour recherche users
@@ -136,14 +133,14 @@ def users_admin_flet(page: ft.Page):
         results_column.controls.clear()
         search = search_field.value.strip()
         if not search:
-            results_column.controls.append(ft.Text("❗ Veuillez entrer un nom ou email."))
+            results_column.controls.append(ft.Text("❗ Veuillez entrer un nom ou email.", size=12, weight="bold", text_align=ft.TextAlign.CENTER))
             page.update()
             return
 
         # Recherche utilisateur
         user = admin_manager.get_user_by_email_username(search)
         if not user:
-            results_column.controls.append(ft.Text("⚠️ Aucun utilisateur trouvé.", color=ft.Colors.RED))
+            results_column.controls.append(ft.Text("⚠️ Aucun utilisateur trouvé.", color=ft.Colors.RED, size=12, weight="bold", text_align=ft.TextAlign.CENTER ))
             page.update()
             return
 
@@ -162,14 +159,16 @@ def users_admin_flet(page: ft.Page):
                                     ft.Text(f"{registration_date}")]),
                             ft.Divider(height=1, color=ft.Colors.GREY_300),
                             ft.Row([ft.ElevatedButton("Modifier",
-                                                      width=100,
+                                                      width=150,
                                                       bgcolor=ft.Colors.CYAN_600,
                                                       color=ft.Colors.WHITE,
+                                                      icon=ft.Icons.EDIT,
                                                       on_click=lambda ev, em=email: toggle_edit(ev, em)),
                                     ft.ElevatedButton("Supprimer",
-                                                      width=100,
+                                                      width=150,
                                                       bgcolor=ft.Colors.RED_400,
                                                       color=ft.Colors.WHITE,
+                                                      icon=ft.Icons.DELETE_OUTLINED,
                                                       on_click=lambda ev, em=email, un=username: delete_user(ev, em, un)),], 
                             spacing=10,
                             alignment=ft.MainAxisAlignment.CENTER)], 
@@ -182,6 +181,7 @@ def users_admin_flet(page: ft.Page):
                                         bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.CYAN_100),
                                         border_radius=10,
                                         padding=15,
+                                        border=ft.border.all(1, ft.Colors.WHITE30),
                                         margin=ft.margin.symmetric(vertical=10))
 
         # Affichage de la fiche user
@@ -197,7 +197,7 @@ def users_admin_flet(page: ft.Page):
     # Création de la fonction de suppression
     def delete_user(e, email, username):
         admin_manager.delete_user(email)
-        results_column.controls.append(ft.Text(f"✅ Utilisateur {username} supprimé."))
+        results_column.controls.append(ft.Text(f"✅ Utilisateur {username} supprimé.", size=12, weight="bold", text_align=ft.TextAlign.CENTER ))
         page.update()
 
     # Création de la fonction de bascule édition
@@ -209,20 +209,23 @@ def users_admin_flet(page: ft.Page):
     def edit_form(user):
         id, username, email, role, registration_date = user
 
-        new_username = ft.TextField(label="Nouveau nom d'utilisateur", 
+        new_username = ft.TextField(label="Nouveau nom d'utilisateur",
+                                    label_style=ft.TextStyle(italic=True, size=12),
                                     value=username, 
                                     width=300,
                                     border_radius=8,
                                     border_color=ft.Colors.WHITE30,)
 
         new_role = ft.Dropdown(label="Nouveau rôle",
+                               label_style=ft.TextStyle(italic=True,size=12),
                                options=[ft.dropdown.Option("admin"), ft.dropdown.Option("user")],
                                value=role,
                                width=300,
                                border_radius=8,
                                border_color=ft.Colors.WHITE30,)
         
-        new_password = ft.TextField(label="Nouveau mot de passe", 
+        new_password = ft.TextField(label="Nouveau mot de passe",
+                                    label_style=ft.TextStyle(italic=True,size=12), 
                                     hint_text="Ex : 1234",
                                     width=300,
                                     password=True,
@@ -236,7 +239,7 @@ def users_admin_flet(page: ft.Page):
                                       username=new_username.value, 
                                       role=new_role.value, 
                                       password=new_password.value if new_password.value else None) # Met à jour seulement si un mot de passe est fourni pour éviter de le réinitialiser par une chaine "" vide 
-            results_column.controls.append(ft.Text(f"✅ Utilisateur {new_username.value} modifié avec succès."))
+            results_column.controls.append(ft.Text(f"✅ Utilisateur {new_username.value} modifié avec succès.", size=12, weight="bold", text_align=ft.TextAlign.CENTER ))
             edit_state[email] = False
             page.update()
 
@@ -246,15 +249,19 @@ def users_admin_flet(page: ft.Page):
                                                        text_align=ft.TextAlign.CENTER, 
                                                        color=couleur_titre_separateur,size=15)),
                                   ft.Container(content=ft.Divider(height=2, color=couleur_titre_separateur),)],
-                                spacing=2)
+                                spacing=2,
+                                horizontal_alignment=ft.CrossAxisAlignment.CENTER)
     
         
         # Bouton valider les modifications
-        bouton_valid_modif = ft.ElevatedButton("Valider les modifications", bgcolor=ft.Colors.CYAN_600, color=ft.Colors.WHITE, on_click=submit_changes,)
+        bouton_valid_modif = ft.ElevatedButton("Valider les modifications", width=300, bgcolor=ft.Colors.CYAN_600, color=ft.Colors.WHITE, icon=ft.Icons.CHECK, on_click=submit_changes,)
+
 
         # Création de la card de modification
         card_modif_iser = ft.Container(bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.CYAN_100),
                             padding=20,
+                            border_radius=8,
+                            border=ft.border.all(2, ft.Colors.WHITE30),
                             alignment=ft.alignment.center,  # Centre le contenu dans le container
                             content=ft.Column([text_edition, new_username, new_role, new_password, bouton_valid_modif],
                                               spacing=10,
@@ -263,21 +270,23 @@ def users_admin_flet(page: ft.Page):
         return card_modif_iser
 
     # Création du bouton valider
-    validate_button = ft.ElevatedButton("Valider",
-                                        height=40,
-                                        width=400,
-                                        icon=ft.Icons.SEARCH,
-                                        bgcolor=couleur_bouton,
-                                        color=ft.Colors.WHITE,
-                                        on_click=validate_search,)
+    bouton = bouton_on_click(text = "Rechercher",on_click=validate_search, icon=ft.Icons.SEARCH, couleur_bouton=couleur_bouton)
 
     # Regroupement widger section
-    contenu = contenu_widget(titre, [sous_titre_contenair, search_field, validate_button])
+    contenu = contenu_widget(titre, [sous_titre_contenair, search_field, bouton])
 
     return [contenu, results_column]
 
 #################################### DATAFRAME USERS ####################################
 def users_table_simple():
+
+    # Sous-titre pour modification user
+    sous_titre = ft.Text("Dataframe users", weight="bold", size=18, 
+                                 text_align=ft.TextAlign.CENTER,
+                                 style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
+    
+    # Création du conteneur pour le sous-titre
+    sous_titre_contenair = ft.Container(content=sous_titre, alignment=ft.alignment.center)
 
     # Récupérer tous les users
     all_users = admin_manager.get_all_users()
@@ -322,7 +331,10 @@ def users_table_simple():
         height=300,
     )
 
-    return cadre_table_users
+    continu = ft.Column([sous_titre_contenair,cadre_table_users], 
+                        spacing=10)
+
+    return [continu]
 
 
 #################################### AJOUT USER ####################################
@@ -358,7 +370,7 @@ def users_add_form(page: ft.Page):
                             border_color=ft.Colors.WHITE30,
                             expand=True,)
 
-    message_text = ft.Text(size=11, italic=True)
+    message_text = ft.Text(size=12, weight="bold", text_align=ft.TextAlign.CENTER)
 
     # Action au clic sur "Créer l'utilisateur"
     def on_create_user(e):
@@ -396,30 +408,23 @@ def users_add_form(page: ft.Page):
         page.update()
 
     # Bouton de création
-    create_button = ft.ElevatedButton(
-        "Créer l'utilisateur",
-        icon=ft.Icons.PERSON_ADD,
-        bgcolor=couleur_bouton,
-        color=ft.Colors.WHITE,
-        on_click=on_create_user,)
+    bouton = bouton_on_click(text = "Créer l'utilisateur",on_click=on_create_user, icon=ft.Icons.PERSON_ADD, couleur_bouton=couleur_bouton)
 
     # Card globale du formulaire
-    form_container = ft.Container(
-        padding=ft.padding.only(top=20),
-        content=ft.Column(
-            [sous_titre_contenair,
-            username_field,
-            email_field,
-            password_field,
-            role_field,
-            create_button,
-            message_text,],
-        spacing=10,
-        horizontal_alignment=ft.CrossAxisAlignment.START,),)
+    form_container = ft.Container(padding=ft.padding.only(top=20, bottom=0),
+                                  content=ft.Column([sous_titre_contenair,
+                                                    username_field,
+                                                    email_field,
+                                                    password_field,
+                                                    role_field,
+                                                    bouton,
+                                                    message_text,],
+                                                    spacing=10,
+                                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,),)
 
     return form_container
 
-    
+ 
 #################################### PAGE ADMIN PRINCIPALE ####################################
 
 def admin_flet(page: ft.Page):
@@ -437,6 +442,16 @@ def admin_flet(page: ft.Page):
 
     # Section gestion utilisateurs
     maj_userss_bdd = users_admin_flet(page)
+    contenu = maj_userss_bdd[0]  # ton "contenu_widget" qui contient sous_titre, search_field, bouton
+    results_column = maj_userss_bdd[1]  # la colonne où tu mets les résultats
+
+    # Pour récupérer les widgets à l'intérieur de contenu :
+    contenu_controls = contenu.controls  # liste des widgets à l'intérieur du Column
+
+    titre = contenu_controls[0]        # sous_titre_contenair
+    trait_titre = contenu_controls[1]       # search_field
+    search_bout_val = contenu_controls[2]     # bouton "Rechercher"
+
 
     # Dataframe users
     dataframe_users = users_table_simple()
@@ -448,5 +463,5 @@ def admin_flet(page: ft.Page):
     bouton_retour = bout_ret_acceuil(couleur_titre_separateur, handler = lambda e: page.go("/"))
 
     # Ajout de tout à la page
-    page.add(fleche_retour, *maj_datas_bdd, *maj_userss_bdd, dataframe_users, ajout_user, bouton_retour)
+    page.add(fleche_retour, *maj_datas_bdd,titre, trait_titre, *dataframe_users, search_bout_val, results_column, ajout_user, bouton_retour)
     page.update()

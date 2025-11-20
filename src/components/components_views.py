@@ -52,8 +52,8 @@ def dropdown (text, actif_default, liste_actifs, handler= None):
     return dropdown_multi
 
 
-# ------- input (periode actif) -------
-def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=250, fonc_ajouter_periode=None): 
+# ------- input (periode actif) avec un width = 250 ! -------
+def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=250, icones=None, fonc_ajouter_periode=None): 
     input_periode = ft.TextField(label=text_label, 
                                 label_style=ft.TextStyle(size=12, italic=True),
                                 border_radius=8,
@@ -64,12 +64,13 @@ def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None,
                                 password=passwords,
                                 can_reveal_password=oeil,
                                 width=widths,
+                                icon=icones,
                                 keyboard_type=ft.KeyboardType.NUMBER, 
                                 on_submit=fonc_ajouter_periode,)
     return input_periode
 
 
-# ------- input (DCAvsLS) -------
+# ------- input (DCAvsLS) avec des valeur mis en avance dans l'input -------
 def dcavsls_input (labels, values, hint_texte):
     input_montant = ft.TextField(label=labels,
                                 label_style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
@@ -93,6 +94,16 @@ def contenu_widget(titre, liste_widget):
                             spacing=5,
                             horizontal_alignment=ft.CrossAxisAlignment.CENTER,)
     return contenu
+
+
+# ------- Bouton on_cick -------
+def bouton_on_click (text, on_click, couleur_bouton, icon=None):
+    bouton = ft.ElevatedButton(text,
+                                on_click=on_click,
+                                icon=icon,
+                                style=ft.ButtonStyle(bgcolor=couleur_bouton, color=ft.Colors.WHITE, padding=ft.padding.symmetric(20, 15)),
+                                width=400,)
+    return bouton
 
 # ------- Bouton retour en haut à gauche -------
 def bout_ret_haut(couleur_bouton_fleche, handler = None):
@@ -123,10 +134,9 @@ def bout_ret_acceuil(couleur_bouton_fleche, handler = None):
         on_click=handler)  # Redirection vers la page d'accueil
     
 
-    container_bouton = ft.Container(
-        content=bouton_retour,
-        alignment=ft.alignment.center,
-        padding=ft.padding.only(top=30, bottom=20))  # Espacement avant et après
+    container_bouton = ft.Container(content=bouton_retour,
+                                    alignment=ft.alignment.center,
+                                    padding=ft.padding.only(top=20, bottom=20))  # Espacement avant et après
     
     return container_bouton
 

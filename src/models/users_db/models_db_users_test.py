@@ -5,6 +5,7 @@ import bcrypt
 import re
 import uuid
 from datetime import datetime, timedelta
+import flet as ft 
 
 
 ############################################# CLASS BDD USERS #############################################
@@ -37,16 +38,47 @@ class BaseDBManager:
             conn.commit()
 
 
+################################ CLASS wrapper ClientStorage ################################
+class ClientStorageWrapper:
+    def __init__(self, storage):
+        self.storage = storage
+
+    # ⬇️ important : au début, pas de gestion réelle des cookies
+    def get(self, key, default=None):
+        try:
+            return self.storage.get(key)
+        except Exception:
+            return default
+
+    # ⬇️ important : au début, pas de gestion réelle des cookies
+    def set(self, key, value):
+        try:
+            self.storage.set(key, value)
+        except Exception:
+            pass
+
+    # ⬇️ important : au début, pas de gestion réelle des cookies
+    def remove(self, key):
+        try:
+            self.storage.remove(key)
+        except Exception:
+            pass
+
+
+
 ################################ CLASS AUTHMANAGER AVEC HERITAGE DE class BaseDBManager ################################
 class AuthManager(BaseDBManager):
 
-#--------------------------- Attribut : chemin et nom bdd et lancement de "super().init_db()" --------------------------#
     def __init__(self, db_path="users.db", cookie_name="session_id", cookie_secret="Toulouse31"):
-        super().__init__(db_path)  # appelle init_db via la classe parente
+        super().__init__(db_path)
         self.cookie_name = cookie_name
-        # on créé une instance de EncryptedCookieManager et on ne met pas de préfix
+        self.cookie_secret = cookie_secret
+
+        # ⬇️ important : au début, pas de gestion réelle des cookies
+        self.cookies = None  
+
         self.init_db()
-        self.clean_expired_sessions() # Nettoie la bdd des session expirées à chaque arrivée sur la page
+        self.clean_expired_sessions()
 
 
 #--------------------------- méthode pour effacer les sessions exiprées de la bdd ---------------------------#
@@ -131,16 +163,21 @@ class AuthManager(BaseDBManager):
             # Enregistre ds la bdd les infos
             conn.commit()
 
-        # créé le cookie avec la session_id créée par str(uuid.uuid4())
-        self.cookies[self.cookie_name] = session_id
-        # Enregistre le cookie et envoie au navigateur
-        self.cookies.save()
+
+        # Si pas de gestion de cookies, on ne tente pas d'écrire dessus
+        if self.cookies is not None:
+            self.cookies[self.cookie_name] = session_id
+            self.cookies.save()
         return True, "✅ Connexion réussie"
 
 
 #--------------------------- logout ---------------------------#   
     def logout(self):
 
+        # Si aucun système de cookies n'est branché, on considère qu'il n'y a pas de session
+        if self.cookies is None:
+            return
+        
         # Cherche si l’utilisateur a un cookie de session
         session_id = self.cookies.get(self.cookie_name)
         
@@ -157,6 +194,10 @@ class AuthManager(BaseDBManager):
 
 #--------------------------- Vérifie si cookie de session valide ---------------------------#   
     def get_current_user(self):
+        
+        # Si aucun système de cookies n'est branché, on considère qu'il n'y a pas de session
+        if self.cookies is None:
+            return None
         
         # récupère le cookie de session du navigateur
         session_id = self.cookies.get(self.cookie_name)
