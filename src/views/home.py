@@ -43,6 +43,7 @@ def main_page(page: ft.Page):
         ("DCAvsLP", "#D67C7C", "/dca_vs_lp"),  # Rouge doux
         ("Admin", ft.Colors.BLUE_500, "/admin"),       # Bleu clair
         ("Auth manag", ft.Colors.BLUE_500, "/auth_manag"),       # Bleu clair
+        ("Inscription", ft.Colors.WHITE, "/inscription"),       # Bleu clair
         ("Test", ft.Colors.CYAN_500, "/test"),       # Bleu clair
     ]
 

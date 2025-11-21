@@ -1,6 +1,7 @@
 import flet as ft
 from src.models.users_db.models_db_users_test import AuthManager, AdminManager
 from src.components.components_views import *
+from src.views import inscription  
 import flet as ft
 
 db_path="users.db"
@@ -45,6 +46,7 @@ def login_view(page: ft.Page):
     def on_click_inscription(e):
         page.snack_bar = ft.SnackBar(ft.Text("Redirection vers la page d'inscription..."))
         page.snack_bar.open = True
+        page.go("/inscription")   # ⬅️ redirection vers la route /inscription
         page.update()
 
     # --- Bouton s'incrire avec son handler ---
@@ -75,37 +77,10 @@ def auth_manage_page(page: ft.Page):
     vu_login = login_view(page)
 
 
-    # Bouton retour en haut à droite
-    bouton_retour_haut = ft.IconButton(
-        icon=ft.Icons.ARROW_BACK,  # flèche gauche
-        icon_color=couleur_bouton_fleche,  # même couleur que le bouton accueil
-        tooltip="Retour accueil",
-        on_click=lambda e: page.go("/"))
-
-    container_retour_haut = ft.Container(
-        content=ft.Row([bouton_retour_haut], alignment=ft.MainAxisAlignment.START),
-        padding=ft.padding.all(0),        # plus aucun padding
-        height=30,)
-
-
     # Bouton Retour accueil
-    bouton_retour = ft.ElevatedButton(
-        "Retour accueil",
-        icon=ft.Icons.HOME, # ajoute icône à gauche du texte
-        style=ft.ButtonStyle(
-            color=ft.Colors.WHITE,
-            bgcolor=couleur_bouton_fleche,
-            padding=ft.padding.symmetric(horizontal=20, vertical=15)
-        ),
-        on_click=lambda e: page.go("/"))  # Redirection vers la page d'accueil
-
-    container_bouton = ft.Container(
-        content=bouton_retour,
-        alignment=ft.alignment.center,
-        padding=ft.padding.only(top=30, bottom=20))  # Espacement avant et après
+    bouton_retour = bout_ret_acceuil(couleur_bouton_fleche, handler = lambda e: page.go("/"))
     
     
     page.add(
-        container_retour_haut,
         vu_login,
-        container_bouton)
+        bouton_retour)

@@ -102,6 +102,11 @@ class AuthManager(BaseDBManager):
 #--------------------------- Enregistrement ---------------------------#
     def register(self, username, email, password):
         
+        # Nettoyage basique du username
+        username = username.strip()
+        if not username:
+            return False, "❌ Le nom d'utilisateur est obligatoire."
+
         # Validation de l'email via regex : structure mail valide
         email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w{2,}$'
         if not re.match(email_pattern, email):
@@ -116,22 +121,25 @@ class AuthManager(BaseDBManager):
         with sqlite3.connect(self.db_path) as conn:
             c = conn.cursor()
             
-        # Vérifie si l'email existe déjà
-        c.execute("SELECT * FROM users WHERE email = ?", (email,))
-        if c.fetchone():
-            return False, "❌ Email déjà utilisé"
+            # Vérifie si l'email existe déjà
+            c.execute("SELECT * FROM users WHERE email = ?", (email,))
+            if c.fetchone():
+                return False, "❌ Email déjà utilisé"
 
-        # Hachage mdp
-        hashed = self.hash_password(password)
+            # Hachage mdp
+            hashed = self.hash_password(password)
 
-        # Insertion des infos users
-        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        c.execute("INSERT INTO users (username, email, password, role, registration_date) VALUES (?, ?, ?, ?, ?)",
-                  (username, email, hashed, 'user', date))
+            # Insertion des infos users
+            date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            c.execute(
+                "INSERT INTO users (username, email, password, role, registration_date) VALUES (?, ?, ?, ?, ?)",
+                (username, email, hashed, 'user', date)
+            )
 
-        # Enregistrement user ds bdd
-        conn.commit()
+            conn.commit()
+
         return True, f"✅ Compte '{username}' créé avec succès !"
+
 
 
 #--------------------------- login ---------------------------#  
