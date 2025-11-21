@@ -14,7 +14,7 @@ couleur_bouton_fleche = ft.Colors.GREEN_700
 def login_view(page: ft.Page):
 
     # --- Titre + séparation ---
-    titre = titre_separateur("🔐 Connexion requise",couleur_titre_separateur, padding_text_top = 35)
+    titre = titre_separateur("🔐 Connexion requise",couleur_titre_separateur, padding_text_top = 0)
 
     # --- Email input ---  
     email_field = periode_input(text_label="📧 Email", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None)
@@ -39,9 +39,28 @@ def login_view(page: ft.Page):
         if success:
             page.go("/")  # Redirection vers la page home
 
+
+    # --- Handler mdp oublié -- 
+    def on_click_mdp_oublie(e):
+        page.snack_bar = ft.SnackBar(ft.Text("Redirection vers la page de mot de passe oublié..."))
+        page.snack_bar.open = True
+        page.go("/mdp_oublie")   # ⬅️ redirection vers la route /mdp_oublie
+        page.update()
+
+  # --- Mdp oublié ---
+    mdp_reset = ft.Row(controls=[ft.Text(spans=[ft.TextSpan("Mot de passe oublié ? ",
+                                                            ft.TextStyle(size=9),),
+                                                ft.TextSpan("Clique ici",
+                                                            ft.TextStyle(size=9,
+                                                                        color=couleur_titre_separateur,
+                                                                        weight=ft.FontWeight.BOLD,),
+                                                            on_click=on_click_mdp_oublie,),])],
+                        alignment=ft.MainAxisAlignment.END)
+
+
     # --- Bouton connexion avec son handler ---
     bout_connexion = bouton_on_click ("Se connecter", on_click=handle_login, icon=ft.Icons.PERSON, couleur_bouton=couleur_titre_separateur)
-    
+
     # --- Handler inscription -- 
     def on_click_inscription(e):
         page.snack_bar = ft.SnackBar(ft.Text("Redirection vers la page d'inscription..."))
@@ -49,17 +68,14 @@ def login_view(page: ft.Page):
         page.go("/inscription")   # ⬅️ redirection vers la route /inscription
         page.update()
 
-    # --- Bouton s'incrire avec son handler ---
+    # --- Bouton inscription (avec son handler) ---
     inscription_text = ft.Text(spans=[ft.TextSpan("Pas encore inscrit ? "),
                                       ft.TextSpan("Clique ici", 
                                                   ft.TextStyle(color=couleur_titre_separateur,
                                                                weight=ft.FontWeight.BOLD,),
                                                  on_click=on_click_inscription,),])
 
-    #return ft.Column([text_rendement, separation, email_field, password_field, bout_connexion, feedback, inscription_text],horizontal_alignment=ft.CrossAxisAlignment.CENTER,)
-    #return titre + [email_field, password_field, bout_connexion, feedback, inscription_text]
-
-    contenu = contenu_widget(titre, [email_field, password_field, bout_connexion, feedback, inscription_text])
+    contenu = contenu_widget(titre, [email_field, password_field, mdp_reset, bout_connexion, feedback, inscription_text])
 
     return contenu
     

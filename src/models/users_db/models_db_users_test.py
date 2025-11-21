@@ -4,7 +4,12 @@ import sqlite3
 import bcrypt
 import re
 import uuid
-from datetime import datetime, timedelta
+import smtplib
+from email.message import EmailMessage
+import os
+import secrets  # pour générer des tokens sécurisés
+from datetime import datetime, timedelta, timezone
+from src.services.envoie_mails import *
 import flet as ft 
 
 
@@ -17,6 +22,8 @@ class BaseDBManager:
     def init_db(self):
         with sqlite3.connect(self.db_path) as conn:
             c = conn.cursor()
+
+            # Table users
             c.execute('''
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,6 +34,8 @@ class BaseDBManager:
                     registration_date TEXT NOT NULL
                 )
             ''')
+
+            # Table session
             c.execute('''
                 CREATE TABLE IF NOT EXISTS sessions (
                     session_id TEXT PRIMARY KEY,
@@ -35,6 +44,19 @@ class BaseDBManager:
                     FOREIGN KEY(user_id) REFERENCES users(id)
                 )
             ''')
+
+            # Table password_resets
+            c.execute('''
+                CREATE TABLE IF NOT EXISTS password_resets (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    token TEXT UNIQUE NOT NULL,
+                    expires_at TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    FOREIGN KEY(user_id) REFERENCES users(id)
+                )
+            ''')
+
             conn.commit()
 
 
@@ -83,7 +105,7 @@ class AuthManager(BaseDBManager):
 
 #--------------------------- méthode pour effacer les sessions exiprées de la bdd ---------------------------#
     def clean_expired_sessions(self):
-        date_now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        date_now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("DELETE FROM sessions WHERE expires_at <= ?", (date_now,))
             conn.commit()
@@ -164,7 +186,7 @@ class AuthManager(BaseDBManager):
             # Créé le token unique
             session_id = str(uuid.uuid4())
             # Créé la date d'expiration du token
-            expires_at = (datetime.utcnow() + timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S") 
+            expires_at = (datetime.now(timezone.utc) + timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S") 
             # Rentre ds la bdd les infos
             c.execute("INSERT INTO sessions (session_id, user_id, expires_at) VALUES (?, ?, ?)",
                       (session_id, user_id, expires_at))
@@ -214,7 +236,7 @@ class AuthManager(BaseDBManager):
         if not session_id:
             return None
         
-        date_now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        date_now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
         # Si "session_id" existe, vérifie si "session_id" non expirée
         with sqlite3.connect(self.db_path) as conn:
@@ -230,7 +252,56 @@ class AuthManager(BaseDBManager):
                 return None
 
 
+#--------------------------- mdp oublié : création du mdp tokenisé ---------------------------#   
+    def create_password_reset_token(self, email):
+        
+        with sqlite3.connect(self.db_path) as conn:
+            
+            # Cherche l'utilisateur
+            c = conn.cursor()
+            c.execute("SELECT id FROM users WHERE email = ?", (email,)) 
+            user = c.fetchone()
+            if not user:
+                return False, "❌ Aucun utilisateur trouvé avec cet email"
+            user_id = user[0]
 
+            # Génère un token aléatoire sécurisé
+            token = secrets.token_urlsafe(32)
+            expires_at = (datetime.now(timezone.utc) + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
+            created_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+
+            # Insère le token dans la table password_resets
+            c.execute(
+                "INSERT INTO password_resets (user_id, token, expires_at, created_at) VALUES (?, ?, ?, ?)",
+                (user_id, token, expires_at, created_at))
+            
+            conn.commit()
+
+        # Retourne le token (il servira dans le lien d'email)
+        return True, token
+
+
+#--------------------------- mdp oublié : envoie mail avec lien ---------------------------#   
+    def forgot_password(self, email):
+        # 1. On crée (ou pas) un token pour cet email
+        success, result = self.create_password_reset_token(email)
+
+        if not success:
+            # result contient le message d’erreur (ex: "Aucun utilisateur trouvé")
+            return False, result
+
+        token = result  # ici, result = token si success == True
+
+        # 2. On envoie le mail avec le lien
+        envoie_password_reset_email(email, token)
+
+        # 3. On répond à l'appelant (la view par ex.)
+        return True, "✅ Email de réinitialisation envoyé !"
+
+
+
+
+#########################################################################################################################
 ################################ CLASS ADMINMANAGER AVEC HERITAGE DE class BaseDBManager ################################
 
 class AdminManager(BaseDBManager):
