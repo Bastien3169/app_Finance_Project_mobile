@@ -65,7 +65,7 @@ def periode_input(text_label="Ex: 3, 9, 18...", hint_texte=None, hint_styl=None,
                                 can_reveal_password=oeil,
                                 width=widths,
                                 icon=icones,
-                                keyboard_type=ft.KeyboardType.NUMBER, 
+                                keyboard_type=ft.KeyboardType.TEXT, 
                                 on_submit=fonc_ajouter_periode,)
     return input_periode
 
@@ -81,7 +81,7 @@ def dcavsls_input (labels, values, hint_texte):
                                 hint_text = hint_texte,
                                 hint_style = ft.TextStyle(size=10, italic=True,),
                                 width=400,
-                                keyboard_type=ft.KeyboardType.NUMBER,)
+                                keyboard_type=ft.KeyboardType.TEXT,)
     return  input_montant
 
 
@@ -115,7 +115,7 @@ def bout_ret_haut(couleur_bouton_fleche, handler = None):
 
     container_retour_haut = ft.Container(
         content=ft.Row([bouton_retour_haut], alignment=ft.MainAxisAlignment.START),
-        padding=ft.padding.all(0),        # plus aucun padding
+        padding=ft.padding.only(top=30),        # plus aucun padding
         height=30,)
     
     return container_retour_haut

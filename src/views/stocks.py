@@ -28,7 +28,6 @@ def create_graph_section(page):
     
     # fonction : titre + séparateur dans conteneur
     titre = titre_separateur(text = "📈 Graphique de l'entreprise", 
-                            padding_text_top = 0, 
                             couleur_titre_separateur = couleur_titre_separateur)
 
 

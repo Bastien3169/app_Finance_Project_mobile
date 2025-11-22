@@ -6,7 +6,7 @@
 
 import flet as ft
 from src.controllers.navigation import route_change
-from src.models.users_db.models_db_users_test import AuthManager  # ⬅️ importe l'AuthManager
+from src.models.users_db.models_db_users_test import AuthManager, ClientStorageWrapper  # ⬅️ importe l'AuthManager
 
 
 # Instance globale d'AuthManager (une seule fois)
@@ -27,7 +27,7 @@ def main(page: ft.Page):  # “page: ft.Page“ = annotation de type (pour l'IDE
 
     # 🔑 On branche le stockage client Flet dans l'AuthManager
     # (si ton AuthManager attend un paramètre "storage" ou "cookies", adapte ici)
-    auth_manager.storage = page.client_storage
+    auth_manager.cookies = ClientStorageWrapper(page.client_storage)
 
     # 🔑 Vérifier la session au démarrage
     current_user = auth_manager.get_current_user()
@@ -52,3 +52,9 @@ def main(page: ft.Page):  # “page: ft.Page“ = annotation de type (pour l'IDE
 
 
 ft.app(target=main)
+
+'''ft.app(
+    target=main,
+    view=ft.AppView.WEB_BROWSER,  # ouvre dans le navigateur
+    port=8550)                     # important : même port que dans l'email
+'''

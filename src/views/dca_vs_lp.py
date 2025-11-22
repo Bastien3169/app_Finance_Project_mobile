@@ -21,7 +21,6 @@ def create_input_section():
 
         # fonction : titre + séparateur dans conteneur
     titre = titre_separateur(text = "📊 Simulation DCA vs LS", 
-                            padding_text_top = 0, 
                             couleur_titre_separateur = couleur_titre_separateur)
 
     # Fonction : Dropdown (menu déroulant)
@@ -180,15 +179,8 @@ def dca_lp_page(page: ft.Page):
     # --- Simulation handler ---
     lancer_simulation = create_simulation_handler(page, dropdown_indice, input_montant, input_durees, input_mois_dca, output_zone)
 
-    # --- Bouton simulation ---
-    bouton_simulation = ft.ElevatedButton(content=ft.Text("🚀 Lancer la simulation", weight=ft.FontWeight.BOLD),
-                                                on_click=lancer_simulation,
-                                                expand=True,
-                                                width=600,
-                                          style=ft.ButtonStyle(
-                                              bgcolor=ft.Colors.RED_200,
-                                              color=ft.Colors.RED_700,
-                                              padding=ft.padding.symmetric(vertical=20),))
+    # --- Bouton simulation --- 
+    bouton_simulation =bouton_on_click ("Lancer la simulation", lancer_simulation, couleur_titre_separateur, icon=ft.Icons.CALCULATE)
 
     # Construis la colonne des contrôles (centrée horizontalement)
     controls_column = ft.Column(

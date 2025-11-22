@@ -44,7 +44,6 @@ def create_rendement_section(page):
 
     # Fonction pour titre et séparateur
     titre = titre_separateur(text = "💯 Rendements actifs (%)", 
-                            padding_text_top = 0, 
                             couleur_titre_separateur = couleur_titre_separateur)
 
     # ------- Sélection des actifs -------

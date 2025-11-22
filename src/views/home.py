@@ -8,7 +8,7 @@ def main_page(page: ft.Page):
     page.clean()
 
     # --- Titre + séparation ---
-    titre = titre_separateur("🏠 Accueil",couleur_titre_separateur, padding_text_top = 0)
+    titre = titre_separateur("🏠 Accueil",couleur_titre_separateur)
 
     # Texte de bienvenue
     texte_bienvenu = ft.Container(content=ft.Text("Bienvenue sur Finance Facile !",
@@ -48,6 +48,8 @@ def main_page(page: ft.Page):
         ("Test", ft.Colors.CYAN_500, "/test"),       # Bleu clair
     ]
 
+    # Widget : ligne de séparation dans un container pour avoir padding que en dessous
+    separation = ft.Container(content=ft.Divider(thickness=2, color=couleur_titre_separateur), padding=ft.padding.only(top=15,bottom=15))
 
     # Créer la liste de boutons avec une boucle normale
     buttons = []
@@ -57,8 +59,8 @@ def main_page(page: ft.Page):
             bgcolor=color,
             color=ft.Colors.BLACK,
             on_click=lambda e, r=route: page.go(r), # Utilisation de r=route pour capturer la route correcte au momment de l'itération
-            width=100,
-            height=50,
+            width=105,
+            height=55,
             )   
         buttons.append(btn)
 
@@ -80,7 +82,7 @@ def main_page(page: ft.Page):
         padding=ft.padding.only(top=20)
     )
     
-    page.add(*titre, texte_bienvenu, texte_explication, grid_avec_espace)
+    page.add(*titre, texte_bienvenu, grid_avec_espace, separation, texte_explication,)
 
     page.update()
 

@@ -299,6 +299,40 @@ class AuthManager(BaseDBManager):
         return True, "✅ Email de réinitialisation envoyé !"
 
 
+#--------------------------- mdp oublié : vérifier token + changer mdp ---------------------------#   
+    def reset_password_with_token(self, token, new_password):
+        
+        # Vérifier le format du mot de passe (même règle que register)
+        password_pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*?])[\S\s]{5,}$'
+        if not re.match(password_pattern, new_password):
+            return False, "❌ Mot de passe trop faible. Il doit contenir au moins 5 caractères, 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial."
+
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+
+        with sqlite3.connect(self.db_path) as conn:
+            c = conn.cursor()
+
+            # 1. Vérifier que le token existe et n'est pas expiré
+            c.execute("""SELECT pr.user_id FROM password_resets pr WHERE pr.token = ? AND pr.expires_at > ?""",(token, now))
+            row = c.fetchone()
+
+            if not row:
+                return False, "❌ Lien de réinitialisation invalide ou expiré."
+
+            user_id = row[0]
+
+            # 2. Mettre à jour le mot de passe de l'utilisateur
+            hashed = self.hash_password(new_password)
+            c.execute("UPDATE users SET password = ? WHERE id = ?", (hashed, user_id))
+
+            # 3. (Optionnel mais conseillé) supprimer tous les tokens pour cet utilisateur
+            c.execute("DELETE FROM password_resets WHERE user_id = ?", (user_id,))
+
+            conn.commit()
+
+        return True, "✅ Mot de passe réinitialisé avec succès."
+
+
 
 
 #########################################################################################################################

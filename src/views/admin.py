@@ -21,8 +21,7 @@ def add_update_database(page: ft.Page, dossier_csv: str, csv_bdd: str, db_path: 
     
     # fonction : titre + séparateur dans conteneur
     titre =  titre_separateur("🔄 Mise à jour BDD datas", 
-                              couleur_titre_separateur, 
-                              padding_text_top = 0)
+                              couleur_titre_separateur)
 
 
     # Création de la colonne pour les messages de suivi d'avancement
@@ -433,10 +432,6 @@ def admin_flet(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.DARK
 
-
-    # Création flèche retour
-    fleche_retour = bout_ret_haut(couleur_titre_separateur, handler = lambda e: page.go("/"))
-
     # Section mise à jour BDD
     maj_datas_bdd = add_update_database(page, dossier_csv="csv", csv_bdd="csv/csv_bdd", db_path="datas.bd")
 
@@ -463,5 +458,5 @@ def admin_flet(page: ft.Page):
     bouton_retour = bout_ret_acceuil(couleur_titre_separateur, handler = lambda e: page.go("/"))
 
     # Ajout de tout à la page
-    page.add(fleche_retour, *maj_datas_bdd,titre, trait_titre, *dataframe_users, search_bout_val, results_column, ajout_user, bouton_retour)
+    page.add(*maj_datas_bdd,titre, trait_titre, *dataframe_users, search_bout_val, results_column, ajout_user, bouton_retour)
     page.update()
