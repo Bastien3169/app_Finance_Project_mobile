@@ -34,6 +34,7 @@ def loader_page(couleur_titre_separateur):
 def loader_globale(couleur_titre_separateur):
     loader_global = ft.Container(content=ft.ProgressRing(color=couleur_titre_separateur, width=60, height=60),
                                  alignment=ft.alignment.center,
+                                 margin=ft.margin.all(100),
                                  visible=True)
     return loader_global
 
@@ -107,31 +108,26 @@ def bouton_on_click (text, on_click, couleur_bouton, icon=None):
 
 # ------- Bouton retour en haut à gauche -------
 def bout_ret_haut(couleur_bouton_fleche, handler = None):
-    bouton_retour_haut = ft.IconButton(
-        icon=ft.Icons.ARROW_BACK,  # flèche gauche
-        icon_color=couleur_bouton_fleche,  # même couleur que le bouton accueil
-        tooltip="Retour accueil",
-        on_click=handler)
+    bouton_retour_haut = ft.IconButton(icon=ft.Icons.ARROW_BACK,  # flèche gauche
+                                        icon_color=couleur_bouton_fleche,  # même couleur que le bouton accueil
+                                        tooltip="Retour accueil",
+                                        on_click=handler)
 
-    container_retour_haut = ft.Container(
-        content=ft.Row([bouton_retour_haut], alignment=ft.MainAxisAlignment.START),
-        padding=ft.padding.only(top=30),        # plus aucun padding
-        height=30,)
+    container_retour_haut = ft.Container(content=ft.Row([bouton_retour_haut], 
+                                                        alignment=ft.MainAxisAlignment.START),
+                                        padding=ft.padding.only(top=30))        # plus aucun padding
     
     return container_retour_haut
 
 
 # ------- Bouton retour acceuil -------
 def bout_ret_acceuil(couleur_bouton_fleche, handler = None):
-    bouton_retour = ft.ElevatedButton(
-        "Retour accueil",
-        icon=ft.Icons.HOME, # ajoute icône à gauche du texte
-        style=ft.ButtonStyle(
-            color=ft.Colors.WHITE,
-            bgcolor=couleur_bouton_fleche,
-            padding=ft.padding.symmetric(horizontal=20, vertical=15)
-        ),
-        on_click=handler)  # Redirection vers la page d'accueil
+    bouton_retour = ft.ElevatedButton("Retour accueil",
+                                        icon=ft.Icons.HOME, # ajoute icône à gauche du texte
+                                        style=ft.ButtonStyle(color=ft.Colors.WHITE,
+                                                            bgcolor=couleur_bouton_fleche,
+                                                            padding=ft.padding.symmetric(horizontal=20, vertical=15)),
+                                        on_click=handler)  # Redirection vers la page d'accueil
     
 
     container_bouton = ft.Container(content=bouton_retour,

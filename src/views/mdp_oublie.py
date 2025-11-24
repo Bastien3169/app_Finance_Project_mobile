@@ -18,9 +18,6 @@ def mdp_oublie_view(page: ft.Page):
     # --- Titre + séparation ---
     titre = titre_separateur("🔑 Réinitialisation mdp",couleur_titre_separateur)
 
-    # --- Champ pseudo / nom d'utilisateur ---
-    username_field = periode_input(text_label="👤 Nom d'utilisateur", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None,)
-
     # --- Champ email ---
     email_field = periode_input(text_label="📧 Email", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None,)
 
@@ -46,10 +43,10 @@ def mdp_oublie_view(page: ft.Page):
 
 
     # --- Bouton envoie lien ---
-    bout_envoie = bouton_on_click ("Envoyez moi un lien de résinitialisation", on_click=on_click_envoie_mdp, icon=ft.Icons.EMAIL, couleur_bouton=couleur_titre_separateur)
+    bout_envoie = bouton_on_click ("Envoyer mail réinitialisation", on_click=on_click_envoie_mdp, icon=ft.Icons.EMAIL, couleur_bouton=couleur_titre_separateur)
 
 
-    contenu = contenu_widget(titre, [email_field, username_field, feedback, bout_envoie])
+    contenu = contenu_widget(titre, [email_field, feedback, bout_envoie])
 
     return contenu
     

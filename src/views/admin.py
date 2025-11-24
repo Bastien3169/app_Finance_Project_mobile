@@ -340,7 +340,7 @@ def users_table_simple():
 def users_add_form(page: ft.Page):
     
     # Sous-titre pour modification user
-    sous_titre = ft.Text("Ajout users", weight="bold", size=18, 
+    sous_titre = ft.Text("Ajouter users", weight="bold", size=18, 
                                  text_align=ft.TextAlign.CENTER,
                                  style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE))
     
@@ -407,7 +407,7 @@ def users_add_form(page: ft.Page):
         page.update()
 
     # Bouton de création
-    bouton = bouton_on_click(text = "Créer l'utilisateur",on_click=on_create_user, icon=ft.Icons.PERSON_ADD, couleur_bouton=couleur_bouton)
+    bouton = bouton_on_click(text = "Ajouter",on_click=on_create_user, icon=ft.Icons.PERSON_ADD, couleur_bouton=couleur_bouton)
 
     # Card globale du formulaire
     form_container = ft.Container(padding=ft.padding.only(top=20, bottom=0),

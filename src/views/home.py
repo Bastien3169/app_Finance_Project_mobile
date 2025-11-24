@@ -14,9 +14,9 @@ def main_page(page: ft.Page):
     texte_bienvenu = ft.Container(content=ft.Text("Bienvenue sur Finance Facile !",
                                                 weight=ft.FontWeight.BOLD,
                                                 size=18,
-                                                color="rgba(255,255,255,0.5)",
+                                                color=couleur_titre_separateur,
                                                 text_align=ft.TextAlign.CENTER,),
-                                        border=ft.border.all(0.5, "rgba(255,255,255,0.5)"),
+                                        border=ft.border.all(0.5, couleur_titre_separateur),
                                         border_radius=10,
                                         padding=ft.padding.all(10),
                                         alignment=ft.alignment.center)
@@ -26,7 +26,7 @@ def main_page(page: ft.Page):
                                                 "leurs performances historiques. \nElle simule deux stratégies d’investissement : le DCA (investissement progressif) et le Lump Sum "
                                                 "(investissement en une seule fois), pour vous aider à visualiser laquelle est la plus adaptée à vos objectifs. \nElle n’a pas pour but de " \
                                                 "vous inciter à investir, mais uniquement de proposer un outil pédagogique basé sur des données officielles passées.", 
-                                                 color="rgba(255,255,255,0.5)", 
+                                                 color=couleur_titre_separateur, 
                                                  size=12, 
                                                  text_align=ft.TextAlign.JUSTIFY,),
                                 padding=ft.padding.symmetric(vertical=10, horizontal=10),
@@ -45,6 +45,7 @@ def main_page(page: ft.Page):
         ("Auth manag", ft.Colors.BLUE_500, "/auth_manag"),       # Bleu clair
         ("Inscription", ft.Colors.WHITE, "/inscription"),       # Bleu clair
         ("Mdp oublié", ft.Colors.WHITE, "/mdp_oublie"),       # Bleu clair
+        ("Reset mdp", ft.Colors.WHITE, "/reset_mdp"),       # Bleu clair
         ("Test", ft.Colors.CYAN_500, "/test"),       # Bleu clair
     ]
 

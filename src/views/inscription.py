@@ -67,7 +67,7 @@ def register_view(page: ft.Page):
                                         icon=ft.Icons.HOW_TO_REG,
                                         couleur_bouton=couleur_titre_separateur,)
 
-    contenu = contenu_widget(titre,[username_field, email_field, password_field, confirm_password_field, bouton_inscription, feedback,],)
+    contenu = contenu_widget(titre,[username_field, email_field, password_field, confirm_password_field, feedback, bouton_inscription,],)
 
     return contenu
 

@@ -1,7 +1,7 @@
 from src.views import home, indices #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
-from src.views import home, indices, stocks, dca_vs_lp, cryptos, tous_actifs, admin, auth_manag, inscription, mdp_oublie, test #, etfs, cryptos, dca_vs_lp, maj_bd
+from src.views import home, indices, stocks, dca_vs_lp, cryptos, tous_actifs, admin, auth_manag, inscription, mdp_oublie, reset_mdp, test #, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
 
@@ -34,6 +34,8 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
         inscription.register_page(page)
     elif route == "/mdp_oublie":  
         mdp_oublie.mdp_oublie_page(page)
+    elif route == "/reset_mdp":  
+        reset_mdp.reset_mdp(page)
     elif route == "/test": 
         # maj_bd.main_page(page)
         test.admin_flet(page)
