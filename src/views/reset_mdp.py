@@ -1,7 +1,7 @@
 import flet as ft
 from src.models.users_db.models_db_users_test import AuthManager, AdminManager
 from src.components.components_views import *
-from src.views import inscription  
+from src.views import inscription
 import flet as ft
 
 db_path = "users.db"
@@ -17,10 +17,7 @@ def reset_password_view(page: ft.Page, token: str):
     auth = AuthManager(db_path=db_path)
 
     # --- Titre + séparation ---
-    titre = titre_separateur(
-        "🔑 Réinitialisation du mot de passe",
-        couleur_titre_separateur
-    )
+    titre = titre_separateur("🔑 Réinitialisation du mot de passe", couleur_titre_separateur)
 
     # --- Champ mot de passe ---
     password_field = periode_input(
@@ -45,13 +42,12 @@ def reset_password_view(page: ft.Page, token: str):
     )
 
     # --- Feedback (erreurs / succès) ---
-    feedback = ft.Text(
-        "",
-        color=ft.Colors.RED_300,
-        size=12,
-        weight="bold",
-        text_align=ft.TextAlign.CENTER,
-    )
+    feedback = ft.Text("",
+                        color=ft.Colors.RED_300,
+                        size=12,
+                        weight="bold",
+                        text_align=ft.TextAlign.CENTER,
+                        visible=False,)
 
     # --- Handler : validation du nouveau mdp ---
     def handle_reset_password(e):
@@ -62,6 +58,7 @@ def reset_password_view(page: ft.Page, token: str):
         if not password or not confirm_password:
             feedback.value = "❌ Merci de remplir tous les champs."
             feedback.color = ft.Colors.RED_300
+            feedback.visible = True
             page.update()
             return
 
@@ -69,6 +66,7 @@ def reset_password_view(page: ft.Page, token: str):
         if password != confirm_password:
             feedback.value = "❌ Les mots de passe ne correspondent pas."
             feedback.color = ft.Colors.RED_300
+            feedback.visible = True
             page.update()
             return
 
@@ -77,12 +75,13 @@ def reset_password_view(page: ft.Page, token: str):
 
         feedback.value = message
         feedback.color = ft.Colors.GREEN_300 if success else ft.Colors.RED_300
+        feedback.visible = True
         page.update()
 
         if success:
             page.snack_bar = ft.SnackBar(
-                ft.Text("✅ Mot de passe modifié avec succès !")
-            )
+                ft.Text("✅ Mot de passe modifié avec succès !"))
+
             page.snack_bar.open = True
             page.update()
 
@@ -91,19 +90,11 @@ def reset_password_view(page: ft.Page, token: str):
 
     # --- Bouton Valider ---
     bouton_valider = bouton_on_click("Valider le nouveau mot de passe",
-                                    on_click=handle_reset_password,
-                                    icon=ft.Icons.LOCK_RESET,
-                                    couleur_bouton=couleur_titre_separateur,)
+                                     on_click=handle_reset_password,
+                                     icon=ft.Icons.LOCK_RESET,
+                                     couleur_bouton=couleur_titre_separateur,)
 
-    contenu = contenu_widget(
-        titre,
-        [
-            password_field,
-            confirm_password_field,
-            bouton_valider,
-            feedback,
-        ],
-    )
+    contenu = contenu_widget(titre, [password_field, confirm_password_field, bouton_valider, feedback,],)
 
     return contenu
 
@@ -127,20 +118,16 @@ def reset_mdp(page: ft.Page):
 
     # Si aucun token -> message d’erreur
     if not token:
-        page.add(
-            ft.Text(
-                "❌ Lien de réinitialisation invalide ou expiré.",
-                size=16,
-                weight="bold",
-                color=ft.Colors.RED_300,
-                text_align=ft.TextAlign.CENTER,
-            )
-        )
+        page.add(ft.Container(content=ft.Text("❌ Lien de réinitialisation invalide ou expiré.",
+                                              size=14,
+                                              weight="bold",
+                                              color=ft.Colors.RED_300,
+                                              text_align=ft.TextAlign.CENTER,),
+                              padding=ft.padding.only(top=50)))
+
         # Bouton retour accueil / auth
-        bouton_retour = bout_ret_acceuil(
-            couleur_bouton_fleche,
-            handler=lambda e: page.go("/auth_manag"),
-        )
+        bouton_retour = bout_ret_acceuil(couleur_bouton_fleche, handler=lambda e: page.go("/auth_manag"),)
+
         page.add(bouton_retour)
         return
 
@@ -149,8 +136,6 @@ def reset_mdp(page: ft.Page):
 
     # Bouton Retour accueil / gestion auth
     bouton_retour = bout_ret_acceuil(
-        couleur_bouton_fleche,
-        handler=lambda e: page.go("/auth_manag"),
-    )
+        couleur_bouton_fleche, handler=lambda e: page.go("/auth_manag"),)
 
     page.add(vue_mdp, bouton_retour)

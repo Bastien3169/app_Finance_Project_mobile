@@ -27,8 +27,7 @@ def create_graph_section(page):
     page.scroll = "auto"
 
     # fonction : titre + séparateur dans conteneur
-    titre = titre_separateur(text = "📈 Graphique de l'indice", 
-                            couleur_titre_separateur = couleur_titre_separateur)
+    titre = titre_separateur(text = "📈 Graphique de l'indice", padding_text_top = 0, couleur_titre_separateur = couleur_titre_separateur)
 
     # Fonction : Dropdown (menu déroulant)
     dropdown_actif = dropdown ("Sélectionnez un indice", actif_default, liste_actifs, handler= None)

@@ -16,8 +16,7 @@ couleur_bouton_fleche = ft.Colors.GREEN_700
 def login_view(page: ft.Page):
 
     # --- Titre + séparation ---
-    titre = titre_separateur("🔐 Connexion requise",
-                             couleur_titre_separateur)
+    titre = titre_separateur("🔐 Connexion requise", couleur_titre_separateur)
 
     # --- Email input ---
     email_field = periode_input(text_label="📧 Email", hint_texte=None, hint_styl=None,
@@ -28,7 +27,7 @@ def login_view(page: ft.Page):
                                    hint_styl=None, passwords=True, oeil=True, widths=400, fonc_ajouter_periode=None)
 
     # --- feedback si connectio réussie ou pas ---
-    feedback = ft.Text("", color=ft.Colors.RED_300, size=12,
+    feedback = ft.Text("", color=ft.Colors.RED_300, size=12, visible=False,
                        weight="bold", text_align=ft.TextAlign.CENTER)
 
     # --- Handler feedback ---
@@ -41,6 +40,7 @@ def login_view(page: ft.Page):
         success, message = auth.login(email, password)
 
         feedback.value = message
+        feedback.visible = True
         page.update()
 
         if success:
@@ -106,6 +106,4 @@ def auth_manage_page(page: ft.Page):
     bouton_retour = bout_ret_acceuil(
         couleur_bouton_fleche, handler=lambda e: page.go("/"))
 
-    page.add(
-        vu_login,
-        bouton_retour)
+    page.add(vu_login, bouton_retour)

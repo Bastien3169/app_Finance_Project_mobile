@@ -27,7 +27,7 @@ def register_view(page: ft.Page):
     confirm_password_field = periode_input(text_label="🔒 Confirmation du mot de passe", hint_texte=None, hint_styl=None, passwords=True, oeil=True, widths=400, fonc_ajouter_periode=None,)
 
     # --- Feedback (erreurs / succès) ---
-    feedback = ft.Text("", color=ft.Colors.RED_300, size=12, weight="bold", text_align=ft.TextAlign.CENTER,)
+    feedback = ft.Text("", color=ft.Colors.RED_300, size=12, weight="bold", text_align=ft.TextAlign.CENTER, visible=False)
 
     # --- Handler inscription ---
     def handle_register(e):
@@ -39,11 +39,13 @@ def register_view(page: ft.Page):
         # Vérif rapide côté front
         if not username or not email or not password or not confirm_password:
             feedback.value = "❌ Tous les champs sont obligatoires."
+            feedback.visible = True
             page.update()
             return
 
         if password != confirm_password:
             feedback.value = "❌ Les mots de passe ne correspondent pas."
+            feedback.visible = True
             page.update()
             return
 
@@ -52,6 +54,7 @@ def register_view(page: ft.Page):
 
         feedback.value = message
         feedback.color = ft.Colors.GREEN_300 if success else ft.Colors.RED_300
+        feedback.visible = True
         page.update()
 
         if success:

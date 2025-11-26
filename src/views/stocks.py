@@ -27,8 +27,7 @@ def create_graph_section(page):
     page.scroll = "auto"
     
     # fonction : titre + séparateur dans conteneur
-    titre = titre_separateur(text = "📈 Graphique de l'entreprise", 
-                            couleur_titre_separateur = couleur_titre_separateur)
+    titre = titre_separateur(text = "📈 Graphique de l'entreprise", padding_text_top = 0, couleur_titre_separateur = couleur_titre_separateur)
 
 
     # Fonction : Dropdown (menu déroulant)
@@ -41,6 +40,7 @@ def create_graph_section(page):
     loader = loader_page(couleur_titre_separateur)
 
     def update_graph(e):  # Met à jour le graphique quand on change l'indice
+        
         loader.visible = True
         graphique.visible = False
         page.update()

@@ -369,7 +369,7 @@ def users_add_form(page: ft.Page):
                             border_color=ft.Colors.WHITE30,
                             expand=True,)
 
-    message_text = ft.Text(size=12, weight="bold", text_align=ft.TextAlign.CENTER)
+    message_text = ft.Text(size=12, weight="bold", text_align=ft.TextAlign.CENTER, visible=False)
 
     # Action au clic sur "Créer l'utilisateur"
     def on_create_user(e):
@@ -382,6 +382,7 @@ def users_add_form(page: ft.Page):
         if not username or not email or not password:
             message_text.value = "❌ Merci de remplir tous les champs."
             message_text.color = ft.Colors.RED
+            message_text.visible = True
             page.update()
             return
 
@@ -390,6 +391,7 @@ def users_add_form(page: ft.Page):
 
         message_text.value = msg
         message_text.color = ft.Colors.GREEN if success else ft.Colors.RED
+        message_text.visible = True
         page.update()
 
         if not success:

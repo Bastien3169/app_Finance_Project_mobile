@@ -20,8 +20,7 @@ titre_size = 20
 def create_input_section():
 
         # fonction : titre + séparateur dans conteneur
-    titre = titre_separateur(text = "📊 Simulation DCA vs LS", 
-                            couleur_titre_separateur = couleur_titre_separateur)
+    titre = titre_separateur(text = "📊 Simulation DCA vs LS", padding_text_top = 0, couleur_titre_separateur = couleur_titre_separateur)
 
     # Fonction : Dropdown (menu déroulant)
     dropdown_actif = dropdown("Sélectionnez un indice pour le graphique", actif_default, liste_actifs, handler= None)

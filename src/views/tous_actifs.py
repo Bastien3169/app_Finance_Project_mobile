@@ -1,8 +1,8 @@
-    # on_click = handler d'événement :  une propriété qui attend une fonction (callable).
-    # Événement = ce qu'il se passe (ici le clic). 
-    # Handler = la fonction qui gère cet événement (ex: go_home).
-    # Handler = Callback spécifique à un événement utilisateur (souvent propre à une bibliothèque UI).
-    # => Tout handler est un callback, mais tout callback n’est pas forcément un handler.
+# on_click = handler d'événement :  une propriété qui attend une fonction (callable).
+# Événement = ce qu'il se passe (ici le clic).
+# Handler = la fonction qui gère cet événement (ex: go_home).
+# Handler = Callback spécifique à un événement utilisateur (souvent propre à une bibliothèque UI).
+# => Tout handler est un callback, mais tout callback n’est pas forcément un handler.
 
 # Un handler doit forcément être une fonction (callable), qu’elle soit classique (réutilisable), anonyme (lambda), ou méthode de classe.
 
@@ -43,46 +43,43 @@ def create_rendement_section(page):
     periods_selectionnees = [6, 12, 24, 60, 120, 180]  # affichées au début
 
     # Fonction pour titre et séparateur
-    titre = titre_separateur(text = "💯 Rendements actifs (%)", 
-                            couleur_titre_separateur = couleur_titre_separateur)
+    titre = titre_separateur(text="💯 Rendements actifs (%)",padding_text_top = 0, couleur_titre_separateur=couleur_titre_separateur)
 
     # ------- Sélection des actifs -------
-
     # Dropdown indice : (menu déroulant)
-    dropdown_indices = dropdown ("Sélectionnez un indice", indice_default, liste_indices, handler= lambda e: ajouter_indice(e.control.value))
+    dropdown_indices = dropdown("Sélectionnez un indice", indice_default, liste_indices, handler=lambda e: ajouter_indice(e.control.value))
+    
     # Dropdown stocks :  (menu déroulant)
-    dropdown_stocks = dropdown ("Sélectionnez une entreprise", stock_default, liste_stocks, handler= lambda e: ajouter_indice(e.control.value))
+    dropdown_stocks = dropdown("Sélectionnez une entreprise", stock_default, liste_stocks, handler=lambda e: ajouter_indice(e.control.value))
+    
     # Dropdown cryptos :  (menu déroulant)
-    dropdown_cryptos = dropdown ("Sélectionnez une crypto", crypto_default, liste_cryptos, handler= lambda e: ajouter_indice(e.control.value))
+    dropdown_cryptos = dropdown("Sélectionnez une crypto", crypto_default, liste_cryptos, handler=lambda e: ajouter_indice(e.control.value))
 
     # Conteneur pour les indices sélectionnés
     indices_selectionnes = [indice_default, stock_default, crypto_default]  # affichés au début
+    
     liste_selection = ft.Row(scroll=ft.ScrollMode.AUTO)
 
-    cadre_text = ft.Container(content=ft.Column([ft.Text("Actifs sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)), 
+    cadre_text = ft.Container(content=ft.Column([ft.Text("Actifs sélectionnés:", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
                                                  liste_selection],
-                                            horizontal_alignment=ft.CrossAxisAlignment.START),
-                                        padding=5,
-                                        border=ft.border.all(2, ft.Colors.WHITE30),
-                                        border_radius=10,
-                                        expand=True,
-                                        alignment=ft.alignment.top_left)
+                                                horizontal_alignment=ft.CrossAxisAlignment.START),
+                              padding=5,
+                              border=ft.border.all(2, ft.Colors.WHITE30),
+                              border_radius=10,
+                              expand=True,
+                              alignment=ft.alignment.top_left)
 
     # Text pour période à ajouter
-    text_periode = ft.Text("Ajouter une période (en mois)", size=11,style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),)
+    text_periode = ft.Text("Ajouter une période (en mois)", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),)
 
-    # Fonction : input période à ajouter 
+    # Fonction : input période à ajouter
     input_periode = periode_input(fonc_ajouter_periode=lambda e: ajouter_periode(e.control.value))
-    
+
     # Bouton "+" pour ajouter la période
-    bouton_ajouter_periode = ft.IconButton(icon=ft.Icons.ADD, 
-                                           tooltip="Ajouter la période", 
-                                           on_click=lambda e: ajouter_periode(input_periode.value))
+    bouton_ajouter_periode = ft.IconButton(icon=ft.Icons.ADD,tooltip="Ajouter la période", on_click=lambda e: ajouter_periode(input_periode.value))
 
     # Ligne pour l'input et le bouton "+"
-    ligne_ajout_periode = ft.Row([input_periode, bouton_ajouter_periode], 
-                                 alignment=ft.MainAxisAlignment.START, 
-                                 spacing=10)
+    ligne_ajout_periode = ft.Row([input_periode, bouton_ajouter_periode], alignment=ft.MainAxisAlignment.START, spacing=10)
 
     # Conteneur pour les périodes sélectionnées
     liste_periodes = ft.Row(scroll=ft.ScrollMode.AUTO)
@@ -90,29 +87,32 @@ def create_rendement_section(page):
     # Cadre complet regroupant tout pour les indices selectionnés
     cadre_periodes = ft.Container(content=ft.Column([text_periode,
                                                      ligne_ajout_periode,
-                                                     ft.Text("Périodes sélectionnées (en mois) :", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-                                                    liste_periodes,],  
+                                                     ft.Text("Périodes sélectionnées (en mois) :", size=11, style=ft.TextStyle(
+                                                         decoration=ft.TextDecoration.UNDERLINE)),
+                                                    liste_periodes,],
                                                     spacing=10,
                                                     alignment=ft.MainAxisAlignment.START),
-                                padding=10,
-                                border=ft.border.all(2, ft.Colors.WHITE30),
-                                border_radius=10,
-                                expand=True,
-                                alignment=ft.alignment.top_left)
+                                  padding=10,
+                                  border=ft.border.all(2, ft.Colors.WHITE30),
+                                  border_radius=10,
+                                  expand=True,
+                                  alignment=ft.alignment.top_left)
 
     # Tableau des rendements
     table = ft.DataTable(expand=True,
-                        column_spacing=10,
-                        heading_row_height=25,
-                        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
-                        data_row_min_height=35,
-                        data_row_max_height=35,
-                        divider_thickness=0.5,
-                        columns=[],
-                        rows=[],)
+                         column_spacing=10,
+                         heading_row_height=25,
+                         heading_row_color=ft.Colors.with_opacity(
+                             1.0, "#1A1C24"),
+                         data_row_min_height=35,
+                         data_row_max_height=35,
+                         divider_thickness=0.5,
+                         columns=[],
+                         rows=[],)
 
     cadre_tableau = ft.Container(content=ft.Row([table], scroll=ft.ScrollMode.AUTO, alignment=ft.MainAxisAlignment.CENTER),
-                                 border=ft.border.all(2, couleur_titre_separateur),
+                                 border=ft.border.all(
+                                     2, couleur_titre_separateur),
                                  border_radius=10,
                                  padding=5,
                                  alignment=ft.alignment.center,)
@@ -122,9 +122,8 @@ def create_rendement_section(page):
         liste_selection.controls.clear()
         for i in indices_selectionnes:
             liste_selection.controls.append(ft.Row([ft.Text(i, size=12),
-                                                    ft.IconButton(icon=ft.Icons.CLOSE, icon_size=16,on_click=lambda e, i=i: retirer_indice(i))], 
-                                                    spacing=0,)
-                                )
+                                                    ft.IconButton(icon=ft.Icons.CLOSE, icon_size=16, on_click=lambda e, i=i: retirer_indice(i))],
+                                                   spacing=0,))
         page.update()
 
     def ajouter_indice(indice):
@@ -166,9 +165,8 @@ def create_rendement_section(page):
         for p in sorted(periods_selectionnees):
             liste_periodes.controls.append(
                 ft.Row([ft.Text(f"{p}m", size=12),
-                        ft.IconButton(icon=ft.Icons.CLOSE, icon_size=16, on_click=lambda e, p=p: retirer_periode(p))]
-                        , spacing=0))
-            
+                        ft.IconButton(icon=ft.Icons.CLOSE, icon_size=16, on_click=lambda e, p=p: retirer_periode(p))], spacing=0))
+
         page.update()
 
     def update_table():
@@ -176,9 +174,11 @@ def create_rendement_section(page):
         table.rows.clear()
 
         # Colonnes dynamiques selon les périodes sélectionnées
-        columns = [ft.DataColumn(ft.Text("Actifs", weight=ft.FontWeight.BOLD, size=12))]
+        columns = [ft.DataColumn(
+            ft.Text("Actifs", weight=ft.FontWeight.BOLD, size=12))]
         for period in sorted(periods_selectionnees):
-            columns.append(ft.DataColumn(ft.Text(f"{period}m", weight=ft.FontWeight.BOLD, size=12)))
+            columns.append(ft.DataColumn(
+                ft.Text(f"{period}m", weight=ft.FontWeight.BOLD, size=12)))
         table.columns = columns
 
         for actif in indices_selectionnes:
@@ -209,9 +209,10 @@ def create_rendement_section(page):
                     except (ValueError, TypeError):
                         texte = str(valeur)
                         couleur_texte = ft.Colors.BLACK
-                    cells.append(ft.DataCell(ft.Text(texte, size=10, color=couleur_texte)))
+                    cells.append(ft.DataCell(
+                        ft.Text(texte, size=10, color=couleur_texte)))
                 table.rows.append(ft.DataRow(cells=cells))
-    
+
         page.update()
 
     # Initialisation
@@ -219,14 +220,8 @@ def create_rendement_section(page):
     update_periodes_list()
     update_table()
 
-    '''
-    contenu = ft.Column([*titre,
-                         ft.Column([dropdown_indices,dropdown_stocks,dropdown_cryptos,cadre_text,cadre_periodes,cadre_tableau],
-                                   spacing=15,     
-                                   horizontal_alignment=ft.CrossAxisAlignment.CENTER,),])'''
-    
     contenu = contenu_widget(titre, [dropdown_indices, dropdown_stocks, dropdown_cryptos, cadre_text, cadre_periodes, cadre_tableau])
-    
+
     return [contenu]
 
 
@@ -239,7 +234,7 @@ def actifs_page(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.DARK
 
-     # Création Loader général
+    # Création Loader général
     loader_global = loader_globale(couleur_titre_separateur)
     # Mise en place du loader_global
     page.add(loader_global)
@@ -248,10 +243,10 @@ def actifs_page(page: ft.Page):
     rendement_elements = create_rendement_section(page)
 
     # Bouton retour en haut à droite
-    bouton_retour_haut = bout_ret_haut(couleur_bouton_fleche, handler = lambda e: page.go("/"))
+    bouton_retour_haut = bout_ret_haut(couleur_bouton_fleche, handler=lambda e: page.go("/"))
 
     # Bouton Retour accueil
-    bouton_retour = bout_ret_acceuil(couleur_bouton_fleche, handler = lambda e: page.go("/"))
+    bouton_retour = bout_ret_acceuil(couleur_bouton_fleche, handler=lambda e: page.go("/"))
 
     # Suppresion du loader_global
     loader_global.visible = False
@@ -259,7 +254,6 @@ def actifs_page(page: ft.Page):
     # Un seul page.add() avec tous les éléments avec décompression des listes grace à l'étoile *
     page.add(
         bouton_retour_haut,  # Bouton en haut à droite
-        *rendement_elements, # Tous les éléments de la section rendements
+        *rendement_elements,  # Tous les éléments de la section rendements
         bouton_retour  # Bouton en dernier
     )
-
