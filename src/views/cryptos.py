@@ -19,8 +19,8 @@ liste_actifs = datas_actifs.get_list_cryptos()
 infos_actifs = datas_actifs.get_infos_cryptos()
 actif_default = "Bitcoin"
 
-couleur_titre_separateur = ft.Colors.PURPLE_200
-couleur_bouton_fleche = ft.Colors.PURPLE_700
+couleur_titre_separateur = "#F7931A"
+couleur_bouton_fleche = "#FBBF63"
 
 ################################## GRAPHIQUE #################################################
 

@@ -7,8 +7,9 @@ import flet as ft
 db_path = "users.db"
 
 # Couleurs
-couleur_titre_separateur = ft.Colors.GREEN_200
-couleur_bouton_fleche = ft.Colors.GREEN_700
+couleur_titre_separateur = "#00B388"
+couleur_bouton_fleche = "#21C4A0"
+
 
 ################################## CONNEXION ################################
 

@@ -11,8 +11,8 @@ liste_actifs = datas_actifs.get_list_indices()
 actif_default = "S&P 500"
 
 # -------------------- Styles --------------------
-couleur_titre_separateur = ft.Colors.RED_200
-couleur_bouton_fleche = ft.Colors.RED_700
+couleur_titre_separateur = ft.Colors.CYAN_400 #
+couleur_bouton_fleche = ft.Colors.CYAN_700
 titre_size = 20
 
 

@@ -1,8 +1,8 @@
 import flet as ft
 from src.components.components_views import *
 
-couleur_titre_separateur = ft.Colors.PURPLE_200
-couleur_bouton_fleche = ft.Colors.PURPLE_700
+couleur_titre_separateur = "#00B388"
+couleur_bouton_fleche = "#21C4A0"
 
 def main_page(page: ft.Page):
     page.clean()
@@ -35,17 +35,17 @@ def main_page(page: ft.Page):
 
     # Liste des tuiles
     tiles_button = [
-        ("Indices",  "#7FB77E", "/indices"),      # Jaune pastel
+        ("Indices",  "#21C4A0", "/indices"),      # Jaune pastel
         ("Stocks", ft.Colors.AMBER_200, "/stocks"),       # Vert clair
         ("ETFs", ft.Colors.CYAN_200, "/etfs"),         # Orange doux
         ("Cryptos", "#F7931A", "/cryptos"),     # Couleur Bitcoin
-        ("Tous Actifs", "#6C8EBF", "/tous_actifs"),
-        ("DCAvsLP", "#D67C7C", "/dca_vs_lp"),  # Rouge doux
-        ("Admin", ft.Colors.BLUE_500, "/admin"),       # Bleu clair
-        ("Auth manag", ft.Colors.BLUE_500, "/auth_manag"),       # Bleu clair
-        ("Inscription", ft.Colors.WHITE, "/inscription"),       # Bleu clair
-        ("Mdp oublié", ft.Colors.WHITE, "/mdp_oublie"),       # Bleu clair
-        ("Reset mdp", ft.Colors.WHITE, "/reset_mdp"),       # Bleu clair
+        ("Tous Actifs", ft.Colors.PURPLE_200, "/tous_actifs"),
+        ("DCAvsLP", ft.Colors.CYAN_400 , "/dca_vs_lp"),  # Rouge doux
+        ("Admin", "#D67C7C", "/admin"),       # Bleu clair
+        ("Auth manag", "#D67C7C", "/auth_manag"),       # Bleu clair
+        ("Inscription", "#D67C7C", "/inscription"),       # Bleu clair
+        ("Mdp oublié", "#D67C7C", "/mdp_oublie"),       # Bleu clair
+        ("Reset mdp", "#D67C7C", "/reset_mdp"),       # Bleu clair
         ("Test", ft.Colors.CYAN_500, "/test"),       # Bleu clair
     ]
 

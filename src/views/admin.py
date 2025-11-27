@@ -9,8 +9,8 @@ auth_manager = AuthManager()
 admin_manager = AdminManager()
 
 # Couleurs et tailles
-couleur_titre_separateur = ft.Colors.CYAN_200
-couleur_bouton = ft.Colors.CYAN_600
+couleur_titre_separateur = "#D67C7C"
+couleur_bouton = "#E89292"
 taille_titre = 20
 
 bouton_on_click = bouton_on_click

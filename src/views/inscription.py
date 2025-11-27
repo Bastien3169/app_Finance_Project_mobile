@@ -5,8 +5,10 @@ from src.components.components_views import *
 db_path = "users.db"
 
 # Couleurs
-couleur_titre_separateur = ft.Colors.GREEN_200
-couleur_bouton_fleche = ft.Colors.GREEN_700
+couleur_titre_separateur = "#D67C7C"
+couleur_bouton = "#E89292"
+couleur_bouton_fleche = "#E89292"
+
 
 ################################## INSCRIPTION ################################
 def register_view(page: ft.Page):

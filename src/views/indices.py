@@ -19,8 +19,8 @@ liste_actifs = datas_actifs.get_list_indices()
 infos_actifs = datas_actifs.get_infos_indices()
 actif_default = "S&P 500"
 
-couleur_titre_separateur = ft.Colors.AMBER_200
-couleur_bouton_fleche = ft.Colors.AMBER_700
+couleur_titre_separateur = "#00B388"
+couleur_bouton_fleche = "#21C4A0"
 
 ################################## GRAPHIQUE #################################################
 def create_graph_section(page):

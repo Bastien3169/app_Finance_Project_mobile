@@ -7,8 +7,10 @@ import flet as ft
 db_path="users.db"
 
 # Couleurs
-couleur_titre_separateur = ft.Colors.GREEN_200
-couleur_bouton_fleche = ft.Colors.GREEN_700
+couleur_titre_separateur = "#D67C7C"
+couleur_bouton = "#E89292"
+couleur_bouton_fleche = "#E89292"
+
 
 ################################## CONNEXION ################################
 def mdp_oublie_view(page: ft.Page):

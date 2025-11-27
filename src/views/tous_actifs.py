@@ -32,8 +32,8 @@ crypto_default = "Bitcoin"
 liste_actifs = sorted(set(liste_stocks + liste_indices + liste_cryptos))
 
 # Couleurs
-couleur_titre_separateur = ft.Colors.GREEN_200
-couleur_bouton_fleche = ft.Colors.GREEN_700
+couleur_titre_separateur = ft.Colors.PURPLE_300
+couleur_bouton_fleche = ft.Colors.PURPLE_600
 
 
 ################################## TABLEAU COMPARATIF RENDEMENTS ################################

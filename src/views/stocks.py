@@ -19,8 +19,8 @@ liste_actifs = datas_actifs.get_list_stocks()
 infos_actifs = datas_actifs.get_infos_stocks()
 actif_default = "Apple Inc."
 
-couleur_titre_separateur = ft.Colors.GREEN_200
-couleur_bouton_fleche = ft.Colors.GREEN_700
+couleur_titre_separateur = ft.Colors.AMBER_200
+couleur_bouton_fleche = ft.Colors.AMBER_600
 
 ################################## GRAPHIQUE #################################################
 def create_graph_section(page):
