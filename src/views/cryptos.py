@@ -134,43 +134,35 @@ def create_rendement_section(page):
     )
 
     # Text pour période à ajouter
-    text_periode = ft.Text("Ajouter une période (en mois)", size=11, style=ft.TextStyle(
-        decoration=ft.TextDecoration.UNDERLINE),)
+    text_periode = ft.Text("Ajouter une période (en mois)", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),)
 
     # Fonction : input période à ajouter
-    input_periode = periode_input(
-        fonc_ajouter_periode=lambda e: ajouter_periode(e.control.value))
+    input_periode = periode_input(fonc_ajouter_periode=lambda e: ajouter_periode(e.control.value))
 
     # Bouton "+" pour ajouter la période
-    bouton_ajouter_periode = ft.IconButton(icon=ft.Icons.ADD,
-                                           tooltip="Ajouter la période",
-                                           on_click=lambda e: ajouter_periode(input_periode.value))
+    bouton_ajouter_periode = ft.IconButton(icon=ft.Icons.ADD,tooltip="Ajouter la période", on_click=lambda e: ajouter_periode(input_periode.value))
 
     # Ligne pour l'input et le bouton "+"
-    ligne_ajout_periode = ft.Row([input_periode, bouton_ajouter_periode],
-                                 alignment=ft.MainAxisAlignment.START,
-                                 spacing=10)
+    ligne_ajout_periode = ft.Row([input_periode, bouton_ajouter_periode], alignment=ft.MainAxisAlignment.START, spacing=10)
 
     # Conteneur pour les périodes sélectionnées
     liste_periodes = ft.Row(scroll=ft.ScrollMode.AUTO)
 
     # Cadre complet regroupant tout
     cadre_periodes = ft.Container(content=ft.Column([text_periode,
-                                                     ligne_ajout_periode,
-                                                     ft.Text("Périodes sélectionnées (en mois) :", size=11, style=ft.TextStyle(
-                                                         decoration=ft.TextDecoration.UNDERLINE)),
-                                                    liste_periodes,],  # <= ici on l’ajoute DANS le cadre
+                                                        ligne_ajout_periode,
+                                                        ft.Text("Périodes sélectionnées (en mois) :", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+                                                        liste_periodes,],  # ici on l’ajoute DANS le cadre
                                                     spacing=10,
                                                     alignment=ft.MainAxisAlignment.START),
-                                  padding=10,
-                                  border=ft.border.all(2, ft.Colors.WHITE30),
-                                  border_radius=10,
-                                  expand=True,
-                                  alignment=ft.alignment.top_left)
+                                            padding=10,
+                                            border=ft.border.all(2, ft.Colors.WHITE30),
+                                            border_radius=10,
+                                            alignment=ft.alignment.top_left)
 
     # Tableau des rendements
     table = ft.DataTable(
-        expand=True,
+        #expand=True,
         column_spacing=10,
         heading_row_height=25,
         heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
@@ -181,15 +173,23 @@ def create_rendement_section(page):
         rows=[],
     )
 
-    cadre_tableau = ft.Container(
-        content=ft.Row([table],
-                       scroll=ft.ScrollMode.AUTO,
-                       alignment=ft.MainAxisAlignment.CENTER),
+    '''cadre_tableau = ft.Container(
+        content=ft.Row([table], scroll=ft.ScrollMode.AUTO, alignment=ft.MainAxisAlignment.CENTER),
         border=ft.border.all(2, couleur_titre_separateur),
         border_radius=10,
         padding=5,
         alignment=ft.alignment.center,
-    )
+    )'''
+
+    cadre_tableau = ft.Container(content=ft.Row([table], scroll=ft.ScrollMode.AUTO,),
+                                border=ft.border.all(2, couleur_titre_separateur),
+                                border_radius=10,
+                                padding=5,)
+
+
+
+
+
 
     # --- Fonctions ---
     def update_selection_list():
@@ -291,8 +291,6 @@ def create_rendement_section(page):
     return [contenu]
 
 ################################## INFO CRYPTOS  ################################
-
-
 def create_composition_section(page):
 
     # Fonction : titre + séparateur dans conteneur
@@ -347,9 +345,8 @@ def create_composition_section(page):
 
     return [contenu]
 
+
 ################################### FONCTION PRINCIPALE ################################
-
-
 def cryptos_page(page: ft.Page):
     page.clean()
     page.title = "Les cryptomonais"

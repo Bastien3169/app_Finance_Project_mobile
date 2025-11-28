@@ -38,7 +38,7 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
         reset_mdp.reset_mdp(page)
     elif route == "/test": 
         # maj_bd.main_page(page)
-        test.admin_flet(page)
+        test.cryptos_page(page)
     else:
         page.add(ft.Text("❌ Page introuvable", size=20))
     

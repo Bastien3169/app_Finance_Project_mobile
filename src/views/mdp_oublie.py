@@ -25,7 +25,7 @@ def mdp_oublie_view(page: ft.Page):
 
 
     # --- Petit texte d'info / feedback ---
-    feedback = ft.Text("", size=12)
+    feedback = ft.Text("", size=12, text_align=ft.TextAlign.CENTER, weight="bold", visible=False)
 
     # --- Handler bouton envoie lien mdp --- 
     def on_click_envoie_mdp(e):
@@ -34,6 +34,7 @@ def mdp_oublie_view(page: ft.Page):
         if not email:
             feedback.value = "❌ Merci de renseigner votre email."
             feedback.color = ft.Colors.RED_300
+            feedback.visible = True
             page.update()
             return
 
@@ -41,6 +42,7 @@ def mdp_oublie_view(page: ft.Page):
 
         feedback.value = message
         feedback.color = ft.Colors.GREEN_300 if success else ft.Colors.RED_300
+        feedback.visible = True
         page.update()
 
 

@@ -184,7 +184,7 @@ def create_rendement_section(page):
         border_radius=10,
         padding=5,
         alignment=ft.alignment.center,
-    )
+)
 
     # --- Fonctions ---
     def update_selection_list():

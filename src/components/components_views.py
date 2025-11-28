@@ -93,7 +93,9 @@ def contenu_widget(titre, liste_widget):
                                                     spacing=10,
                                                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,),],
                             spacing=5,
-                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,)
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                            scroll=ft.ScrollMode.AUTO,
+                            alignment=ft.MainAxisAlignment.CENTER,)
     return contenu
 
 

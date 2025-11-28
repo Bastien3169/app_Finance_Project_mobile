@@ -319,21 +319,19 @@ def users_table_simple():
     )
 
     # Optionnel : cadre scrollable (comme tes autres tableaux)
-    cadre_table_users = ft.Container(
-        content=ft.Column(
-            [ft.Row([users_table], scroll=ft.ScrollMode.AUTO)],
-            scroll=ft.ScrollMode.AUTO,
-        ),
-        border=ft.border.all(2, couleur_titre_separateur),
-        border_radius=10,
-        padding=5,
-        height=300,
-    )
+    cadre_table_users = ft.Container(content=ft.Column([users_table],
+                                                       scroll=ft.ScrollMode.AUTO,),
+                                    border=ft.border.all(2, couleur_titre_separateur),
+                                    border_radius=10,
+                                    padding=5,
+                                    height=300,)
 
-    continu = ft.Column([sous_titre_contenair,cadre_table_users], 
-                        spacing=10)
+    contenu = ft.Column([sous_titre_contenair, cadre_table_users], 
+                        spacing=10,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        alignment=ft.MainAxisAlignment.CENTER,)
 
-    return [continu]
+    return [contenu]
 
 
 #################################### AJOUT USER ####################################
