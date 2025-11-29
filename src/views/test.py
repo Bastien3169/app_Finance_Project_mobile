@@ -119,19 +119,13 @@ def create_rendement_section(page):
     indices_selectionnes = [actif_default]
     liste_selection = ft.Row(scroll=ft.ScrollMode.AUTO)
 
-    cadre_text = ft.Container(
-        content=ft.Column([
-            ft.Text("Cryptos sélectionnées:", size=11, style=ft.TextStyle(
-                decoration=ft.TextDecoration.UNDERLINE)),
-            liste_selection
-        ],
-            horizontal_alignment=ft.CrossAxisAlignment.START),
-        padding=5,
-        border=ft.border.all(2, ft.Colors.WHITE30),
-        border_radius=10,
-        #expand=True,
-        alignment=ft.alignment.top_left
-    )
+    cadre_text = ft.Container(content=ft.Column([ft.Text("Cryptos sélectionnées:", 
+                                                         size=11, 
+                                                         style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
+                                                liste_selection],),
+                                        padding=5,
+                                        border=ft.border.all(2, ft.Colors.WHITE30),
+                                        border_radius=10,)
 
     # Text pour période à ajouter
     text_periode = ft.Text("Ajouter une période (en mois)", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),)
@@ -149,7 +143,7 @@ def create_rendement_section(page):
     liste_periodes = ft.Row(scroll=ft.ScrollMode.AUTO)
 
     # Cadre complet regroupant tout
-    cadre_periodess = ft.Container(content=ft.Column([text_periode,
+    cadre_periodes = ft.Container(content=ft.Column([text_periode,
                                                         ligne_ajout_periode,
                                                         ft.Text("Périodes sélectionnées (en mois) :", size=11, style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
                                                         liste_periodes,],  # ici on l’ajoute DANS le cadre
@@ -161,34 +155,18 @@ def create_rendement_section(page):
                                             alignment=ft.alignment.top_left)
 
 
-    cadre_periodes = ft.Container(
-        content=ft.Column([
-            text_periode,
-            ligne_ajout_periode,
-            ft.Text("Périodes sélectionnées (en mois) :", size=11, 
-                    style=ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE)),
-            liste_periodes,
-        ], 
-        spacing=10,
-        scroll=ft.ScrollMode.AUTO,  # ← Scroll direct sur la Column
-        ),
-        padding=10,
-        border=ft.border.all(2, ft.Colors.WHITE30),
-        border_radius=10,
-    )
 
     # Tableau des rendements
     table = ft.DataTable(
         #expand=True,
-        column_spacing=10,
-        heading_row_height=25,
-        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
-        data_row_min_height=35,
-        data_row_max_height=35,
-        divider_thickness=0.5,
-        columns=[],
-        rows=[],
-    )
+        column_spacing=10,#espacement des colonnes
+        heading_row_height=30,#hauteur de la ligne de titre
+        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),#couleur de fond de la ligne de titre
+        data_row_min_height=35,#hauteur minimale des lignes de données
+        data_row_max_height=35,#hauteur maximale des lignes de données
+        divider_thickness=0.5,#épaisseur des diviseurs entre les lignes
+        columns=[],#colonnes du tableau
+        rows=[],) #lignes du tableau
 
     cadre_tableau = ft.Container(content=ft.Row([table], scroll=ft.ScrollMode.AUTO,),
                                 border=ft.border.all(2, couleur_titre_separateur),
@@ -197,14 +175,14 @@ def create_rendement_section(page):
     
 
 
+
     # --- Fonctions ---
     def update_selection_list():
         liste_selection.controls.clear()
         for i in indices_selectionnes:
             liste_selection.controls.append(ft.Row([ft.Text(i, size=12),
                                                     ft.IconButton(icon=ft.Icons.CLOSE, icon_size=16, on_click=lambda e, i=i: retirer_indice(i))],
-                                                   spacing=0,)
-                                            )
+                                                   spacing=0,))
         page.update()
 
     def ajouter_indice(indice):
@@ -308,21 +286,21 @@ def create_composition_section(page):
 
     # Widget : tableau de la composition
     table_composition = ft.DataTable(
-        column_spacing=10,
-        heading_row_height=30,
-        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
-        data_row_min_height=25,
-        divider_thickness=0.5,
-        columns=[ft.DataColumn(ft.Text("Chargement...", size=11))],
-        rows=[])
+        #expand=True,
+        column_spacing=10,#espacement des colonnes
+        heading_row_height=30,#hauteur de la ligne de titre
+        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),#couleur de fond de la ligne de titre
+        data_row_min_height=35,#hauteur minimale des lignes de données
+        data_row_max_height=35,#hauteur maximale des lignes de données
+        divider_thickness=0.5,#épaisseur des diviseurs entre les lignes
+        columns=[],#colonnes du tableau
+        rows=[],) #lignes du tableau
 
     # Cadre autour du tableau
-    cadre_table_composition = ft.Container(
-        content=ft.Column(
-            [ft.Row([table_composition], scroll=ft.ScrollMode.AUTO)], scroll=ft.ScrollMode.AUTO),
-        border=ft.border.all(2, couleur_titre_separateur),
-        border_radius=10,
-        padding=5,)
+    cadre_table_composition = ft.Container(content=ft.Row([table_composition], scroll=ft.ScrollMode.AUTO,),
+                            border=ft.border.all(2, couleur_titre_separateur),
+                            border_radius=10,
+                            padding=5,)
 
     # Fonction pour mettre à jour le tableau de composition
     def update_table_composition(e):

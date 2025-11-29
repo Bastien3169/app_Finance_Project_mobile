@@ -138,14 +138,10 @@ def create_rendement_section(page):
     input_periode = periode_input(fonc_ajouter_periode=lambda e: ajouter_periode(e.control.value))
     
     # Bouton "+" pour ajouter la période
-    bouton_ajouter_periode = ft.IconButton(icon=ft.Icons.ADD, 
-                                           tooltip="Ajouter la période", 
-                                           on_click=lambda e: ajouter_periode(input_periode.value))
+    bouton_ajouter_periode = ft.IconButton(icon=ft.Icons.ADD, tooltip="Ajouter la période", on_click=lambda e: ajouter_periode(input_periode.value))
 
     # Ligne pour l'input et le bouton "+"
-    ligne_ajout_periode = ft.Row([input_periode, bouton_ajouter_periode], 
-                                 alignment=ft.MainAxisAlignment.START, 
-                                 spacing=10)
+    ligne_ajout_periode = ft.Row([input_periode, bouton_ajouter_periode], alignment=ft.MainAxisAlignment.START, spacing=10)
 
     # Conteneur pour les périodes sélectionnées
     liste_periodes = ft.Row(scroll=ft.ScrollMode.AUTO)
@@ -163,28 +159,9 @@ def create_rendement_section(page):
                                 expand=True,
                                 alignment=ft.alignment.top_left)
 
-    # Tableau des rendements
-    table = ft.DataTable(
-        expand=True,
-        column_spacing=10,
-        heading_row_height=25,
-        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
-        data_row_min_height=35,
-        data_row_max_height=35,
-        divider_thickness=0.5,
-        columns=[],
-        rows=[],
-    )
-
-    cadre_tableau = ft.Container(
-        content=ft.Row([table],
-                       scroll=ft.ScrollMode.AUTO,
-                       alignment=ft.MainAxisAlignment.CENTER),
-        border=ft.border.all(2, couleur_titre_separateur),
-        border_radius=10,
-        padding=5,
-        alignment=ft.alignment.center,
-)
+    
+    # Ossature tableau rendement + cadre
+    table, cadre_tableau = tableau_cadre(expands = False, couleur = couleur_titre_separateur, heights = None)
 
     # --- Fonctions ---
     def update_selection_list():
@@ -192,8 +169,7 @@ def create_rendement_section(page):
         for i in indices_selectionnes:
             liste_selection.controls.append(ft.Row([ft.Text(i, size=12),
                                                     ft.IconButton(icon=ft.Icons.CLOSE, icon_size=16,on_click=lambda e, i=i: retirer_indice(i))], 
-                                                    spacing=0,)
-                                )
+                                                    spacing=0,))
         page.update()
 
     def ajouter_indice(indice):
@@ -294,25 +270,8 @@ def create_composition_section(page):
     # Fonction : Dropdown (menu déroulant)
     dropdown_actif = dropdown ("Sélectionnez une entreprise", actif_default, liste_actifs, handler= None)
 
-    # Widget : tableau de la composition
-    table_composition = ft.DataTable(
-        column_spacing=10,
-        heading_row_height=30,
-        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),  
-        data_row_min_height=25,
-        divider_thickness=0.5,
-        columns=[ft.DataColumn(ft.Text("Chargement...", size=11))],
-        rows=[]
-    )
-
-    # Cadre autour du tableau
-    cadre_table_composition = ft.Container(
-        content=ft.Column([ft.Row([table_composition], scroll=ft.ScrollMode.AUTO)], scroll=ft.ScrollMode.AUTO),
-        border=ft.border.all(2, couleur_titre_separateur),
-        border_radius=10,
-        padding=5,
-    )
-
+    # Tableau composition + cadre
+    table_composition, cadre_table_composition = tableau_cadre(expands = False, couleur = couleur_titre_separateur, heights = None)
 
     # Fonction pour mettre à jour le tableau de composition
     def update_table_composition(e):

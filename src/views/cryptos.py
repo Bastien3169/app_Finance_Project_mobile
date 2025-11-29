@@ -160,35 +160,8 @@ def create_rendement_section(page):
                                             border_radius=10,
                                             alignment=ft.alignment.top_left)
 
-    # Tableau des rendements
-    table = ft.DataTable(
-        #expand=True,
-        column_spacing=10,
-        heading_row_height=25,
-        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
-        data_row_min_height=35,
-        data_row_max_height=35,
-        divider_thickness=0.5,
-        columns=[],
-        rows=[],
-    )
-
-    '''cadre_tableau = ft.Container(
-        content=ft.Row([table], scroll=ft.ScrollMode.AUTO, alignment=ft.MainAxisAlignment.CENTER),
-        border=ft.border.all(2, couleur_titre_separateur),
-        border_radius=10,
-        padding=5,
-        alignment=ft.alignment.center,
-    )'''
-
-    cadre_tableau = ft.Container(content=ft.Row([table], scroll=ft.ScrollMode.AUTO,),
-                                border=ft.border.all(2, couleur_titre_separateur),
-                                border_radius=10,
-                                padding=5,)
-
-
-
-
+    # Ossature tableau rendement + cadre
+    table, cadre_tableau = tableau_cadre(expands = False, couleur = couleur_titre_separateur, heights = None)
 
 
     # --- Fonctions ---
@@ -301,23 +274,8 @@ def create_composition_section(page):
     dropdown_indice = dropdown(
         "Sélectionnez une crypto", actif_default, liste_actifs, handler=None)
 
-    # Widget : tableau de la composition
-    table_composition = ft.DataTable(
-        column_spacing=10,
-        heading_row_height=30,
-        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
-        data_row_min_height=25,
-        divider_thickness=0.5,
-        columns=[ft.DataColumn(ft.Text("Chargement...", size=11))],
-        rows=[])
-
-    # Cadre autour du tableau
-    cadre_table_composition = ft.Container(
-        content=ft.Column(
-            [ft.Row([table_composition], scroll=ft.ScrollMode.AUTO)], scroll=ft.ScrollMode.AUTO),
-        border=ft.border.all(2, couleur_titre_separateur),
-        border_radius=10,
-        padding=5,)
+    # Tableau composition + cadre
+    table_composition, cadre_table_composition = tableau_cadre(expands = False, couleur = couleur_titre_separateur, heights = None)
 
     # Fonction pour mettre à jour le tableau de composition
     def update_table_composition(e):

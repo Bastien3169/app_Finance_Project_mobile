@@ -138,3 +138,25 @@ def bout_ret_acceuil(couleur_bouton_fleche, handler = None):
     
     return container_bouton
 
+
+# ------- Structure tableau + cadre -------
+
+def tableau_cadre(expands = False, couleur=ft.Colors.WHITE, heights=None):
+    table = ft.DataTable(
+        expand= expands,
+        column_spacing=10,#espacement des colonnes
+        heading_row_height=30,#hauteur de la ligne de titre
+        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),#couleur de fond de la ligne de titre
+        data_row_min_height=35,#hauteur minimale des lignes de données
+        data_row_max_height=35,#hauteur maximale des lignes de données
+        divider_thickness=0.5,#épaisseur des diviseurs entre les lignes
+        columns=[],#colonnes du tableau
+        rows=[],) #lignes du tableau
+
+    cadre_tableau = ft.Container(content=ft.Row([table], scroll=ft.ScrollMode.AUTO,),
+                                border=ft.border.all(1, couleur),
+                                border_radius=10,
+                                height=heights,
+                                padding=5,)
+    
+    return table, cadre_tableau

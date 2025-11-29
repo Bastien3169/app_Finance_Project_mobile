@@ -22,7 +22,7 @@ def main(page: ft.Page):  # “page: ft.Page“ = annotation de type (pour l'IDE
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.padding = 10
     page.spacing = 5
-    page.scroll = "auto"       # Permet le défilement si le contenu dépasse la hauteur
+    page.scroll = "auto"       # Permet le défilement si le contenu dépasse la hauteugit r
     page.theme_mode = ft.ThemeMode.DARK
 
     # 🔑 On branche le stockage client Flet dans l'AuthManager
