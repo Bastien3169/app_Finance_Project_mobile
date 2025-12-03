@@ -1,0 +1,73 @@
+########################### 1- Nettoyer Docke ###########################
+
+# Supprimer tous les containers arrêtés et sans images
+docker container prune -f
+
+# Supprime les images non utilisées
+docker image prune -a -f
+
+# Supprime les volumes non utilisés
+docker volume prune -f
+
+# Supprime les caches non utilisés
+docker builder prune -a -f
+
+# Vérification s'il ne reste rien
+docker system df
+
+
+########## Nettoyer Flutter ##########
+flutter clean
+
+# Supprimer Flutter pour repatir à 0
+rm -rf ~/flutter
+rm -rf ~/.flutter
+rm -rf ~/.cache/flutter
+
+
+########## Nettoyer Flet ##########
+rm -rf build
+
+# Supprimer le build Android dans ton projet Flet
+rm -rf build/flutter
+rm -rf build/apk
+
+# Nettoyer toutes les installations locales
+pip uninstall flet flet-cli -y
+
+
+########## Nettoyer Gradle ##########
+rm -rf ~/.gradle/caches/
+rm -rf ~/.gradle/kotlin-dsl/
+rm -rf ~/.gradle
+
+
+########## Nettoyer Android SDK !!!!!! Seulement si tu veux VRAIMENT tout réinstaller derrière ##########
+rm -rf ~/Library/Android/sdk
+rm -rf ~/.android
+rm -rf ~/Library/Application\ Support/Google
+
+
+########## Recommandation : supprimer pour repartir propre côté Flet APK ##########
+rm -rf build
+rm -rf ~/.gradle/caches/
+rm -rf ~/.gradle/kotlin-dsl/
+rm -rf ~/.gradle
+rm -rf ~/.cache/flutter
+rm -rf build/flutter
+rm -rf build/apk
+flutter clean
+
+
+
+
+
+
+
+rm -rf build/ .flet/ dist/ *.egg-info/
+
+# 1. Nettoie Python
+find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null
+find . -name "*.pyc" -delete
+
+

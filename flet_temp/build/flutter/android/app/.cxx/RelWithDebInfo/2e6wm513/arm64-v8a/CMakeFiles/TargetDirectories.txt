@@ -1,0 +1,2 @@
+/Users/bastoch/app_Finance_Project_mobile/flet_temp/build/flutter/android/app/.cxx/RelWithDebInfo/2e6wm513/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/bastoch/app_Finance_Project_mobile/flet_temp/build/flutter/android/app/.cxx/RelWithDebInfo/2e6wm513/arm64-v8a/CMakeFiles/rebuild_cache.dir

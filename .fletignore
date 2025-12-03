@@ -1,0 +1,43 @@
+cat > .fletignore << 'EOF'
+# Environnements virtuels - TOUS LES PATTERNS
+**/.venv/
+**/.venv*/
+**/venv/
+**/.env/
+.venv
+.venv311
+venv
+.env
+
+# Données lourdes
+csv/
+data_Vancien.db
+*.csv
+*.db
+*.pkl
+*.log
+src/models/datas_db/
+
+# Caches et artefacts
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+.cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+# Git / IDE
+.git/
+.gitignore
+*.swp
+*.bak
+*.tmp
+.DS_Store
+.vscode/
+.idea/
+
+# Build
+build/
+dist/
+.dart_tool/
+EOF

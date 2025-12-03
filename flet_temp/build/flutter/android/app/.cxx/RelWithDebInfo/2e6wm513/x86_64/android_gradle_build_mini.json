@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/bastoch/flutter/3.29.2/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/bastoch/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/bastoch/app_Finance_Project_mobile/flet_temp/build/flutter/android/app/.cxx/RelWithDebInfo/2e6wm513/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/bastoch/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/bastoch/app_Finance_Project_mobile/flet_temp/build/flutter/android/app/.cxx/RelWithDebInfo/2e6wm513/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

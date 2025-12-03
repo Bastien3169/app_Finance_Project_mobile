@@ -1,0 +1,25 @@
+# Environnements virtuels
+venv/
+.venv/
+.venv311/
+
+# Données lourdes
+csv/
+*.csv
+data_Vancien.db
+src/models/datas_db/csv/
+
+# Caches et artefacts
+__pycache__/
+*.pyc
+*.pyo
+*.pkl
+*.log
+.cache/
+.ipynb_checkpoints/
+
+# Git / IDE
+.git/
+*.swp
+*.bak
+*.tmp

@@ -4,9 +4,15 @@
 # Installer les dépendances : pip install -r requirements.txt
 # Lancer l’application : python main.py
 
+import os
 import flet as ft
+
+# Configurer matplotlib pour Android
+os.environ['MPLCONFIGDIR'] = '/data/user/0/com.flet.flet_temp/cache/matplotlib'
+
+
 from src.controllers.navigation import route_change
-from src.models.users_db.models_db_users_test import AuthManager, ClientStorageWrapper  # ⬅️ importe l'AuthManager
+from src.models.users_db.models_db_users_test import AuthManager, ClientStorageWrapper 
 
 
 # Instance globale d'AuthManager (une seule fois)
