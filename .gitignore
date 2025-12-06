@@ -23,3 +23,9 @@ __pycache__/
 *.swp
 *.bak
 *.tmp
+
+# Builds mobiles
+*.apk
+flet_temp/build/
+build/
+dist/
