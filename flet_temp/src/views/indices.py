@@ -7,11 +7,8 @@
 # Un handler doit forcément être une fonction (callable), qu’elle soit classique (réutilisable), anonyme (lambda), ou méthode de classe.
 
 import flet as ft
-from flet.plotly_chart import PlotlyChart
-import plotly.graph_objects as go
-import io
-import base64
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from src.models.control_datas.connexion_db_datas import *
 from src.components.components_views import *
 
@@ -30,68 +27,21 @@ def create_graph_section(page):
     page.scroll = "auto"
 
     # Titre + séparateur
-    titre = titre_separateur(
-        text="📈 Graphique de l'indice",
-        padding_text_top=0,
-        couleur_titre_separateur="#00B388"
-    )
+    titre = titre_separateur(text="📈 Graphique de l'indice", padding_text_top=0, couleur_titre_separateur="#00B388")
 
     # Dropdown pour sélectionner l'indice
-    dropdown_actif = dropdown(
-        "Sélectionnez un indice",
-        actif_default,
-        liste_actifs,
-        handler=None
-    )
+    dropdown_actif = dropdown("Sélectionnez un indice", actif_default, liste_actifs, handler=None)
 
-    # Widget Image (vide au départ)
-    graphique = ft.Image(
-        src_base64="",  # <- utilisation de src_base64 ici
-        visible=True,
-        fit=ft.ImageFit.CONTAIN,
-        width=700,
-        height=400
-    )
+     # Container pour le graphique
+    chart_container = ft.Container(content=ft.Text("Chargement du graphique...", color="white"),
+                                   expand=True,) 
 
     # Loader
-    loader = loader_page("#00B388")
-    loader.visible = False
+    loader = loader_page(couleur_titre_separateur)
 
     def update_graph(e):
-        loader.visible = True
-        page.update()
-
-        selected_indice = dropdown_actif.value
-        df = datas_actifs.get_prix_date(selected_indice)
-        if df.empty:
-            loader.visible = False
-            page.update()
-            return
-
-        df['Date'] = df['Date'].astype(str)
-
-        # --- Création du graphique Matplotlib ---
-        fig, ax = plt.subplots(figsize=(10, 4))
-        ax.plot(df["Date"], df["Close"], color="#6DBE8C", linewidth=2)
-        ax.set_title(f"Évolution de {selected_indice}", fontsize=16, color="white")
-        ax.set_facecolor("black")
-        fig.patch.set_facecolor("black")
-        ax.tick_params(colors="white", rotation=45)
-        ax.grid(color="gray", alpha=0.25)
-        ax.set_xlabel("Date", color="white")
-        ax.set_ylabel("Prix de clôture", color="white")
-
-        # Conversion en image base64 pour Flet
-        buf = io.BytesIO()
-        fig.savefig(buf, format="png", bbox_inches="tight", facecolor=fig.get_facecolor())
-        buf.seek(0)
-        img_b64 = base64.b64encode(buf.read()).decode("utf-8")
-        plt.close(fig)
-
-        graphique.src_base64 = img_b64  # <- changement clé
-
-        loader.visible = False
-        page.update()
+        test = graphique_matplot_actif(page, couleur_titre_separateur, loader, chart_container, datas_actifs,dropdown_actif)
+        return test
 
     # Lier le dropdown
     dropdown_actif.on_change = update_graph
@@ -99,8 +49,9 @@ def create_graph_section(page):
     # Affichage initial
     update_graph(None)
 
-    contenu = contenu_widget(titre, [dropdown_actif, loader, graphique])
+    contenu = contenu_widget(titre, [dropdown_actif, loader, chart_container])
     return [contenu]
+
 
 ################################## TABLEAU COMPARATIF RENDEMENTS ################################
 

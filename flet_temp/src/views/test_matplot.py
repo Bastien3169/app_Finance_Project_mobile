@@ -24,7 +24,7 @@ actif_default = "Bitcoin"
 couleur_titre_separateur = "#F7931A"
 couleur_bouton_fleche = "#FBBF63"
 
-################################## GRAPHIQUE avec fl_chart
+################################## GRAPHIQUE avec fl_chart ##################################
 def create_graph_section(page):
     page.scroll = "auto"
     
@@ -44,88 +44,17 @@ def create_graph_section(page):
     )
     
     # Container pour le graphique
-    chart_container = ft.Container(
-        content=ft.Text("Chargement...", text_align=ft.TextAlign.CENTER),
-        height=300,
-        border=ft.border.all(2, color=ft.Colors.BLACK12),
-        border_radius=10,
-        padding=5,
-    )
-    
+
+    chart_container = ft.Container(content=ft.Text("Chargement du graphique...", color="white"),
+                                   expand=True,) 
+
     # Loader
     loader = loader_page(couleur_titre_separateur)
     
     def update_graph(e):
-        loader.visible = True
-        page.update()
-        
-        try:
-            selected_crypto = dropdown_actif.value
-            df = datas_actifs.get_prix_date(selected_crypto)
-            
-            if df.empty:
-                chart_container.content = ft.Text("Aucune donnée disponible", color="red")
-                loader.visible = False
-                page.update()
-                return
-            
-            # Figure matplotlib
-            fig, ax = plt.subplots(figsize=(24, 12))  # Augmenter la taille
-            ax.plot(df['Date'], df['Close'], color=couleur_titre_separateur, linewidth=2)
-            
-            ax.set_facecolor('#1A1C24')
-            fig.patch.set_facecolor('#1A1C24')
-            
-            # Personnaliser l'axe X
-            ax.xaxis.set_major_locator(mdates.AutoDateLocator())
-            ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
-            plt.setp(ax.get_xticklabels(), rotation=45, ha='right', color='white', fontsize=24)
-            
-            # Personnaliser l'axe Y
-            ax.set_ylabel('Prix ($)', color='white', fontsize=24, labelpad=10)  # Titre axe Y
-            plt.setp(ax.get_yticklabels(), color='white', fontsize=10)
+        test = graphique_matplot_actif(page, couleur_titre_separateur, loader, chart_container, datas_actifs,dropdown_actif)
+        return test
 
-    
-            
-            # Grille
-            ax.grid(True, axis='x', linestyle='--', alpha=0.2, color='white')
-            ax.grid(True, axis='y', linestyle='--', alpha=0.1, color='white')
-            
-            # Convertir en image base64
-            buf = io.BytesIO()
-            fig.savefig(buf, format='png', 
-                    bbox_inches='tight', 
-                    facecolor=fig.get_facecolor(),
-                    dpi=100)  # Ajouter DPI
-            buf.seek(0)
-            plt.close(fig)
-            
-            img_base64 = base64.b64encode(buf.read()).decode("utf-8")
-            
-            # Utiliser Image.src_base64 au lieu de src
-            chart_container.content = ft.Column([
-                ft.Text(f"Évolution de {selected_crypto}", 
-                    size=18, 
-                    weight=ft.FontWeight.BOLD, 
-                    color="white"),
-                ft.Container(
-                    content=ft.Image(src_base64=img_base64, 
-                                fit=ft.ImageFit.CONTAIN,
-                                width=page.width * 0.9),
-                    expand=True,
-                    padding=10,
-                    border_radius=10,
-                    bgcolor='#1A1C24'
-                )
-            ], expand=True)
-            
-        except Exception as ex:
-            chart_container.content = ft.Text(f"Erreur: {str(ex)}", color="red")
-            print(f"Erreur détaillée: {ex}")
-        
-        finally:
-            loader.visible = False
-            page.update()
 
     
     # Lier le dropdown
