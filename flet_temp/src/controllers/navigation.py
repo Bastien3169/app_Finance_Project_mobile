@@ -1,6 +1,3 @@
-from src.views import home, indices #, stocks, etfs, cryptos, dca_vs_lp, maj_bd
-import flet as ft
-
 from src.views import home, indices, stocks, dca_vs_lp, cryptos, tous_actifs, admin, auth_manag, inscription, mdp_oublie, reset_mdp, test, test_matplot #, etfs, cryptos, dca_vs_lp, maj_bd
 import flet as ft
 
@@ -37,10 +34,9 @@ def route_change(page: ft.Page):  # Pas besoin de guillemets
     elif route == "/reset_mdp":  
         reset_mdp.reset_mdp(page)
     elif route == "/test": 
-        # maj_bd.main_page(page)
-        test.cryptos_page(page)
+        test.dca_lp_page(page)
     elif route == "/test_matplot":
-        test_matplot.cryptos_page(page)
+        test_matplot.dca_lp_page(page)
     else:
         page.add(ft.Text("❌ Page introuvable", size=20))
     

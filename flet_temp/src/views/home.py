@@ -36,7 +36,7 @@ def main_page(page: ft.Page):
     # Liste des tuiles
     tiles_button = [
         ("Indices",  "#21C4A0", "/indices"),      # Jaune pastel
-        ("Stocks", ft.Colors.AMBER_200, "/stocks"),       # Vert clair
+        ("Stocks", "#81D4FA", "/stocks"),       # Vert clair
         ("ETFs", ft.Colors.CYAN_200, "/etfs"),         # Orange doux
         ("Cryptos", "#F7931A", "/cryptos"),     # Couleur Bitcoin
         ("Tous Actifs", ft.Colors.PURPLE_200, "/tous_actifs"),
