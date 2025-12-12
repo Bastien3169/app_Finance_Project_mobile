@@ -127,13 +127,13 @@ def bout_ret_haut(couleur_bouton_fleche, handler = None):
 
 
 # ------- Bouton retour acceuil -------
-def bout_ret_acceuil(couleur_bouton_fleche, handler = None):
-    bouton_retour = ft.ElevatedButton("Retour accueil",
-                                        icon=ft.Icons.HOME, # ajoute icône à gauche du texte
-                                        style=ft.ButtonStyle(color=ft.Colors.WHITE,
-                                                            bgcolor=couleur_bouton_fleche,
-                                                            padding=ft.padding.symmetric(horizontal=20, vertical=15)),
-                                        on_click=handler)  # Redirection vers la page d'accueil
+def bout_ret_acceuil(couleur_bouton_fleche, text="Retour accueil", handler = None, icons=ft.Icons.HOME):
+    bouton_retour = ft.ElevatedButton(text,
+                                    icon=icons, # ajoute icône à gauche du texte
+                                    style=ft.ButtonStyle(color=ft.Colors.WHITE,
+                                                        bgcolor=couleur_bouton_fleche,
+                                                        padding=ft.padding.symmetric(horizontal=20, vertical=15)),
+                                    on_click=handler)  # Redirection vers la page d'accueil
     
 
     container_bouton = ft.Container(content=bouton_retour,

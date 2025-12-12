@@ -194,29 +194,32 @@ class AuthManager(BaseDBManager):
 
 
 # --------------------------- login ---------------------------#
-    def login(self, email, password):
-        user_role = None # Ajout d'une variable pour le rôle
+    def login(self, email, password, stay_connected=False):  # ⬅️ Nouveau paramètre
+        user_role = None
         with sqlite3.connect(self.db_path) as conn:
             c = conn.cursor()
             
-            # ATTENTION CORRECTION ICI : Sélectionner l'ID, le mot de passe ET le rôle
             c.execute("SELECT id, password, role FROM users WHERE email = ?", (email,))
             user = c.fetchone()
 
             if not user:
-                return False, "❌ Utilisateur non trouvé", None # Retourne None pour le rôle
+                return False, "❌ Utilisateur non trouvé", None
 
-            # L'enregistrement a maintenant 3 éléments
             user_id, hashed, user_role = user 
             
             if not self.check_password(password, hashed):
-                return False, "❌ Mot de passe incorrect", None # Retourne None pour le rôle
+                return False, "❌ Mot de passe incorrect", None
 
             # Créé le token unique
             session_id = str(uuid.uuid4())
 
-            # Créé la date d'expiration du token
-            expires_at = (datetime.now(timezone.utc) + timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S") 
+            # Durée selon stay_connected
+            if stay_connected:
+                # Session longue : 30 jours
+                expires_at = (datetime.now(timezone.utc) + timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
+            else:
+                # Session courte : 1 jour
+                expires_at = (datetime.now(timezone.utc) + timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
 
             # SUPPRIME toutes les anciennes sessions de cet utilisateur
             c.execute("DELETE FROM sessions WHERE user_id = ?", (user_id,))
@@ -227,10 +230,9 @@ class AuthManager(BaseDBManager):
                 (session_id, user_id, expires_at)
             )
 
-            # Enregistre dans la base
             conn.commit()
 
-        # 🔑 Écriture côté client
+        # Écriture côté client
         if self.cookies is not None:
             try:
                 self.cookies[self.cookie_name] = session_id
@@ -239,7 +241,6 @@ class AuthManager(BaseDBManager):
             except Exception:
                 pass
 
-        # CORRECTION ICI : Retourner le rôle en cas de succès
         return True, "✅ Connexion réussie", user_role
 
 

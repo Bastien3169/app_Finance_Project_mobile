@@ -17,7 +17,7 @@ def mdp_oublie_view(page: ft.Page):
     auth = AuthManager(db_path=db_path)
 
     # --- Titre + séparation ---
-    titre = titre_separateur("🔑 Réinitialisation mdp",couleur_titre_separateur)
+    titre = titre_separateur("🔑 Réinitialisation mdp",couleur_titre_separateur, padding_text_top = 45)
 
     # --- Champ email ---
     email_field = periode_input(text_label="📧 Email", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None,)

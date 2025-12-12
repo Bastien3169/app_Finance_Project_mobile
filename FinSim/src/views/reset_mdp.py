@@ -18,7 +18,7 @@ def reset_password_view(page: ft.Page, token: str):
     auth = AuthManager(db_path=db_path)
 
     # --- Titre + séparation ---
-    titre = titre_separateur("🔑 Réinitialisation du mot de passe", couleur_titre_separateur)
+    titre = titre_separateur("🔑 Réinitialisation du mot de passe", couleur_titre_separateur, padding_text_top = 45)
 
     # --- Champ mot de passe ---
     password_field = periode_input(

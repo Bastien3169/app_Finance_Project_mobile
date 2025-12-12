@@ -14,7 +14,7 @@ couleur_bouton_fleche = "#E89292"
 def register_view(page: ft.Page):
 
     # --- Titre + séparation ---
-    titre = titre_separateur("📝 Inscription", couleur_titre_separateur)
+    titre = titre_separateur("📝 Inscription", couleur_titre_separateur , padding_text_top = 45)
 
     # --- Champ pseudo / nom d'utilisateur ---
     username_field = periode_input(text_label="👤 Nom d'utilisateur", hint_texte=None, hint_styl=None, passwords=None, oeil=None, widths=400, fonc_ajouter_periode=None,)

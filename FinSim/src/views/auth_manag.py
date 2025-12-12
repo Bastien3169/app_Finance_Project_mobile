@@ -10,7 +10,7 @@ couleur_bouton_fleche = "#21C4A0"
 
 ################################## CONNEXION ################################
 def login_view(page: ft.Page):
-    titre = titre_separateur("🔐 Connexion requise", couleur_titre_separateur)
+    titre = titre_separateur("🔐 FinSim : Connexion requise", couleur_titre_separateur, padding_text_top = 45)
     email_field = periode_input(text_label="📧 Email", widths=400,)
     password_field = periode_input(text_label="🔒 Mot de passe", passwords=True, oeil=True, widths=400,)
     feedback = ft.Text("", color=ft.Colors.RED_300, size=12, visible=False, weight="bold", text_align=ft.TextAlign.CENTER,)
@@ -21,39 +21,43 @@ def login_view(page: ft.Page):
         page.go("/mdp_oublie")
         page.update()
 
-    mdp_reset = ft.Row(
-        controls=[ft.Text(
-            spans=[
-                ft.TextSpan("Mot de passe oublié ? ", ft.TextStyle(size=9)),
-                ft.TextSpan("Clique ici", ft.TextStyle(size=9, color=couleur_titre_separateur, weight=ft.FontWeight.BOLD), on_click=on_click_mdp_oublie)
-            ],
-            size=12
-        )],
-        alignment=ft.MainAxisAlignment.END,
-        width=400
-    )
+    # Checkbox "Rester connecté" en dehors de la Row pour récupération de sa valeur dans le handler
+    stay_connected_checkbox_control = ft.Checkbox(value=False,
+                                                  fill_color=ft.Colors.BLACK,
+                                                  check_color=couleur_titre_separateur,)
+    
+    # Row Checkbox pour personaliser l'alignement
+    stay_connected_checkbox = ft.Row(controls=[stay_connected_checkbox_control,
+                                               ft.Text("Rester connecté",size=9,)],
+                                     alignment=ft.MainAxisAlignment.START,
+                                     spacing=0,)
+    
+    # Row avec checkbox à gauche et "Mot de passe oublié" à droite
+    staytune_resetMdP = ft.Row(controls=[stay_connected_checkbox,  # ← À gauche
+                                        ft.Container(expand=True),  # ← Espace entre les deux
+                                        ft.Text(spans=[ft.TextSpan("Mot de passe oublié ? ", ft.TextStyle(size=9)),
+                                                       ft.TextSpan("Clique ici", ft.TextStyle(size=9, color=couleur_titre_separateur, weight=ft.FontWeight.BOLD), 
+                                                                   on_click=on_click_mdp_oublie)],
+                                                size=12)],
+                                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                                width=400)
 
     # --- Handler connexion CORRIGÉ ---
     def handle_login(e):
-        email = email_field.value
+        email = email_field.value.lower()
         password = password_field.value
+        stay_connected = stay_connected_checkbox_control.value  # ✅ Récupère l'état de la checkbox
         
         # Le login retourne maintenant 3 valeurs : success, message, role
-        success, message, user_role = auth_manager.login(email, password)
+        success, message, user_role = auth_manager.login(email, password, stay_connected)
         
         feedback.value = message
         feedback.visible = True
         page.update()
         
         if success:
-            # La redirection se base sur le rôle récupéré
-            if user_role == "admin":
-                page.go("/")
-            else:
-                page.go("/") # Rediriger l'utilisateur simple vers la page d'accueil
-            
-            # Ne pas oublier de mettre à jour la page après la redirection
-            page.update()
+            page.go("/")
 
     bout_connexion = bouton_on_click("Se connecter", on_click=handle_login, icon=ft.Icons.PERSON, couleur_bouton=couleur_titre_separateur,)
 
@@ -72,7 +76,7 @@ def login_view(page: ft.Page):
     )
 
     form_column = ft.Column(
-        controls=[email_field, password_field, mdp_reset, feedback, bout_connexion, inscription_text,],
+        controls=[email_field, password_field, staytune_resetMdP, feedback, bout_connexion, inscription_text,],
         spacing=10,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
     )
