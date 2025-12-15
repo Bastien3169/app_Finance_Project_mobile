@@ -38,7 +38,7 @@ def main_page(page: ft.Page):
         tiles_button = [
             ("Indices", "#21C4A0", "/indices"),
             ("Stocks", "#81D4FA", "/stocks"),
-            ("ETFs", ft.Colors.CYAN_200, "/etfs"),
+            ("ETFs", ft.Colors.CYAN_200, "/ETFs"),
             ("Cryptos", "#F7931A", "/cryptos"),
             ("Tous Actifs", ft.Colors.PURPLE_200, "/tous_actifs"),
             ("DCAvsLP", ft.Colors.CYAN_400, "/dca_vs_lp"),

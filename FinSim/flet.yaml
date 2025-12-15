@@ -4,7 +4,7 @@ description: Application de simulation de placement financier.
 version: 1.0.0
 author: Bastien Maurieres
 
-# 🎨 Icône de l'app
+# 🎨 Icône de l'app 
 icon: assets/icon.png
 
 # 📱 Config Android

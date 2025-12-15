@@ -145,19 +145,27 @@ def bout_ret_acceuil(couleur_bouton_fleche, text="Retour accueil", handler = Non
 
 # ------- Structure tableau + cadre -------
 
-def tableau_cadre(expands = False, couleur=ft.Colors.WHITE, heights=None):
-    table = ft.DataTable(
-        expand= expands,
-        column_spacing=10,#espacement des colonnes
-        heading_row_height=30,#hauteur de la ligne de titre
-        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),#couleur de fond de la ligne de titre
-        data_row_min_height=35,#hauteur minimale des lignes de données
-        data_row_max_height=35,#hauteur maximale des lignes de données
-        divider_thickness=0.5,#épaisseur des diviseurs entre les lignes
-        columns=[],#colonnes du tableau
-        rows=[],) #lignes du tableau
+def tableau_cadre(expands=False, couleur=ft.Colors.WHITE, heights=None):
+    table = ft.DataTable(expand=expands,
+                        column_spacing=10,
+                        heading_row_height=30,
+                        heading_row_color=ft.Colors.with_opacity(1.0, "#1A1C24"),
+                        data_row_min_height=35,
+                        data_row_max_height=35,
+                        divider_thickness=0.5,
+                        columns=[],
+                        rows=[],)
 
-    cadre_tableau = ft.Container(content=ft.Row([table], scroll=ft.ScrollMode.AUTO,),
+    # ✅ Scroll horizontal (pour les colonnes larges)
+    horizontal_scroll = ft.Row(controls=[table], scroll=ft.ScrollMode.AUTO,)
+
+    # ✅ Scroll vertical (pour les nombreuses lignes)
+    vertical_scroll = ft.Column(controls=[horizontal_scroll],
+                                scroll=ft.ScrollMode.AUTO,
+                                horizontal_alignment=ft.CrossAxisAlignment.START,)
+
+    # ✅ Cadre final
+    cadre_tableau = ft.Container(content=vertical_scroll,
                                 border=ft.border.all(1, couleur),
                                 border_radius=10,
                                 height=heights,
