@@ -410,10 +410,10 @@ def create_simulation_handler(page: ft.Page, dropdown_indice, input_montant,
         # Ajout dans la zone d'affichage
         output_zone.controls.extend([
             *titre_graph1, graphe1_container,
+            cadre_tableau1,
             *titre_graph2, graphe2_container,
-            *titre_tableau,
-            titre_tableau1_container, cadre_tableau1,
-            titre_tableau2_container, cadre_tableau2
+            #*titre_tableau,
+            cadre_tableau2
         ])
         
         page.update()

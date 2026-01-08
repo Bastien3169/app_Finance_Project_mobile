@@ -38,6 +38,7 @@ pip uninstall flet flet-cli -y
 
 ########## Nettoyer Gradle ##########
 rm -rf ~/.gradle/caches/
+rm -rf ~/.gradle/wrapper/
 rm -rf ~/.gradle/kotlin-dsl/
 rm -rf ~/.gradle
 
@@ -53,14 +54,11 @@ rm -rf build
 rm -rf ~/.gradle/caches/
 rm -rf ~/.gradle/kotlin-dsl/
 rm -rf ~/.gradle
+rm -rf ~/.gradle/wrapper/
 rm -rf ~/.cache/flutter
 rm -rf build/flutter
 rm -rf build/apk
 flutter clean
-
-
-
-
 
 
 
@@ -71,3 +69,8 @@ find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null
 find . -name "*.pyc" -delete
 
 
+
+########## Recommandation : Commande Flet ##########
+
+# Build .apk avec icon
+flet build apk --verbose
